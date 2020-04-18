@@ -25,5 +25,8 @@
   "engines": {
     "homebridge": ">=0.4.53",
     "node": ">=12.16.1"
+  },
+  "dependencies": {
+    "bacstack": "0.0.1-beta.13"
   }
 }
