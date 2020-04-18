@@ -7,7 +7,7 @@ function mySwitch(log, config) {
     this.manufacturer = "My manufacturer";
     this.model = "My model";
     this.name = config["name"] || "My Switch";
-    this.serial = UUID.generate(this.name)
+    this.serial = "123-456-789";
 
     this.state = false;
     this.battery = {

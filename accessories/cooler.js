@@ -8,7 +8,7 @@ function myCooler(log, config) {
     this.manufacturer = "My manufacturer";
     this.model = "My model";
     this.name = config["name"] || "My Cooler";
-    this.serial = UUID.generate(this.name);
+    this.serial = "123-456-789";
 
     this.cooler = {
         active: 1, // 0=Inactive, 1=Active

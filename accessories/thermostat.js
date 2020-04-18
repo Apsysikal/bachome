@@ -8,7 +8,7 @@ function myThermostat(log, config) {
     this.manufacturer = "My manufacturer";
     this.model = "My model";
     this.name = config["name"] || "My Thermostat";
-    this.serial = UUID.generate(this.name)
+    this.serial = "123-456-789";
 
     this.currentHeatingCoolingState = 0; // 0 = OFF, 1 = HEAT, 2 = COOL
     this.targetHeatingCoolingState = 0; // 0 = OFF, 1 = HEAT, 2 = COOL, 3 = AUTO
