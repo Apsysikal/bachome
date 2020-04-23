@@ -52,6 +52,7 @@ myThermostat.prototype.getServices = function () {
   this.thermostatService = thermostatService;
 
   setInterval(() => {
+    console.log("Interval");
     bacnetHelper
       .readAnalogInput(
         "192.168.1.147",
@@ -59,9 +60,11 @@ myThermostat.prototype.getServices = function () {
         bacnet.enum.PropertyIds.PROP_PRESENT_VALUE
       )
       .then((value) => {
+        console.log(value);
+        this.currentTemperature = value["values"][0]["value"] / 10.0;
         this.thermostatService
           .getCharacteristic(Characteristic.CurrentTemperature)
-          .updateValue(value["values"]["value"]);
+          .updateValue(value["values"][0]["value"] / 10.0);
       })
       .catch((error) => {
         console.error(error);
@@ -104,24 +107,24 @@ myThermostat.prototype.setTargetHeatingCoolingState = function (
 
   switch (this.targetHeatingCoolingState) {
     case 0:
-      this.setCurrentHeatingCoolingState(0, () => {});
+      this.setCurrentHeatingCoolingState(0, () => { });
       break;
 
     case 1:
-      this.setCurrentHeatingCoolingState(1, () => {});
+      this.setCurrentHeatingCoolingState(1, () => { });
       break;
 
     case 2:
-      this.setCurrentHeatingCoolingState(2, () => {});
+      this.setCurrentHeatingCoolingState(2, () => { });
       break;
 
     case 3:
       if (this.targetTempearture > this.currentTemperature) {
-        this.setCurrentHeatingCoolingState(1, () => {});
+        this.setCurrentHeatingCoolingState(1, () => { });
       } else if (this.targetTempearture < this.currentTemperature) {
-        this.setCurrentHeatingCoolingState(2, () => {});
+        this.setCurrentHeatingCoolingState(2, () => { });
       } else {
-        this.setCurrentHeatingCoolingState(0, () => {});
+        this.setCurrentHeatingCoolingState(0, () => { });
       }
       break;
 
@@ -168,14 +171,14 @@ myThermostat.prototype.setTargetTemperature = function (value, callback) {
     this.targetTempearture > this.currentTemperature &&
     this.targetHeatingCoolingState == 3
   ) {
-    this.setCurrentHeatingCoolingState(1, () => {});
+    this.setCurrentHeatingCoolingState(1, () => { });
   } else if (
     this.targetTempearture < this.currentTemperature &&
     this.targetHeatingCoolingState == 3
   ) {
-    this.setCurrentHeatingCoolingState(2, () => {});
+    this.setCurrentHeatingCoolingState(2, () => { });
   } else if (this.targetHeatingCoolingState == 3) {
-    this.setCurrentHeatingCoolingState(0, () => {});
+    this.setCurrentHeatingCoolingState(0, () => { });
   }
 
   return callback(null);
