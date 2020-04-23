@@ -1,6 +1,6 @@
-/// <reference path="./node_modules/bacstack/index.js" />
-/// <reference path="./node_modules/bacstack/lib/client.js" />
-/// <reference path="./node_modules/bacstack/lib/enum.js" />
+/// <reference path="../node_modules/bacstack/index.js" />
+/// <reference path="../node_modules/bacstack/lib/client.js" />
+/// <reference path="../node_modules/bacstack/lib/enum.js" />
 
 const bacnet = require("bacstack");
 
