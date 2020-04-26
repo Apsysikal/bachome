@@ -138,6 +138,190 @@ function readAnalogOutput(ipAddress, instance, propertyId) {
   });
 }
 
+function writeBinaryInput(ipAddress, instance, propertyId, value) {
+  return new Promise((resolve, reject) => {
+    const propertyObject = {
+      type: bacnet.enum.ObjectTypes.OBJECT_BINARY_INPUT,
+      instance: instance,
+    };
+
+    const valueObject = generateValueObjectFromValue(value);
+
+    client.writeProperty(
+      ipAddress,
+      propertyObject,
+      propertyId,
+      valueObject,
+      (error, value) => {
+        if (error) {
+          return reject(error);
+        }
+
+        return resolve(value);
+      }
+    );
+  });
+}
+
+function writeBinaryValue(ipAddress, instance, propertyId, value) {
+  return new Promise((resolve, reject) => {
+    const propertyObject = {
+      type: bacnet.enum.ObjectTypes.OBJECT_BINARY_VALUE,
+      instance: instance,
+    };
+
+    const valueObject = generateValueObjectFromValue(value);
+
+    client.writeProperty(
+      ipAddress,
+      propertyObject,
+      propertyId,
+      valueObject,
+      (error, value) => {
+        if (error) {
+          return reject(error);
+        }
+
+        return resolve(value);
+      }
+    );
+  });
+}
+
+function writeBinaryOutput(ipAddress, instance, propertyId, value) {
+  return new Promise((resolve, reject) => {
+    const propertyObject = {
+      type: bacnet.enum.ObjectTypes.OBJECT_BINARY_OUTPUT,
+      instance: instance,
+    };
+
+    const valueObject = generateValueObjectFromValue(value);
+
+    client.writeProperty(
+      ipAddress,
+      propertyObject,
+      propertyId,
+      valueObject,
+      (error, value) => {
+        if (error) {
+          return reject(error);
+        }
+
+        return resolve(value);
+      }
+    );
+  });
+}
+
+function writeAnalogInput(ipAddress, instance, propertyId, value) {
+  return new Promise((resolve, reject) => {
+    const propertyObject = {
+      type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_INPUT,
+      instance: instance,
+    };
+
+    const valueObject = generateValueObjectFromValue(value);
+
+    client.writeProperty(
+      ipAddress,
+      propertyObject,
+      propertyId,
+      valueObject,
+      (error, value) => {
+        if (error) {
+          return reject(error);
+        }
+
+        return resolve(value);
+      }
+    );
+  });
+}
+
+function writeAnalogValue(ipAddress, instance, propertyId, value) {
+  return new Promise((resolve, reject) => {
+    const propertyObject = {
+      type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_VALUE,
+      instance: instance,
+    };
+
+    const valueObject = generateValueObjectFromValue(value);
+
+    client.writeProperty(
+      ipAddress,
+      propertyObject,
+      propertyId,
+      valueObject,
+      (error, value) => {
+        if (error) {
+          return reject(error);
+        }
+
+        return resolve(value);
+      }
+    );
+  });
+}
+
+function writeAnalogOutput(ipAddress, instance, propertyId, value) {
+  return new Promise((resolve, reject) => {
+    const propertyObject = {
+      type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_OUTPUT,
+      instance: instance,
+    };
+
+    const valueObject = generateValueObjectFromValue(value);
+
+    client.writeProperty(
+      ipAddress,
+      propertyObject,
+      propertyId,
+      valueObject,
+      (error, value) => {
+        if (error) {
+          return reject(error);
+        }
+
+        return resolve(value);
+      }
+    );
+  });
+}
+
+function generateValueObjectFromValue(value) {
+  let valueObject = [];
+
+  switch (typeof value) {
+    case "number":
+      valueObject[0] = {
+        tag: bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_REAL,
+        value: value,
+      };
+      break;
+
+    case "boolean":
+      valueObject[0] = {
+        tag: bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_BOOLEAN,
+        // Bacnet uses 0 and 1 instead of false and true
+        value: Number(value),
+      };
+      break;
+
+    case "string":
+      valueObject[0] = {
+        tag:
+          bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_CHARACTER_STRING,
+        value: value,
+      };
+      break;
+
+    default:
+      break;
+  }
+
+  return valueObject;
+}
+
 module.exports = {
   readAnalogInput: readAnalogInput,
   readAnalogOutput: readAnalogOutput,
@@ -145,4 +329,10 @@ module.exports = {
   readBinaryInput: readBinaryInput,
   readBinaryOutput: readBinaryOutput,
   readBinaryValue: readBinaryValue,
+  writeAnalogInput: writeAnalogInput,
+  writeAnalogOutput: writeAnalogOutput,
+  writeAnalogValue: writeAnalogValue,
+  writeBinaryInput: writeBinaryInput,
+  writeBinaryOutput: writeBinaryOutput,
+  writeBinaryValue: writeBinaryValue,
 };
