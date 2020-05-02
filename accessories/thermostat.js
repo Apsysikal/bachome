@@ -11,7 +11,7 @@ function myThermostat(log, config) {
   this.serial = "123-456-789";
 
   this.currentHeatingCoolingState = 0; // 0 = OFF, 1 = HEAT, 2 = COOL
-  this.targetHeatingCoolingState = 0; // 0 = OFF, 1 = HEAT, 2 = COOL, 3 = AUTO
+  this.targetHeatingCoolingState = 3; // 0 = OFF, 1 = HEAT, 2 = COOL, 3 = AUTO
   this.currentTemperature = 20.0;
   this.targetTempearture = 25.0;
   this.temperatureDisplayUnits = 0; // 0 = CELSIUS, 1 = FAHRENHEIT
@@ -60,9 +60,11 @@ myThermostat.prototype.setCurrentHeatingCoolingState = function (
   callback
 ) {
   this.currentHeatingCoolingState = value;
+
   this.thermostatService
     .getCharacteristic(Characteristic.CurrentHeatingCoolingState)
-    .updateValue(value);
+    .updateValue(this.currentHeatingCoolingState);
+
   return callback(null);
 };
 
@@ -74,52 +76,65 @@ myThermostat.prototype.setTargetHeatingCoolingState = function (
   value,
   callback
 ) {
-  this.targetHeatingCoolingState = value;
-  this.thermostatService
-    .getCharacteristic(Characteristic.TargetHeatingCoolingState)
-    .updateValue(value);
-
-  switch (this.targetHeatingCoolingState) {
+  switch (value) {
     case 0:
-      this.setCurrentHeatingCoolingState(0, () => {});
+      this.targetHeatingCoolingState = 0;
+      this.currentHeatingCoolingState = 0;
+
       break;
 
     case 1:
+      this.targetHeatingCoolingState = 1;
+
       if (this.targetTempearture > this.currentTemperature) {
-        this.setCurrentHeatingCoolingState(1, () => {});
+        this.currentHeatingCoolingState = 1;
       } else {
-        this.setCurrentHeatingCoolingState(0, () => {});
+        this.currentHeatingCoolingState = 0;
       }
 
       break;
 
     case 2:
+      this.targetHeatingCoolingState = 2;
+
       if (this.targetTempearture < this.currentTemperature) {
-        this.setCurrentHeatingCoolingState(2, () => {});
+        this.currentHeatingCoolingState = 2;
       } else {
-        this.setCurrentHeatingCoolingState(0, () => {});
+        this.currentHeatingCoolingState = 0;
       }
 
       break;
 
     case 3:
+      this.targetHeatingCoolingState = 3;
+
       if (this.targetTempearture > this.currentTemperature) {
-        this.setCurrentHeatingCoolingState(1, () => {});
+        this.currentHeatingCoolingState = 1;
       } else if (this.targetTempearture < this.currentTemperature) {
-        this.setCurrentHeatingCoolingState(2, () => {});
+        this.currentHeatingCoolingState = 2;
       } else {
-        this.setCurrentHeatingCoolingState(0, () => {});
+        this.currentHeatingCoolingState = 0;
       }
+
       break;
 
     default:
       break;
   }
 
+  this.thermostatService
+    .getCharacteristic(Characteristic.TargetHeatingCoolingState)
+    .updateValue(this.targetHeatingCoolingState);
+
+  this.thermostatService
+    .getCharacteristic(Characteristic.CurrentHeatingCoolingState)
+    .updateValue(this.currentHeatingCoolingState);
+
   return callback(null);
 };
 
 myThermostat.prototype.getCurrentTemperature = function (callback) {
+  console.log(this.currentTemperature);
   return callback(null, this.currentTemperature);
 };
 
@@ -129,47 +144,39 @@ myThermostat.prototype.setCurrentTemperature = function (value, callback) {
 };
 
 myThermostat.prototype.getTargetTemperature = function (callback) {
-  console.log(`GET Target temperature: ${this.targetTempearture}`);
   return callback(null, this.targetTempearture);
 };
 
 myThermostat.prototype.setTargetTemperature = function (value, callback) {
   this.targetTempearture = value;
 
-  if (
-    this.targetTempearture > this.currentTemperature &&
-    this.targetHeatingCoolingState === 3
-  ) {
-    this.setCurrentHeatingCoolingState(1, () => {});
-  } else if (
-    this.targetTempearture < this.currentTemperature &&
-    this.targetHeatingCoolingState === 3
-  ) {
-    this.setCurrentHeatingCoolingState(2, () => {});
-  } else if (this.targetHeatingCoolingState === 3) {
-    this.setCurrentHeatingCoolingState(0, () => {});
-  }
-
-  return callback(null);
-};
-
-myThermostat.prototype.updateValue = function (value) {
-  this.currentTemperature = value;
-
-  // If the thermostat is in automatic mode, recalculate the state
-  if (this.targetHeatingCoolingState === 3) {
+  if (this.targetHeatingCoolingState === 1) {
     if (this.targetTempearture > this.currentTemperature) {
       this.currentHeatingCoolingState = 1;
-      this.setCurrentHeatingCoolingState(this.currentHeatingCoolingState);
+    } else {
+      this.currentHeatingCoolingState = 0;
+    }
+  } else if (this.targetHeatingCoolingState === 2) {
+    if (this.targetTempearture < this.currentTemperature) {
+      this.currentHeatingCoolingState = 2;
+    } else {
+      this.currentHeatingCoolingState = 0;
+    }
+  } else if (this.targetHeatingCoolingState === 3) {
+    if (this.targetTempearture > this.currentTemperature) {
+      this.currentHeatingCoolingState = 1;
     } else if (this.targetTempearture < this.currentTemperature) {
       this.currentHeatingCoolingState = 2;
-      this.setCurrentHeatingCoolingState(this.currentHeatingCoolingState);
+    } else {
+      this.currentHeatingCoolingState = 0;
     }
   }
 
   this.thermostatService
-    .getCharacteristic(Characteristic.CurrentTemperature)
-    .updateValue(value);
+    .getCharacteristic(Characteristic.CurrentHeatingCoolingState)
+    .updateValue(this.currentHeatingCoolingState);
+
+  return callback(null);
 };
 
 module.exports = function (homebridge) {
