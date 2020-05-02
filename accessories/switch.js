@@ -20,17 +20,6 @@ function mySwitch(log, config) {
     chargingState: 2,
     lowBattery: 0,
   };
-
-  const objects = [
-    {
-      eventName: "switchUpdate",
-      type: "BV",
-      instance: 0,
-      propertyId: PropertyIds.PROP_PRESENT_VALUE,
-    },
-  ];
-
-  this.bacnetWatcher = new bacnetWatcher("192.168.1.147", objects);
 }
 
 mySwitch.prototype.getServices = function () {
@@ -94,16 +83,6 @@ mySwitch.prototype.setStatus = function (state, callback) {
 mySwitch.prototype.updateValue = function (value) {
   this.state = value;
   this.switchService.getCharacteristic(Characteristic.On).updateValue(value);
-  const object = this.bacnetWatcher.objects[0];
-  const deviceAddress = this.bacnetWatcher.deviceIpAddress;
-  bacnet
-    .writeBinaryValue(
-      deviceAddress,
-      object["instance"],
-      object["propertyId"],
-      value
-    )
-    .catch((error) => console.error(error));
 };
 
 module.exports = function (homebridge) {

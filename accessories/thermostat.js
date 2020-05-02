@@ -1,8 +1,5 @@
 "use strict";
 
-const PropertyIds = require("bacstack").enum.PropertyIds;
-const bacnetWatcher = require("../bacnet/watcher");
-
 let Service, Characteristic, UUID;
 
 function myThermostat(log, config) {
@@ -18,17 +15,6 @@ function myThermostat(log, config) {
   this.currentTemperature = 20.0;
   this.targetTempearture = 25.0;
   this.temperatureDisplayUnits = 0; // 0 = CELSIUS, 1 = FAHRENHEIT
-
-  const objects = [
-    {
-      eventName: "temperatureUpdate",
-      type: "AI",
-      instance: 0,
-      propertyId: PropertyIds.PROP_PRESENT_VALUE,
-    },
-  ];
-
-  this.bacnetWatcher = new bacnetWatcher("192.168.1.147", objects);
 }
 
 myThermostat.prototype.getServices = function () {
@@ -62,8 +48,6 @@ myThermostat.prototype.getServices = function () {
   this.informationService = infoService;
   this.thermostatService = thermostatService;
 
-  this.bacnetWatcher.on("temperatureUpdate", this.updateValue.bind(this));
-
   return [this.informationService, this.thermostatService];
 };
 
@@ -83,9 +67,6 @@ myThermostat.prototype.setCurrentHeatingCoolingState = function (
 };
 
 myThermostat.prototype.getTargetHeatingCoolingState = function (callback) {
-  console.log(
-    `GET Target heating/cooling state: ${this.targetHeatingCoolingState}`
-  );
   return callback(null, this.TargetHeatingCoolingState);
 };
 
@@ -125,23 +106,15 @@ myThermostat.prototype.setTargetHeatingCoolingState = function (
       break;
   }
 
-  console.log(
-    `SET Target heating/cooling state: ${this.targetHeatingCoolingState}`
-  );
-  console.log(
-    `Current heating/cooling state: ${this.currentHeatingCoolingState}`
-  );
   return callback(null);
 };
 
 myThermostat.prototype.getCurrentTemperature = function (callback) {
-  console.log(`GET Current temperature: ${this.currentTemperature}`);
   return callback(null, this.currentTemperature);
 };
 
 myThermostat.prototype.setCurrentTemperature = function (value, callback) {
   this.currentTemperature = value;
-  console.log(`GET Current temperature: ${this.currentTemperature}`);
   return callback(null);
 };
 
@@ -152,25 +125,18 @@ myThermostat.prototype.getTargetTemperature = function (callback) {
 
 myThermostat.prototype.setTargetTemperature = function (value, callback) {
   this.targetTempearture = value;
-  console.log(`SET Target temperature: ${this.targetTempearture}`);
-  console.log(
-    `Target heating/cooling state: ${this.targetHeatingCoolingState}`
-  );
-  console.log(
-    `Current heating/cooling state: ${this.currentHeatingCoolingState}`
-  );
 
   if (
     this.targetTempearture > this.currentTemperature &&
-    this.targetHeatingCoolingState == 3
+    this.targetHeatingCoolingState === 3
   ) {
     this.setCurrentHeatingCoolingState(1, () => {});
   } else if (
     this.targetTempearture < this.currentTemperature &&
-    this.targetHeatingCoolingState == 3
+    this.targetHeatingCoolingState === 3
   ) {
     this.setCurrentHeatingCoolingState(2, () => {});
-  } else if (this.targetHeatingCoolingState == 3) {
+  } else if (this.targetHeatingCoolingState === 3) {
     this.setCurrentHeatingCoolingState(0, () => {});
   }
 
@@ -178,11 +144,22 @@ myThermostat.prototype.setTargetTemperature = function (value, callback) {
 };
 
 myThermostat.prototype.updateValue = function (value) {
-  console.log(`Update Value: ${value}`);
   this.currentTemperature = value;
+
+  // If the thermostat is in automatic mode, recalculate the state
+  if (this.targetHeatingCoolingState === 3) {
+    if (this.targetTempearture > this.currentTemperature) {
+      this.currentHeatingCoolingState = 1;
+      this.setCurrentHeatingCoolingState(this.currentHeatingCoolingState);
+    } else if (this.targetTempearture < this.currentTemperature) {
+      this.currentHeatingCoolingState = 2;
+      this.setCurrentHeatingCoolingState(this.currentHeatingCoolingState);
+    }
+  }
+
   this.thermostatService
     .getCharacteristic(Characteristic.CurrentTemperature)
-    .updateValue(value / 10);
+    .updateValue(value);
 };
 
 module.exports = function (homebridge) {
