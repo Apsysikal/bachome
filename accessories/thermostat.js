@@ -85,11 +85,21 @@ myThermostat.prototype.setTargetHeatingCoolingState = function (
       break;
 
     case 1:
-      this.setCurrentHeatingCoolingState(1, () => {});
+      if (this.targetTempearture > this.currentTemperature) {
+        this.setCurrentHeatingCoolingState(1, () => {});
+      } else {
+        this.setCurrentHeatingCoolingState(0, () => {});
+      }
+
       break;
 
     case 2:
-      this.setCurrentHeatingCoolingState(2, () => {});
+      if (this.targetTempearture < this.currentTemperature) {
+        this.setCurrentHeatingCoolingState(2, () => {});
+      } else {
+        this.setCurrentHeatingCoolingState(0, () => {});
+      }
+
       break;
 
     case 3:
