@@ -61,8 +61,6 @@ mySwitch.prototype.getServices = function () {
       return callback(null, this.battery.StatusLowBattery);
     });
 
-  this.bacnetWatcher.on("switchUpdate", this.updateValue.bind(this));
-
   this.informationService = infoService;
   this.switchService = switchService;
   this.batteryService = batteryService;
