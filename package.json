@@ -1,5 +1,5 @@
 {
-  "name": "bachome",
+  "name": "homebridge-bachome",
   "version": "0.0.1",
   "description": "HomeKit / Homebridge adapter for BACnet devices.",
   "main": "index.js",
