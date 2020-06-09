@@ -8,6 +8,7 @@
       "title": "Name",
       "type": "string",
       "default": "BAChome",
+      "singular": true,
       "required": true
     },
     "thermostats": {
