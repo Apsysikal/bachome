@@ -1,121 +1,15 @@
 {
   "pluginAlias": "BAChome",
   "pluginType": "platform",
-  "headerDisplay": "This plugins depends on the 'BACstack' package, which is currently unstable.",
-  "footerDisplay": "For help please see the [wiki](https://github.com/Caserage/bachome#readme).",
+  "singular": true,
   "schema": {
-    "name": {
-      "title": "Name",
-      "type": "string",
-      "default": "BAChome",
-      "singular": true,
-      "required": true
-    },
-    "thermostats": {
-      "type": "array",
-      "items": {
-        "title": "Thermostat",
-        "type": "object",
-        "properties": {
-          "name": {
-            "title": "Name",
-            "type": "string",
-            "description": "Name of the thermostat",
-            "required": true,
-            "typehead": ["Living room thermostat", "Master Bedroom"]
-          },
-          "currentHeatingCoolingState": {
-            "title": "Current heating or cooling state",
-            "type": "string",
-            "description": "BACnet object representing the current state",
-            "required": true,
-            "typeahead": {
-              "source": ["AV:16", "AI:3"]
-            }
-          },
-          "targetHeatingCoolingState": {
-            "title": "Target heating or cooling state",
-            "type": "string",
-            "description": "BACnet object representing the target state",
-            "required": true,
-            "typeahead": {
-              "source": ["AV:16", "AV:7"]
-            }
-          },
-          "currentTemperature": {
-            "title": "Current temperature",
-            "type": "string",
-            "description": "BACnet object representing the current tempearture",
-            "required": true,
-            "typeahead": {
-              "source": ["AV:16", "AI:03"]
-            }
-          },
-          "targetTemperature": {
-            "title": "Target temperature",
-            "type": "string",
-            "description": "BACnet object representing the target tempearture",
-            "required": true,
-            "typeahead": {
-              "source": ["AV:16", "AV:7"]
-            }
-          },
-          "manufacturer": {
-            "title": "Manufacturer",
-            "type": "string",
-            "default": "Caserage"
-          },
-          "model": {
-            "title": "Model",
-            "type": "string",
-            "default": "Caserages's thermostat"
-          },
-          "serial": {
-            "title": "Serial number",
-            "type": "string",
-            "default": "123-456-789"
-          }
-        }
-      }
-    },
-    "switches": {
-      "type": "array",
-      "items": {
-        "title": "Switches",
-        "type": "object",
-        "properties": {
-          "name": {
-            "title": "Name",
-            "type": "string",
-            "description": "Name of the switch",
-            "required": true,
-            "typehead": ["Living room switch", "Master Bedroom"]
-          },
-          "state": {
-            "title": "Current switch state",
-            "type": "string",
-            "description": "BACnet object representing the current state",
-            "required": true,
-            "typeahead": {
-              "source": ["BV:1", "BV:17"]
-            }
-          },
-          "manufacturer": {
-            "title": "Manufacturer",
-            "type": "string",
-            "default": "Caserage"
-          },
-          "model": {
-            "title": "Model",
-            "type": "string",
-            "default": "Caserages's thermostat"
-          },
-          "serial": {
-            "title": "Serial number",
-            "type": "string",
-            "default": "123-456-789"
-          }
-        }
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "required": true,
+        "default": "BAChome Dynamic Platform"
       }
     }
   }
