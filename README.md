@@ -5,6 +5,7 @@
 
 </p>
 
+![Build and Lint](https://github.com/Caserage/bachome/workflows/Build%20and%20Lint/badge.svg)
 
 # Homebridge Platform Plugin Template
 
