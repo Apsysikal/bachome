@@ -1,16 +1,16 @@
 {
   "private": true,
   "displayName": "BAChome",
-  "name": "homebridge-bachome-ts",
+  "name": "homebridge-bachome",
   "version": "1.0.0",
   "description": "A short description about what your plugin does.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/caserage/bachome-ts.git"
+    "url": "git://github.com/caserage/bachome.git"
   },
   "bugs": {
-    "url": "https://github.com/caserage/bachome-ts/issues"
+    "url": "https://github.com/caserage/bachome/issues"
   },
   "engines": {
     "node": ">=10.17.0",
