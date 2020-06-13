@@ -15,6 +15,8 @@ export class BachomeHeaterCoolerAccessory {
     currentHeaterCoolerState: 0,
     targetHeaterCoolerState: 0,
     currentTemperature: 20.5,
+    coolingThresholdTemperature: 26.0,
+    heatingThresholdTemperature: 22.0,
   }
 
   constructor(
@@ -52,6 +54,16 @@ export class BachomeHeaterCoolerAccessory {
     
     this.service.getCharacteristic(this.platform.Characteristic.CurrentTemperature)
       .on('get', this.getCurrentTemperature.bind(this));
+
+    this.service.getCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature)
+      .on('set', this.setCoolingThresholdTemperature.bind(this))
+      .on('get', this.getCoolingThresholdTemperature.bind(this));
+
+    this.service.getCharacteristic(this.platform.Characteristic.HeatingThresholdTemperature)
+      .on('set', this.setHeatingThresholdTemperature.bind(this))
+      .on('get', this.getHeatingThresholdTemperature.bind(this));
+
+    
   }
 
   getActive(callback) {
@@ -92,5 +104,33 @@ export class BachomeHeaterCoolerAccessory {
     this.platform.log.debug('GET CurrentTemperature');
 
     callback(null, this.exampleStates.currentTemperature);
+  }
+
+  getCoolingThresholdTemperature(callback) {
+    this.platform.log.debug('GET CoolingThresholdTemperature');
+
+    callback(null, this.exampleStates.coolingThresholdTemperature);
+  }
+
+  setCoolingThresholdTemperature(value, callback) {
+    this.platform.log.debug('SET CoolingThresholdTemperature');
+
+    this.exampleStates.coolingThresholdTemperature = value;
+
+    callback(null);
+  }
+
+  getHeatingThresholdTemperature(callback) {
+    this.platform.log.debug('GET HeatingThresholdTemperature');
+
+    callback(null, this.exampleStates.heatingThresholdTemperature);
+  }
+
+  setHeatingThresholdTemperature(value, callback) {
+    this.platform.log.debug('SET HeatingThresholdTemperature');
+
+    this.exampleStates.heatingThresholdTemperature = value;
+
+    callback(null);
   }
 }

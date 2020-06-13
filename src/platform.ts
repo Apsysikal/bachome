@@ -144,27 +144,27 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
 
     for (const device of exampleConfig.cooler) {
       const uuid = this.api.hap.uuid.generate(device.serial);
-
+  
       const existingAccessory = this.accessories.find(
         (accessory) => accessory.UUID === uuid,
       );
-
-
+  
+  
       if (existingAccessory) {
         this.log.info(`Restoring existing accessory from cache: ${existingAccessory.displayName}`);
-
+  
         new BachomeHeaterCoolerAccessory(this, existingAccessory);
       } else {
         this.log.info(`Adding new accessory: ${device.name}`);
-
+  
         const accessory = new this.api.platformAccessory(device.name, uuid);
-
+  
         accessory.context.device = device;
-
+  
         new BachomeHeaterCoolerAccessory(this, accessory);
-
+  
         this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
       }
-    }
+    } 
   }
 }
