@@ -79,7 +79,7 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
           name: 'Example Switch One',
           manufacturer: 'Example Manufacturer',
           model: 'Example Model',
-          serial: 'Example Serial',
+          serial: 'IJK',
         },
       ],
       thermostat: [
@@ -87,7 +87,7 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
           name: 'Example Thermostat One',
           manufacturer: 'Example Manufacturer',
           model: 'Example Model',
-          serial: 'Example Serial + 1',
+          serial: 'LMN',
         },
       ],
     };
