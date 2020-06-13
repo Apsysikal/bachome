@@ -6,4 +6,4 @@ export const PLATFORM_NAME = 'bachome';
 /**
  * This must match the name of your plugin as defined the package.json
  */
-export const PLUGIN_NAME = 'homebridge-bachome-ts';
+export const PLUGIN_NAME = 'homebridge-bachome';

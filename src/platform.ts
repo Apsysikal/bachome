@@ -9,7 +9,7 @@ import {
 } from 'homebridge';
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
-import { BachomeSwitchAccessory } from './platformAccessory';
+import { BachomeSwitchAccessory } from './accessories/switch';
 
 /**
  * HomebridgePlatform
@@ -72,6 +72,42 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
         exampleDisplayName: 'Kitchen',
       },
     ];
+
+    const exampleConfig = {
+      switch: [
+        {
+          name: 'Example Switch One',
+          manufacturer: 'Example Manufacturer',
+          model: 'Example Model',
+          serial: 'Example Serial',
+        },
+      ],
+    };
+
+    for (const device of exampleConfig.switch) {
+      const uuid = this.api.hap.uuid.generate(device.serial);
+
+      const existingAccessory = this.accessories.find(
+        (accessory) => accessory.UUID === uuid,
+      );
+
+
+      if (existingAccessory) {
+        this.log.info(`Restoring existing accessory from cache: ${existingAccessory.displayName}`);
+
+        new BachomeSwitchAccessory(this, existingAccessory);
+      } else {
+        this.log.info(`Adding new accessory: ${device.name}`);
+
+        const accessory = new this.api.platformAccessory(device.name, uuid);
+
+        accessory.context.device = device;
+
+        new BachomeSwitchAccessory(this, accessory);
+
+        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+      }
+    }
 
     // loop over the discovered devices and register each one if it has not already been registered
     for (const device of exampleDevices) {
