@@ -82,9 +82,42 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
           serial: 'Example Serial',
         },
       ],
+      thermostat: [
+        {
+          name: 'Example Thermostat One',
+          manufacturer: 'Example Manufacturer',
+          model: 'Example Model',
+          serial: 'Example Serial + 1',
+        },
+      ],
     };
 
     for (const device of exampleConfig.switch) {
+      const uuid = this.api.hap.uuid.generate(device.serial);
+
+      const existingAccessory = this.accessories.find(
+        (accessory) => accessory.UUID === uuid,
+      );
+
+
+      if (existingAccessory) {
+        this.log.info(`Restoring existing accessory from cache: ${existingAccessory.displayName}`);
+
+        new BachomeSwitchAccessory(this, existingAccessory);
+      } else {
+        this.log.info(`Adding new accessory: ${device.name}`);
+
+        const accessory = new this.api.platformAccessory(device.name, uuid);
+
+        accessory.context.device = device;
+
+        new BachomeSwitchAccessory(this, accessory);
+
+        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+      }
+    }
+
+    for (const device of exampleConfig.thermostat) {
       const uuid = this.api.hap.uuid.generate(device.serial);
 
       const existingAccessory = this.accessories.find(
