@@ -65,34 +65,7 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
     // A real plugin you would discover accessories from the local network, cloud services
     // or a user-defined array in the platform config.
 
-    const exampleConfig = {
-      switch: [
-        {
-          name: 'Example Switch One',
-          manufacturer: 'Example Manufacturer',
-          model: 'Example Model',
-          serial: 'IJK',
-        },
-      ],
-      thermostat: [
-        {
-          name: 'Example Thermostat One',
-          manufacturer: 'Example Manufacturer',
-          model: 'Example Model',
-          serial: 'LMN',
-        },
-      ],
-      cooler: [
-        {
-          name: 'Example Cooler One',
-          manufacturer: 'Example Manufacturer',
-          model: 'Example Model',
-          serial: 'OPQ',
-        },
-      ],
-    };
-
-    for (const device of exampleConfig.switch) {
+    for (const device of this.config.switch) {
       const uuid = this.api.hap.uuid.generate(device.serial);
 
       const existingAccessory = this.accessories.find(
@@ -117,7 +90,7 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
       }
     }
 
-    for (const device of exampleConfig.thermostat) {
+    for (const device of this.config.thermostat) {
       const uuid = this.api.hap.uuid.generate(device.serial);
 
       const existingAccessory = this.accessories.find(
@@ -142,7 +115,7 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
       }
     }
 
-    for (const device of exampleConfig.cooler) {
+    for (const device of this.config.cooler) {
       const uuid = this.api.hap.uuid.generate(device.serial);
   
       const existingAccessory = this.accessories.find(
