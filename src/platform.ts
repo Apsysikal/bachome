@@ -10,6 +10,7 @@ import {
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { BachomeSwitchAccessory } from './accessories/switch';
+import { BachomeThermostatAccessory } from './accessories/thermostat';
 
 /**
  * HomebridgePlatform
@@ -128,7 +129,7 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
       if (existingAccessory) {
         this.log.info(`Restoring existing accessory from cache: ${existingAccessory.displayName}`);
 
-        new BachomeSwitchAccessory(this, existingAccessory);
+        new BachomeThermostatAccessory(this, existingAccessory);
       } else {
         this.log.info(`Adding new accessory: ${device.name}`);
 
@@ -136,7 +137,7 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
 
         accessory.context.device = device;
 
-        new BachomeSwitchAccessory(this, accessory);
+        new BachomeThermostatAccessory(this, accessory);
 
         this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
       }
