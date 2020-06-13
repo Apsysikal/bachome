@@ -1,5 +1,5 @@
 {
-  "pluginAlias": "BAChome",
+  "pluginAlias": "bachome",
   "pluginType": "platform",
   "singular": true,
   "schema": {
@@ -10,6 +10,111 @@
         "type": "string",
         "required": true,
         "default": "BAChome Dynamic Platform"
+      },
+      "switch": {
+        "title": "Switches",
+        "type": "array",
+        "items": {
+            "title": "Switch",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "title": "Name",
+                    "type": "string",
+                    "placeholder": "e.g. Kitchen",
+                    "required": true    
+                },
+                "manufacturer": {
+                    "title": "Manufacturer",
+                    "type": "string",
+                    "default": "Caserage",
+                    "required": true
+                },
+                "model": {
+                    "title": "Model",
+                    "type": "string",
+                    "default": "Caserage's switch",
+                    "required": true
+                },
+                "serial": {
+                    "title": "Serial number",
+                    "type": "string",
+                    "required": true,
+                    "placeholder": "ABC-DEF-GHI",
+                    "description": "Must be unique in this configuration"
+                }
+            }
+        }
+      },
+      "thermostat": {
+        "title": "Thermostats",
+        "type": "array",
+        "items": {
+            "title": "Thermostat",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "title": "Name",
+                    "type": "string",
+                    "placeholder": "e.g. Kitchen",
+                    "required": true    
+                },
+                "manufacturer": {
+                    "title": "Manufacturer",
+                    "type": "string",
+                    "default": "Caserage",
+                    "required": true
+                },
+                "model": {
+                    "title": "Model",
+                    "type": "string",
+                    "default": "Caserage's thermostat",
+                    "required": true
+                },
+                "serial": {
+                    "title": "Serial number",
+                    "type": "string",
+                    "required": true,
+                    "placeholder": "ABC-DEF-GHI",
+                    "description": "Must be unique in this configuration"
+                }
+            }
+        }
+      },
+      "cooler": {
+        "title": "Coolers",
+        "type": "array",
+        "items": {
+            "title": "Cooler",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "title": "Name",
+                    "type": "string",
+                    "placeholder": "e.g. Kitchen",
+                    "required": true    
+                },
+                "manufacturer": {
+                    "title": "Manufacturer",
+                    "type": "string",
+                    "default": "Caserage",
+                    "required": true
+                },
+                "model": {
+                    "title": "Model",
+                    "type": "string",
+                    "default": "Caserage's cooler",
+                    "required": true
+                },
+                "serial": {
+                    "title": "Serial number",
+                    "type": "string",
+                    "required": true,
+                    "placeholder": "ABC-DEF-GHI",
+                    "description": "Must be unique in this configuration"
+                }
+            }
+        }
       }
     }
   }
