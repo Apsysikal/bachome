@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Service, PlatformAccessory, CharacteristicValue, CharacteristicSetCallback, CharacteristicGetCallback } from 'homebridge';
 
 import { ExampleHomebridgePlatform } from '../platform';
+import { objectStringParser } from '../bacnet/parser';
+import { readAnalogInput } from '../bacnet/bacnet';
 
 /**
  * Platform Accessory
@@ -10,8 +13,12 @@ import { ExampleHomebridgePlatform } from '../platform';
 export class BachomeSwitchAccessory {
   private service: Service;
 
-  private exampleStates = {
+  private internalState = {
     On: false,
+  }
+
+  private stateObjects = {
+    On: {},
   }
 
   constructor(
@@ -34,6 +41,10 @@ export class BachomeSwitchAccessory {
     // Read the service name form the accessory context (config file passed via platform)
     this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.context.device.name);
 
+    this.stateObjects['On'] = objectStringParser(accessory.context.device.stateObject);
+    this.platform.log.debug(String(this.stateObjects.On['type']));
+    this.platform.log.debug(String(this.stateObjects.On['instance']));
+
     // register handlers for the On/Off Characteristic
     this.service.getCharacteristic(this.platform.Characteristic.On)
       .on('set', this.setOn.bind(this))
@@ -47,7 +58,7 @@ export class BachomeSwitchAccessory {
   setOn(value: CharacteristicValue, callback: CharacteristicSetCallback) {
 
     // implement your own code to turn your device on/off
-    this.exampleStates.On = value as boolean;
+    this.internalState.On = value as boolean;
 
     this.platform.log.debug('Set Characteristic On ->', value);
 
@@ -68,10 +79,10 @@ export class BachomeSwitchAccessory {
    * @example
    * this.service.updateCharacteristic(this.platform.Characteristic.On, true)
    */
-  getOn(callback: CharacteristicGetCallback) {
+  async getOn(callback: CharacteristicGetCallback) {
 
     // implement your own code to check if the device is on
-    const isOn = this.exampleStates.On;
+    const isOn = this.internalState.On;
 
     this.platform.log.debug('Get Characteristic On ->', isOn);
 
@@ -79,5 +90,15 @@ export class BachomeSwitchAccessory {
     // the first argument should be null if there were no errors
     // the second argument should be the value to return
     callback(null, isOn);
+
+    try {
+      let value = await readAnalogInput('192.168.1.147', 0, 85);
+      // @ts-ignore
+      value = value['values'][0]['value'];
+      // @ts-ignore
+      this.platform.log.debug(value);
+    } catch (error) {
+      this.platform.log.debug(error);
+    }
   }
 }

@@ -72,7 +72,6 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
         (accessory) => accessory.UUID === uuid,
       );
 
-
       if (existingAccessory) {
         this.log.info(`Restoring existing accessory from cache: ${existingAccessory.displayName}`);
 
