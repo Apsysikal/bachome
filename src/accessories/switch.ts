@@ -3,7 +3,7 @@ import { Service, PlatformAccessory, CharacteristicValue, CharacteristicSetCallb
 
 import { ExampleHomebridgePlatform } from '../platform';
 import { objectStringParser } from '../bacnet/parser';
-import { readAnalogInput } from '../bacnet/bacnet';
+import { readBinaryInput, readBinaryOutput, readBinaryValue, writeBinaryInput, writeBinaryOutput, writeBinaryValue } from '../bacnet/bacnet';
 
 /**
  * Platform Accessory
@@ -55,7 +55,7 @@ export class BachomeSwitchAccessory {
    * Handle "SET" requests from HomeKit
    * These are sent when the user changes the state of an accessory, for example, turning on a Light bulb.
    */
-  setOn(value: CharacteristicValue, callback: CharacteristicSetCallback) {
+  async setOn(value: CharacteristicValue, callback: CharacteristicSetCallback) {
 
     // implement your own code to turn your device on/off
     this.internalState.On = value as boolean;
@@ -64,6 +64,42 @@ export class BachomeSwitchAccessory {
 
     // you must call the callback function
     callback(null);
+
+    try {
+      switch (this.stateObjects.On['typeText']) {
+        case 'BI': {
+          let returnedValue = await writeBinaryInput('192.168.1.147', this.stateObjects.On['instance'], 85, value);
+          // @ts-ignore
+          returnedValue = returnedValue['values'][0]['value'];
+          this.platform.log.debug(`Written value to BI: ${String(returnedValue)}`);
+          this.internalState.On = Boolean(value);
+          break;
+        }
+
+        case 'BO': {
+          let returnedValue = await writeBinaryOutput('192.168.1.147', this.stateObjects.On['instance'], 85, value);
+          // @ts-ignore
+          returnedValue = returnedValue['values'][0]['value'];
+          this.platform.log.debug(`Written value to BO: ${String(returnedValue)}`);
+          this.internalState.On = Boolean(value);
+          break;
+        }
+
+        case 'BV': {
+          let returnedValue = await writeBinaryValue('192.168.1.147', this.stateObjects.On['instance'], 85, value);
+          // @ts-ignore
+          returnedValue = returnedValue['values'][0]['value'];
+          this.platform.log.debug(`Written value to BV: ${String(returnedValue)}`);
+          this.internalState.On = Boolean(value);
+          break;
+        }
+
+        default:
+          break;
+      }
+    } catch (error) {
+      this.platform.log.debug(error);
+    }
   }
 
   /**
@@ -92,11 +128,37 @@ export class BachomeSwitchAccessory {
     callback(null, isOn);
 
     try {
-      let value = await readAnalogInput('192.168.1.147', 0, 85);
-      // @ts-ignore
-      value = value['values'][0]['value'];
-      // @ts-ignore
-      this.platform.log.debug(value);
+      switch (this.stateObjects.On['typeText']) {
+        case 'BI': {
+          let value = await readBinaryInput('192.168.1.147', this.stateObjects.On['instance'], 85);
+          // @ts-ignore
+          value = value['values'][0]['value'];
+          this.platform.log.debug(`Read value from BI: ${String(value)}`);
+          this.internalState.On = Boolean(value);
+          break;
+        }
+
+        case 'BO': {
+          let value = await readBinaryOutput('192.168.1.147', this.stateObjects.On['instance'], 85);
+          // @ts-ignore
+          value = value['values'][0]['value'];
+          this.platform.log.debug(`Read value from BO: ${String(value)}`);
+          this.internalState.On = Boolean(value);
+          break;
+        }
+
+        case 'BV': {
+          let value = await readBinaryValue('192.168.1.147', this.stateObjects.On['instance'], 85);
+          // @ts-ignore
+          value = value['values'][0]['value'];
+          this.platform.log.debug(`Read value from BV: ${String(value)}`);
+          this.internalState.On = Boolean(value);
+          break;
+        }
+
+        default:
+          break;
+      }
     } catch (error) {
       this.platform.log.debug(error);
     }
