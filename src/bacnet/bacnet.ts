@@ -148,6 +148,7 @@ export function writeBinaryInput(ipAddress: string, instance: number, propertyId
       propertyObject,
       propertyId,
       valueObject,
+      { priority: 8 },
       (error, value) => {
         if (error) {
           return reject(error);
@@ -173,6 +174,7 @@ export function writeBinaryValue(ipAddress: string, instance: number, propertyId
       propertyObject,
       propertyId,
       valueObject,
+      { priority: 8 },
       (error, value) => {
         if (error) {
           return reject(error);
@@ -198,6 +200,7 @@ export function writeBinaryOutput(ipAddress: string, instance: number, propertyI
       propertyObject,
       propertyId,
       valueObject,
+      { priority: 8 },
       (error, value) => {
         if (error) {
           return reject(error);
@@ -223,6 +226,7 @@ export function writeAnalogInput(ipAddress: string, instance: number, propertyId
       propertyObject,
       propertyId,
       valueObject,
+      { priority: 8 },
       (error, value) => {
         if (error) {
           return reject(error);
@@ -248,6 +252,7 @@ export function writeAnalogValue(ipAddress: string, instance: number, propertyId
       propertyObject,
       propertyId,
       valueObject,
+      { priority: 8 },
       (error, value) => {
         if (error) {
           return reject(error);
@@ -273,6 +278,7 @@ export function writeAnalogOutput(ipAddress: string, instance: number, propertyI
       propertyObject,
       propertyId,
       valueObject,
+      { priority: 8 },
       (error, value) => {
         if (error) {
           return reject(error);
@@ -290,22 +296,22 @@ export function generateValueObjectFromValue(value) {
   switch (typeof value) {
     case 'number':
       valueObject[0] = {
-        tag: bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_REAL,
+        type: bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_REAL,
         value: value,
       };
       break;
  
     case 'boolean':
       valueObject[0] = {
-        tag: bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_BOOLEAN,
+        type: bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_ENUMERATED,
         // Bacnet uses 0 and 1 instead of false and true
-        value: Number(value),
+        value: value,
       };
       break;
  
     case 'string':
       valueObject[0] = {
-        tag:
+        type:
             bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_CHARACTER_STRING,
         value: value,
       };

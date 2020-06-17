@@ -86,9 +86,9 @@ export class BachomeSwitchAccessory {
         }
 
         case 'BV': {
-          let returnedValue = await writeBinaryValue('192.168.1.147', this.stateObjects.On['instance'], 85, value);
+          this.platform.log.debug(`Trying to write ${this.stateObjects.On['typeText']}:${this.stateObjects.On['instance']}`);
+          const returnedValue = await writeBinaryValue('192.168.1.147', this.stateObjects.On['instance'], 85, Boolean(value));
           // @ts-ignore
-          returnedValue = returnedValue['values'][0]['value'];
           this.platform.log.debug(`Written value to BV: ${String(returnedValue)}`);
           this.internalState.On = Boolean(value);
           break;
@@ -125,7 +125,6 @@ export class BachomeSwitchAccessory {
     // you must call the callback function
     // the first argument should be null if there were no errors
     // the second argument should be the value to return
-    callback(null, isOn);
 
     try {
       switch (this.stateObjects.On['typeText']) {
@@ -148,9 +147,9 @@ export class BachomeSwitchAccessory {
         }
 
         case 'BV': {
-          let value = await readBinaryValue('192.168.1.147', this.stateObjects.On['instance'], 85);
+          const readProperty = await readBinaryValue('192.168.1.147', this.stateObjects.On['instance'], 85);
           // @ts-ignore
-          value = value['values'][0]['value'];
+          const value = readProperty['values'][0]['value'];
           this.platform.log.debug(`Read value from BV: ${String(value)}`);
           this.internalState.On = Boolean(value);
           break;
@@ -159,6 +158,8 @@ export class BachomeSwitchAccessory {
         default:
           break;
       }
+
+      callback(null, isOn);
     } catch (error) {
       this.platform.log.debug(error);
     }
