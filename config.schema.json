@@ -85,26 +85,26 @@
                       "placeholder": "ABC-DEF-GHI",
                       "description": "Must be unique in this configuration"
                   },
-                  "currentStateObject": {
+                  "currentHeatingCoolingState": {
                       "title": "Current State Object",
                       "type": "string",
                       "required": true,
                       "placeholder": "AI:16"
                   },
-                  "targetStateObject": {
+                  "targetHeatingCoolingState": {
                       "title": "Target State Object",
                       "type": "string",
                       "required": true,
                       "placeholder": "AV:16",
                       "description": "Must be a writeable BACnet object"
                   },
-                  "currentTemperatureObject": {
+                  "currentTemperature": {
                       "title": "Current Temperature Object",
                       "type": "string",
                       "required": true,
                       "placeholder": "AI:7"
                   },
-                  "targetTemperatureObject": {
+                  "targetTemperature": {
                       "title": "Target Temperature Object",
                       "type": "string",
                       "required": true,
@@ -146,40 +146,40 @@
                       "placeholder": "ABC-DEF-GHI",
                       "description": "Must be unique in this configuration"
                   },
-                  "activeStateObject": {
+                  "active": {
                       "title": "Active State Object",
                       "type": "string",
                       "required": true,
                       "placeholder": "BV:16",
                       "description": "Must be a writeable BACnet object"
                   },
-                  "currentStateObject": {
+                  "currentHeaterCoolerState": {
                       "title": "Current State Object",
                       "type": "string",
                       "required": true,
                       "placeholder": "AI:16"
                   },
-                  "targetStateObject": {
+                  "targetHeaterCoolerState": {
                       "title": "Target State Object",
                       "type": "string",
                       "required": true,
                       "placeholder": "AV:16",
                       "description": "Must be a writeable BACnet object"
                   },
-                  "currentTemperatureObject": {
+                  "currentTemperature": {
                       "title": "Current Temperature Object",
                       "type": "string",
                       "required": true,
                       "placeholder": "AI:7"
                   },
-                  "coolingThresholdTemperatureObject": {
+                  "coolingThresholdTemperature": {
                       "title": "Cooling Threshold Temperature Object",
                       "type": "string",
                       "required": true,
                       "placeholder": "AV:8",
                       "description": "Must be a writeable BACnet object"
                   },
-                  "heatingThresholdTemperatureObject": {
+                  "heatingThresholdTemperature": {
                       "title": "Heating Threshold Temperature Object",
                       "type": "string",
                       "required": true,
