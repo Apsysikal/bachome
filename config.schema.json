@@ -150,7 +150,8 @@
                       "title": "Active State Object",
                       "type": "string",
                       "required": true,
-                      "placeholder": "BI:16"
+                      "placeholder": "BV:16",
+                      "description": "Must be a writeable BACnet object"
                   },
                   "currentStateObject": {
                       "title": "Current State Object",

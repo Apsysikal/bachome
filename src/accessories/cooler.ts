@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Service, PlatformAccessory } from 'homebridge';
 
 import { ExampleHomebridgePlatform } from '../platform';
+import { objectStringParser } from '../bacnet/parser';
+import { readBinaryValue, writeBinaryValue, readAnalogInput, readAnalogValue, writeAnalogValue } from '../bacnet/bacnet';
 
 /**
  * Platform Accessory
@@ -10,13 +13,22 @@ import { ExampleHomebridgePlatform } from '../platform';
 export class BachomeHeaterCoolerAccessory {
   private service: Service;
 
-  private exampleStates = {
-    active: 0,
+  private internalStates = {
+    active: false,
     currentHeaterCoolerState: 0,
     targetHeaterCoolerState: 0,
     currentTemperature: 20.5,
     coolingThresholdTemperature: 26.0,
     heatingThresholdTemperature: 22.0,
+  }
+
+  private stateObjects = {
+    active: {},
+    currentHeaterCoolerState: {},
+    targetHeaterCoolerState: {},
+    currentTemperature: {},
+    coolingThresholdTemperature: {},
+    heatingThresholdTemperature: {},
   }
 
   constructor(
@@ -40,6 +52,13 @@ export class BachomeHeaterCoolerAccessory {
     // Read the service name form the accessory context (config file passed via platform)
     this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.context.device.name);
 
+    this.stateObjects['active'] = objectStringParser(accessory.context.device.active);
+    this.stateObjects['currentHeaterCoolerState'] = objectStringParser(accessory.context.device.currentHeaterCoolerState);
+    this.stateObjects['targetHeaterCoolerState'] = objectStringParser(accessory.context.device.targetHeaterCoolerState);
+    this.stateObjects['currentTemperature'] = objectStringParser(accessory.context.device.currentTemperature);
+    this.stateObjects['coolingThresholdTemperature'] = objectStringParser(accessory.context.device.coolingThresholdTemperature);
+    this.stateObjects['heatingThresholdTemperature'] = objectStringParser(accessory.context.device.heatingThresholdTemperature);
+
     // register handlers for mandatory characteristics
     this.service.getCharacteristic(this.platform.Characteristic.Active)
       .on('set', this.setActive.bind(this))
@@ -62,75 +81,130 @@ export class BachomeHeaterCoolerAccessory {
     this.service.getCharacteristic(this.platform.Characteristic.HeatingThresholdTemperature)
       .on('set', this.setHeatingThresholdTemperature.bind(this))
       .on('get', this.getHeatingThresholdTemperature.bind(this));
-
-    
   }
 
-  getActive(callback) {
+  async getActive(callback) {
     this.platform.log.debug('GET Active');
 
-    callback(null, this.exampleStates.active);
+    const readProperty = await readBinaryValue('192.168.1.147', this.stateObjects.active['instance'], 85);
+    // @ts-ignore
+    const value = readProperty['values'][0]['value'];
+    this.platform.log.debug(`Read value from BV: ${String(value)}`);
+    this.internalStates.active = Boolean(value);
+
+    callback(null, this.internalStates.active);
   }
 
-  setActive(value, callback) {
+  async setActive(value, callback) {
     this.platform.log.debug('SET Active');
 
-    this.exampleStates.active = value;
+    this.platform.log.debug(`Trying to write ${this.stateObjects.active['typeText']}:${this.stateObjects.active['instance']}`);
+    const returnedValue = await writeBinaryValue('192.168.1.147', this.stateObjects.active['instance'], 85, Boolean(value));
+    // @ts-ignore
+    this.platform.log.debug(`Written value to BV: ${String(returnedValue)}`);
+    this.internalStates.active = Boolean(value);
+
+    this.internalStates.active = value;
 
     callback(null);
   }
 
-  getCurrentHeaterCoolerState(callback) {
+  async getCurrentHeaterCoolerState(callback) {
     this.platform.log.debug('GET CurrentHeaterCoolerState');
 
-    callback(null, this.exampleStates.currentHeaterCoolerState);
+    const readProperty = await readAnalogInput('192.168.1.147', this.stateObjects.currentHeaterCoolerState['instance'], 85);
+    // @ts-ignore
+    const value = readProperty['values'][0]['value'];
+    this.platform.log.debug(`Read value from AI: ${String(value)}`);
+    this.internalStates.currentHeaterCoolerState = value;
+
+    callback(null, this.internalStates.currentHeaterCoolerState);
   }
 
-  getTargetHeaterCoolerState(callback) {
+  async getTargetHeaterCoolerState(callback) {
     this.platform.log.debug('GET TargetHeaterCoolerState');
 
-    callback(null, this.exampleStates.targetHeaterCoolerState);
+    const readProperty = await readAnalogValue('192.168.1.147', this.stateObjects.targetHeaterCoolerState['instance'], 85);
+    // @ts-ignore
+    const value = readProperty['values'][0]['value'];
+    this.platform.log.debug(`Read value from AV: ${String(value)}`);
+    this.internalStates.targetHeaterCoolerState = value;
+
+    callback(null, this.internalStates.targetHeaterCoolerState);
   }
 
-  setTargetHeaterCoolerState(value, callback) {
+  async setTargetHeaterCoolerState(value, callback) {
     this.platform.log.debug('SET TargetHeaterCoolerState');
 
-    this.exampleStates.targetHeaterCoolerState = value;
+    this.internalStates.targetHeaterCoolerState = value;
 
     callback(null);
+
+    const returnedValue = await writeAnalogValue('192.168.1.147', this.stateObjects.targetHeaterCoolerState['instance'], 85, value);
+    
+    this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
+    this.internalStates.targetHeaterCoolerState = value;
   }
 
-  getCurrentTemperature(callback) {
+  async getCurrentTemperature(callback) {
     this.platform.log.debug('GET CurrentTemperature');
 
-    callback(null, this.exampleStates.currentTemperature);
+    const readProperty = await readAnalogInput('192.168.1.147', this.stateObjects.currentTemperature['instance'], 85);
+    // @ts-ignore
+    const value = readProperty['values'][0]['value'];
+    this.platform.log.debug(`Read value from AI: ${String(value)}`);
+    this.internalStates.currentTemperature = value;
+
+    callback(null, this.internalStates.currentTemperature);
   }
 
-  getCoolingThresholdTemperature(callback) {
+  async getCoolingThresholdTemperature(callback) {
     this.platform.log.debug('GET CoolingThresholdTemperature');
 
-    callback(null, this.exampleStates.coolingThresholdTemperature);
+    const readProperty = await readAnalogValue('192.168.1.147', this.stateObjects.coolingThresholdTemperature['instance'], 85);
+    // @ts-ignore
+    const value = readProperty['values'][0]['value'];
+    this.platform.log.debug(`Read value from AI: ${String(value)}`);
+    this.internalStates.coolingThresholdTemperature = value;
+
+    callback(null, this.internalStates.coolingThresholdTemperature);
   }
 
-  setCoolingThresholdTemperature(value, callback) {
+  async setCoolingThresholdTemperature(value, callback) {
     this.platform.log.debug('SET CoolingThresholdTemperature');
 
-    this.exampleStates.coolingThresholdTemperature = value;
+    this.internalStates.coolingThresholdTemperature = value;
 
     callback(null);
+
+    const returnedValue = await writeAnalogValue('192.168.1.147', this.stateObjects.coolingThresholdTemperature['instance'], 85, value);
+
+    this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
+    this.internalStates.coolingThresholdTemperature = value;
   }
 
-  getHeatingThresholdTemperature(callback) {
+  async getHeatingThresholdTemperature(callback) {
     this.platform.log.debug('GET HeatingThresholdTemperature');
 
-    callback(null, this.exampleStates.heatingThresholdTemperature);
+    const readProperty = await readAnalogValue('192.168.1.147', this.stateObjects.heatingThresholdTemperature['instance'], 85);
+    // @ts-ignore
+    const value = readProperty['values'][0]['value'];
+    this.platform.log.debug(`Read value from AI: ${String(value)}`);
+    this.internalStates.heatingThresholdTemperature = value;
+
+    callback(null, this.internalStates.heatingThresholdTemperature);
   }
 
-  setHeatingThresholdTemperature(value, callback) {
+  async setHeatingThresholdTemperature(value, callback) {
     this.platform.log.debug('SET HeatingThresholdTemperature');
 
-    this.exampleStates.heatingThresholdTemperature = value;
+    this.internalStates.heatingThresholdTemperature = value;
 
     callback(null);
+
+    const returnedValue = await writeAnalogValue('192.168.1.147', this.stateObjects.coolingThresholdTemperature['instance'], 85, value);
+
+    this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
+    this.internalStates.coolingThresholdTemperature = value;
   }
 }
