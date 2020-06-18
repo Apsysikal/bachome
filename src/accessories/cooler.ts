@@ -202,9 +202,9 @@ export class BachomeHeaterCoolerAccessory {
 
     callback(null);
 
-    const returnedValue = await writeAnalogValue('192.168.1.147', this.stateObjects.coolingThresholdTemperature['instance'], 85, value);
+    const returnedValue = await writeAnalogValue('192.168.1.147', this.stateObjects.heatingThresholdTemperature['instance'], 85, value);
 
     this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
-    this.internalStates.coolingThresholdTemperature = value;
+    this.internalStates.heatingThresholdTemperature = value;
   }
 }
