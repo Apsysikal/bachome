@@ -74,6 +74,11 @@ export class BachomeThermostatAccessory {
       .on('get', this.getTemperatureDisplayUnits.bind(this));
   }
 
+  /**
+   * Reads the current heating / cooling state from the
+   * configured BACnet object and updates the internal state.
+   * @param callback Callback from homebridge
+   */
   async getCurrentHeatingCoolingState(callback) {
     this.platform.log.debug('GET CurrentHeatingCoolingState');
 
@@ -86,6 +91,11 @@ export class BachomeThermostatAccessory {
     callback(null, this.internalStates.currentHeatingCoolingState);
   }
 
+  /**
+   * Reads the target heating / cooling state from the
+   * configured BACnet object and updates the internal state.
+   * @param callback Callback from homebridge
+   */
   async getTargetHeatingCoolingState(callback) {
     this.platform.log.debug('GET TargetHeatingCoolingState');
 
@@ -98,6 +108,13 @@ export class BachomeThermostatAccessory {
     callback(null, this.internalStates.targetHeatingCoolingState);
   }
 
+  /**
+   * Writes the value passed from homebridge to the
+   * configured BACnet object and updates the
+   * internal state.
+   * @param value Value passed from homebridge
+   * @param callback Callback from homebridge
+   */
   async setTargetHeatingCoolingState(value, callback) {
     this.platform.log.debug('SET TargetHeatingCoolingState');
 
@@ -111,6 +128,11 @@ export class BachomeThermostatAccessory {
     this.internalStates.targetHeatingCoolingState = value;
   }
 
+  /**
+   * Reads the current temperature from the
+   * configured BACnet object and updates the internal state.
+   * @param callback Callback from homebridge
+   */
   async getCurrentTemperature(callback) {
     this.platform.log.debug('GET CurrentTemperature');
 
@@ -123,6 +145,11 @@ export class BachomeThermostatAccessory {
     callback(null, this.internalStates.currentTemperature);
   }
 
+  /**
+   * Reads the target temperature from the
+   * configured BACnet object and updates the internal state.
+   * @param callback Callback from homebridge
+   */
   async getTargetTemperature(callback) {
     this.platform.log.debug('GET TargetTemperature');
 
@@ -135,6 +162,13 @@ export class BachomeThermostatAccessory {
     callback(null, this.internalStates.targetTemperature);
   }
 
+  /**
+   * Writes the value passed from homebridge to the
+   * configured BACnet object and updates the
+   * internal state.
+   * @param value Value passed from homebridge
+   * @param callback Callback from homebridge
+   */
   async setTargetTemperature(value, callback) {
     this.platform.log.debug('SET TargetTemperature');
 
@@ -148,12 +182,23 @@ export class BachomeThermostatAccessory {
     this.internalStates.targetTemperature = value;
   }
 
+  /**
+   * Reads the display units from the
+   * internal state.
+   * @param callback Callback from homebridge
+   */
   getTemperatureDisplayUnits(callback) {
     this.platform.log.debug('GET TemperatureDisplayUnits');
 
     callback(null, this.internalStates.temperatureDisplayUnits);
   }
 
+  /**
+   * Writes the value passed from homebridge to the
+   * internal state.
+   * @param value Value passed from homebridge
+   * @param callback Callback from homebridge
+   */
   setTemperatureDisplayUnits(value, callback) {
     this.platform.log.debug('SET TemperatureDisplayUnits');
 

@@ -2,6 +2,14 @@ import bacnet from 'bacstack';
 
 const client = new bacnet();
 
+/**
+ * Reads a binary input object from the remote device.
+ * Returns a promise which resolves with the read content on
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param instance Instance number of the binary input object
+ * @param propertyId Property ID of the property, which will be read
+ */
 export function readBinaryInput(ipAddress: string, instance: number, propertyId: number) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
@@ -23,7 +31,15 @@ export function readBinaryInput(ipAddress: string, instance: number, propertyId:
     );
   });
 }
- 
+
+/**
+ * Reads a binary value object from the remote device.
+ * Returns a promise which resolves with the read content on
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param instance Instance number of the binary value object
+ * @param propertyId Property ID of the property, which will be read
+ */
 export function readBinaryValue(ipAddress: string, instance: number, propertyId: number) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
@@ -45,7 +61,15 @@ export function readBinaryValue(ipAddress: string, instance: number, propertyId:
     );
   });
 }
- 
+
+/**
+ * Reads a binary output object from the remote device.
+ * Returns a promise which resolves with the read content on
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param instance Instance number of the binary output object
+ * @param propertyId Property ID of the property, which will be read
+ */
 export function readBinaryOutput(ipAddress: string, instance: number, propertyId: number) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
@@ -67,7 +91,15 @@ export function readBinaryOutput(ipAddress: string, instance: number, propertyId
     );
   });
 }
- 
+
+/**
+ * Reads a analog input object from the remote device.
+ * Returns a promise which resolves with the read content on
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param instance Instance number of the analog input object
+ * @param propertyId Property ID of the property, which will be read
+ */
 export function readAnalogInput(ipAddress: string, instance: number, propertyId: number) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
@@ -89,7 +121,15 @@ export function readAnalogInput(ipAddress: string, instance: number, propertyId:
     );
   });
 }
- 
+
+/**
+ * Reads a analog value object from the remote device.
+ * Returns a promise which resolves with the read content on
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param instance Instance number of the analog vlaue object
+ * @param propertyId Property ID of the property, which will be read
+ */
 export function readAnalogValue(ipAddress: string, instance: number, propertyId: number) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
@@ -111,7 +151,15 @@ export function readAnalogValue(ipAddress: string, instance: number, propertyId:
     );
   });
 }
- 
+
+/**
+ * Reads a analog output object from the remote device.
+ * Returns a promise which resolves with the read content on
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param instance Instance number of the analog output object
+ * @param propertyId Property ID of the property, which will be read
+ */
 export function readAnalogOutput(ipAddress: string, instance: number, propertyId: number) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
@@ -133,7 +181,16 @@ export function readAnalogOutput(ipAddress: string, instance: number, propertyId
     );
   });
 }
- 
+
+/**
+ * Writes a binary input on the remote device with the provided value.
+ * Returns a promise which resolves with the written content
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param instance Instance number of the binary input
+ * @param propertyId Property ID of the property, which will be written
+ * @param value Value to be written to the selected property
+ */
 export function writeBinaryInput(ipAddress: string, instance: number, propertyId: number, value) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
@@ -159,7 +216,16 @@ export function writeBinaryInput(ipAddress: string, instance: number, propertyId
     );
   });
 }
- 
+
+/**
+ * Writes a binary value on the remote device with the provided value.
+ * Returns a promise which resolves with the written content
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param instance Instance number of the binary value
+ * @param propertyId Property ID of the property, which will be written
+ * @param value Value to be written to the selected property
+ */
 export function writeBinaryValue(ipAddress: string, instance: number, propertyId: number, value) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
@@ -185,7 +251,16 @@ export function writeBinaryValue(ipAddress: string, instance: number, propertyId
     );
   });
 }
- 
+
+/**
+ * Writes a binary output on the remote device with the provided value.
+ * Returns a promise which resolves with the written content
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param instance Instance number of the binary output
+ * @param propertyId Property ID of the property, which will be written
+ * @param value Value to be written to the selected property
+ */
 export function writeBinaryOutput(ipAddress: string, instance: number, propertyId: number, value) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
@@ -211,7 +286,16 @@ export function writeBinaryOutput(ipAddress: string, instance: number, propertyI
     );
   });
 }
- 
+
+/**
+ * Writes a analog input on the remote device with the provided value.
+ * Returns a promise which resolves with the written content
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param instance Instance number of the analog input
+ * @param propertyId Property ID of the property, which will be written
+ * @param value Value to be written to the selected property
+ */
 export function writeAnalogInput(ipAddress: string, instance: number, propertyId: number, value) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
@@ -237,7 +321,16 @@ export function writeAnalogInput(ipAddress: string, instance: number, propertyId
     );
   });
 }
- 
+
+/**
+ * Writes a analog value on the remote device with the provided value.
+ * Returns a promise which resolves with the written content
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param instance Instance number of the analog value
+ * @param propertyId Property ID of the property, which will be written
+ * @param value Value to be written to the selected property
+ */
 export function writeAnalogValue(ipAddress: string, instance: number, propertyId: number, value) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
@@ -263,7 +356,16 @@ export function writeAnalogValue(ipAddress: string, instance: number, propertyId
     );
   });
 }
- 
+
+/**
+ * Writes a analog output on the remote device with the provided value.
+ * Returns a promise which resolves with the written content
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param instance Instance number of the analog output
+ * @param propertyId Property ID of the property, which will be written
+ * @param value Value to be written to the selected property
+ */
 export function writeAnalogOutput(ipAddress: string, instance: number, propertyId: number, value) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
@@ -289,7 +391,13 @@ export function writeAnalogOutput(ipAddress: string, instance: number, propertyI
     );
   });
 }
- 
+
+/**
+ * Takes the value passed into the function and converts it into a
+ * valueObject, which then can be used in other functions to read
+ * and write to external BACnet objects
+ * @param value Value which will be converted to a valueObject
+ */
 export function generateValueObjectFromValue(value) {
   const valueObject: unknown[] = [];
  

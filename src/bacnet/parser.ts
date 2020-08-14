@@ -6,6 +6,11 @@ export interface BacnetObject {
     instance: number;
 }
 
+/**
+ * Parses shorthand notations of BACnet objects and instances and returns
+ * a BacnetObject
+ * @param objectString Shorthand BACnet object notation string e.g. 'BV:6'
+ */
 export function objectStringParser(objectString:string): BacnetObject {
   const parsedObject: BacnetObject = {
     typeText: '',

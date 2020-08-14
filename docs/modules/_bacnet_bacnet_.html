@@ -105,7 +105,7 @@
 					<div class="tsd-signature tsd-kind-icon">client<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = new bacnet()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L3">bacnet/bacnet.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L3">bacnet/bacnet.ts:3</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -122,13 +122,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L293">bacnet/bacnet.ts:293</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L401">bacnet/bacnet.ts:401</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Takes the value passed into the function and converts it into a
+										valueObject, which then can be used in other functions to read
+									and write to external BACnet objects</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>value: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Value which will be converted to a valueObject</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h4>
@@ -145,19 +155,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L71">bacnet/bacnet.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L103">bacnet/bacnet.ts:103</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Reads a analog input object from the remote device.
+										Returns a promise which resolves with the read content on
+									successful operation and rejects on failure.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ipAddress: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IP address of the device</p>
+									</div>
 								</li>
 								<li>
 									<h5>instance: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Instance number of the analog input object</p>
+									</div>
 								</li>
 								<li>
 									<h5>propertyId: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property ID of the property, which will be read</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -174,19 +200,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L115">bacnet/bacnet.ts:115</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L163">bacnet/bacnet.ts:163</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Reads a analog output object from the remote device.
+										Returns a promise which resolves with the read content on
+									successful operation and rejects on failure.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ipAddress: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IP address of the device</p>
+									</div>
 								</li>
 								<li>
 									<h5>instance: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Instance number of the analog output object</p>
+									</div>
 								</li>
 								<li>
 									<h5>propertyId: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property ID of the property, which will be read</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -203,19 +245,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L93">bacnet/bacnet.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L133">bacnet/bacnet.ts:133</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Reads a analog value object from the remote device.
+										Returns a promise which resolves with the read content on
+									successful operation and rejects on failure.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ipAddress: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IP address of the device</p>
+									</div>
 								</li>
 								<li>
 									<h5>instance: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Instance number of the analog vlaue object</p>
+									</div>
 								</li>
 								<li>
 									<h5>propertyId: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property ID of the property, which will be read</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -232,19 +290,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L5">bacnet/bacnet.ts:5</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L13">bacnet/bacnet.ts:13</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Reads a binary input object from the remote device.
+										Returns a promise which resolves with the read content on
+									successful operation and rejects on failure.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ipAddress: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IP address of the device</p>
+									</div>
 								</li>
 								<li>
 									<h5>instance: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Instance number of the binary input object</p>
+									</div>
 								</li>
 								<li>
 									<h5>propertyId: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property ID of the property, which will be read</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -261,19 +335,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L49">bacnet/bacnet.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L73">bacnet/bacnet.ts:73</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Reads a binary output object from the remote device.
+										Returns a promise which resolves with the read content on
+									successful operation and rejects on failure.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ipAddress: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IP address of the device</p>
+									</div>
 								</li>
 								<li>
 									<h5>instance: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Instance number of the binary output object</p>
+									</div>
 								</li>
 								<li>
 									<h5>propertyId: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property ID of the property, which will be read</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -290,19 +380,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L27">bacnet/bacnet.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L43">bacnet/bacnet.ts:43</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Reads a binary value object from the remote device.
+										Returns a promise which resolves with the read content on
+									successful operation and rejects on failure.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ipAddress: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IP address of the device</p>
+									</div>
 								</li>
 								<li>
 									<h5>instance: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Instance number of the binary value object</p>
+									</div>
 								</li>
 								<li>
 									<h5>propertyId: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property ID of the property, which will be read</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -319,22 +425,41 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L215">bacnet/bacnet.ts:215</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L299">bacnet/bacnet.ts:299</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Writes a analog input on the remote device with the provided value.
+										Returns a promise which resolves with the written content
+									successful operation and rejects on failure.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ipAddress: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IP address of the device</p>
+									</div>
 								</li>
 								<li>
 									<h5>instance: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Instance number of the analog input</p>
+									</div>
 								</li>
 								<li>
 									<h5>propertyId: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property ID of the property, which will be written</p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Value to be written to the selected property</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -351,22 +476,41 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L267">bacnet/bacnet.ts:267</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L369">bacnet/bacnet.ts:369</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Writes a analog output on the remote device with the provided value.
+										Returns a promise which resolves with the written content
+									successful operation and rejects on failure.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ipAddress: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IP address of the device</p>
+									</div>
 								</li>
 								<li>
 									<h5>instance: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Instance number of the analog output</p>
+									</div>
 								</li>
 								<li>
 									<h5>propertyId: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property ID of the property, which will be written</p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Value to be written to the selected property</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -383,22 +527,41 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L241">bacnet/bacnet.ts:241</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L334">bacnet/bacnet.ts:334</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Writes a analog value on the remote device with the provided value.
+										Returns a promise which resolves with the written content
+									successful operation and rejects on failure.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ipAddress: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IP address of the device</p>
+									</div>
 								</li>
 								<li>
 									<h5>instance: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Instance number of the analog value</p>
+									</div>
 								</li>
 								<li>
 									<h5>propertyId: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property ID of the property, which will be written</p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Value to be written to the selected property</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -415,22 +578,41 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L137">bacnet/bacnet.ts:137</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L194">bacnet/bacnet.ts:194</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Writes a binary input on the remote device with the provided value.
+										Returns a promise which resolves with the written content
+									successful operation and rejects on failure.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ipAddress: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IP address of the device</p>
+									</div>
 								</li>
 								<li>
 									<h5>instance: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Instance number of the binary input</p>
+									</div>
 								</li>
 								<li>
 									<h5>propertyId: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property ID of the property, which will be written</p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Value to be written to the selected property</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -447,22 +629,41 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L189">bacnet/bacnet.ts:189</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L264">bacnet/bacnet.ts:264</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Writes a binary output on the remote device with the provided value.
+										Returns a promise which resolves with the written content
+									successful operation and rejects on failure.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ipAddress: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IP address of the device</p>
+									</div>
 								</li>
 								<li>
 									<h5>instance: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Instance number of the binary output</p>
+									</div>
 								</li>
 								<li>
 									<h5>propertyId: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property ID of the property, which will be written</p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Value to be written to the selected property</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -479,22 +680,41 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/dd8b4dc/src/bacnet/bacnet.ts#L163">bacnet/bacnet.ts:163</a></li>
+									<li>Defined in <a href="https://github.com/Caserage/bachome/blob/37f6d16/src/bacnet/bacnet.ts#L229">bacnet/bacnet.ts:229</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Writes a binary value on the remote device with the provided value.
+										Returns a promise which resolves with the written content
+									successful operation and rejects on failure.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ipAddress: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>IP address of the device</p>
+									</div>
 								</li>
 								<li>
 									<h5>instance: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Instance number of the binary value</p>
+									</div>
 								</li>
 								<li>
 									<h5>propertyId: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property ID of the property, which will be written</p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Value to be written to the selected property</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
