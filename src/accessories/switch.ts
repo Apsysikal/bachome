@@ -21,6 +21,8 @@ export class BachomeSwitchAccessory {
     On: {},
   }
 
+  private ipAddress = "";
+
   constructor(
     private readonly platform: ExampleHomebridgePlatform,
     private readonly accessory: PlatformAccessory,
@@ -42,6 +44,9 @@ export class BachomeSwitchAccessory {
     this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.context.device.name);
 
     this.stateObjects['On'] = objectStringParser(accessory.context.device.stateObject);
+
+    this.ipAddress = accessory.context.device.ipAddress;
+    
     this.platform.log.debug(String(this.stateObjects.On['type']));
     this.platform.log.debug(String(this.stateObjects.On['instance']));
 
@@ -68,7 +73,7 @@ export class BachomeSwitchAccessory {
     try {
       switch (this.stateObjects.On['typeText']) {
         case 'BI': {
-          let returnedValue = await writeBinaryInput('192.168.1.147', this.stateObjects.On['instance'], 85, value);
+          let returnedValue = await writeBinaryInput(this.ipAddress, this.stateObjects.On['instance'], 85, value);
           // @ts-ignore
           returnedValue = returnedValue['values'][0]['value'];
           this.platform.log.debug(`Written value to BI: ${String(returnedValue)}`);
@@ -77,7 +82,7 @@ export class BachomeSwitchAccessory {
         }
 
         case 'BO': {
-          let returnedValue = await writeBinaryOutput('192.168.1.147', this.stateObjects.On['instance'], 85, value);
+          let returnedValue = await writeBinaryOutput(this.ipAddress, this.stateObjects.On['instance'], 85, value);
           // @ts-ignore
           returnedValue = returnedValue['values'][0]['value'];
           this.platform.log.debug(`Written value to BO: ${String(returnedValue)}`);
@@ -87,7 +92,7 @@ export class BachomeSwitchAccessory {
 
         case 'BV': {
           this.platform.log.debug(`Trying to write ${this.stateObjects.On['typeText']}:${this.stateObjects.On['instance']}`);
-          const returnedValue = await writeBinaryValue('192.168.1.147', this.stateObjects.On['instance'], 85, Boolean(value));
+          const returnedValue = await writeBinaryValue(this.ipAddress, this.stateObjects.On['instance'], 85, Boolean(value));
           // @ts-ignore
           this.platform.log.debug(`Written value to BV: ${String(returnedValue)}`);
           this.internalState.On = Boolean(value);
@@ -129,7 +134,7 @@ export class BachomeSwitchAccessory {
     try {
       switch (this.stateObjects.On['typeText']) {
         case 'BI': {
-          let value = await readBinaryInput('192.168.1.147', this.stateObjects.On['instance'], 85);
+          let value = await readBinaryInput(this.ipAddress, this.stateObjects.On['instance'], 85);
           // @ts-ignore
           value = value['values'][0]['value'];
           this.platform.log.debug(`Read value from BI: ${String(value)}`);
@@ -138,7 +143,7 @@ export class BachomeSwitchAccessory {
         }
 
         case 'BO': {
-          let value = await readBinaryOutput('192.168.1.147', this.stateObjects.On['instance'], 85);
+          let value = await readBinaryOutput(this.ipAddress, this.stateObjects.On['instance'], 85);
           // @ts-ignore
           value = value['values'][0]['value'];
           this.platform.log.debug(`Read value from BO: ${String(value)}`);
@@ -147,7 +152,7 @@ export class BachomeSwitchAccessory {
         }
 
         case 'BV': {
-          const readProperty = await readBinaryValue('192.168.1.147', this.stateObjects.On['instance'], 85);
+          const readProperty = await readBinaryValue(this.ipAddress, this.stateObjects.On['instance'], 85);
           // @ts-ignore
           const value = readProperty['values'][0]['value'];
           this.platform.log.debug(`Read value from BV: ${String(value)}`);
