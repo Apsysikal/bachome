@@ -43,6 +43,12 @@
                       "placeholder": "ABC-DEF-GHI",
                       "description": "Must be unique in this configuration"
                   },
+                  "ipAddress": {
+                      "title": "IP Address",
+                      "type": "string",
+                      "required": true,
+                      "placeholder": "192.168.1.140"
+                  },
                   "stateObject": {
                       "title": "State Object",
                       "type": "string",
@@ -84,6 +90,12 @@
                       "required": true,
                       "placeholder": "ABC-DEF-GHI",
                       "description": "Must be unique in this configuration"
+                  },
+                  "ipAddress": {
+                      "title": "IP Address",
+                      "type": "string",
+                      "required": true,
+                      "placeholder": "192.168.1.140"
                   },
                   "currentHeatingCoolingState": {
                       "title": "Current State Object",
@@ -145,6 +157,12 @@
                       "required": true,
                       "placeholder": "ABC-DEF-GHI",
                       "description": "Must be unique in this configuration"
+                  },
+                  "ipAddress": {
+                      "title": "IP Address",
+                      "type": "string",
+                      "required": true,
+                      "placeholder": "192.168.1.140"
                   },
                   "active": {
                       "title": "Active State Object",
