@@ -64,78 +64,83 @@ export class ExampleHomebridgePlatform implements DynamicPlatformPlugin {
     // EXAMPLE ONLY
     // A real plugin you would discover accessories from the local network, cloud services
     // or a user-defined array in the platform config.
+    if (this.config.switch) {
+      for (const device of this.config.switch) {
+        const uuid = this.api.hap.uuid.generate(device.serial);
+  
+        const existingAccessory = this.accessories.find(
+          (accessory) => accessory.UUID === uuid,
+        );
+  
+        if (existingAccessory) {
+          this.log.info(`Restoring existing accessory from cache: ${existingAccessory.displayName}`);
+  
+          new BachomeSwitchAccessory(this, existingAccessory);
+        } else {
+          this.log.info(`Adding new accessory: ${device.name}`);
+  
+          const accessory = new this.api.platformAccessory(device.name, uuid);
+  
+          accessory.context.device = device;
+  
+          new BachomeSwitchAccessory(this, accessory);
+  
+          this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+        }
+      } 
+    }
 
-    for (const device of this.config.switch) {
-      const uuid = this.api.hap.uuid.generate(device.serial);
-
-      const existingAccessory = this.accessories.find(
-        (accessory) => accessory.UUID === uuid,
-      );
-
-      if (existingAccessory) {
-        this.log.info(`Restoring existing accessory from cache: ${existingAccessory.displayName}`);
-
-        new BachomeSwitchAccessory(this, existingAccessory);
-      } else {
-        this.log.info(`Adding new accessory: ${device.name}`);
-
-        const accessory = new this.api.platformAccessory(device.name, uuid);
-
-        accessory.context.device = device;
-
-        new BachomeSwitchAccessory(this, accessory);
-
-        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+    if (this.config.thermostat) {
+      for (const device of this.config.thermostat) {
+        const uuid = this.api.hap.uuid.generate(device.serial);
+  
+        const existingAccessory = this.accessories.find(
+          (accessory) => accessory.UUID === uuid,
+        );
+  
+  
+        if (existingAccessory) {
+          this.log.info(`Restoring existing accessory from cache: ${existingAccessory.displayName}`);
+  
+          new BachomeThermostatAccessory(this, existingAccessory);
+        } else {
+          this.log.info(`Adding new accessory: ${device.name}`);
+  
+          const accessory = new this.api.platformAccessory(device.name, uuid);
+  
+          accessory.context.device = device;
+  
+          new BachomeThermostatAccessory(this, accessory);
+  
+          this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+        }
       }
     }
 
-    for (const device of this.config.thermostat) {
-      const uuid = this.api.hap.uuid.generate(device.serial);
-
-      const existingAccessory = this.accessories.find(
-        (accessory) => accessory.UUID === uuid,
-      );
-
-
-      if (existingAccessory) {
-        this.log.info(`Restoring existing accessory from cache: ${existingAccessory.displayName}`);
-
-        new BachomeThermostatAccessory(this, existingAccessory);
-      } else {
-        this.log.info(`Adding new accessory: ${device.name}`);
-
-        const accessory = new this.api.platformAccessory(device.name, uuid);
-
-        accessory.context.device = device;
-
-        new BachomeThermostatAccessory(this, accessory);
-
-        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
-      }
-    }
-
-    for (const device of this.config.cooler) {
-      const uuid = this.api.hap.uuid.generate(device.serial);
-  
-      const existingAccessory = this.accessories.find(
-        (accessory) => accessory.UUID === uuid,
-      );
-  
-  
-      if (existingAccessory) {
-        this.log.info(`Restoring existing accessory from cache: ${existingAccessory.displayName}`);
-  
-        new BachomeHeaterCoolerAccessory(this, existingAccessory);
-      } else {
-        this.log.info(`Adding new accessory: ${device.name}`);
-  
-        const accessory = new this.api.platformAccessory(device.name, uuid);
-  
-        accessory.context.device = device;
-  
-        new BachomeHeaterCoolerAccessory(this, accessory);
-  
-        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+    if (this.config.cooler) {
+      for (const device of this.config.cooler) {
+        const uuid = this.api.hap.uuid.generate(device.serial);
+    
+        const existingAccessory = this.accessories.find(
+          (accessory) => accessory.UUID === uuid,
+        );
+    
+    
+        if (existingAccessory) {
+          this.log.info(`Restoring existing accessory from cache: ${existingAccessory.displayName}`);
+    
+          new BachomeHeaterCoolerAccessory(this, existingAccessory);
+        } else {
+          this.log.info(`Adding new accessory: ${device.name}`);
+    
+          const accessory = new this.api.platformAccessory(device.name, uuid);
+    
+          accessory.context.device = device;
+    
+          new BachomeHeaterCoolerAccessory(this, accessory);
+    
+          this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+        }
       }
     } 
   }
