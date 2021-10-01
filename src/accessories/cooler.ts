@@ -31,7 +31,7 @@ export class BachomeHeaterCoolerAccessory {
     heatingThresholdTemperature: {},
   }
 
-  private ipAddress = "";
+  private ipAddress = '';
 
   constructor(
     private readonly platform: BachomeHomebridgePlatform,
