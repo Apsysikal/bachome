@@ -33,6 +33,11 @@ export class BachomeHomebridgePlatform implements DynamicPlatformPlugin {
   ) {
     this.log.debug('Finished initializing platform:', this.config.name);
 
+    process.on('uncaughtException', (error) => {
+      log.error(error.message);
+      process.exit(1);
+    });
+
     // When this event is fired it means Homebridge has restored all cached accessories from disk.
     // Dynamic Platform plugins should only register new accessories after this event was fired,
     // in order to ensure they weren't added to homebridge already. This event can also be used
