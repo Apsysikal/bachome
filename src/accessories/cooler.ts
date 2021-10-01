@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Service, PlatformAccessory } from 'homebridge';
 
-import { ExampleHomebridgePlatform } from '../platform';
+import { BachomeHomebridgePlatform } from '../platform';
 import { objectStringParser } from '../bacnet/parser';
 import { readBinaryValue, writeBinaryValue, readAnalogInput, readAnalogValue, writeAnalogValue } from '../bacnet/bacnet';
 
@@ -34,7 +34,7 @@ export class BachomeHeaterCoolerAccessory {
   private ipAddress = "";
 
   constructor(
-    private readonly platform: ExampleHomebridgePlatform,
+    private readonly platform: BachomeHomebridgePlatform,
     private readonly accessory: PlatformAccessory,
   ) {
 
