@@ -103,7 +103,7 @@ export class BachomeSwitchAccessory {
           break;
       }
     } catch (error) {
-      this.platform.log.debug(error);
+      this.platform.log.debug(String(error));
     }
   }
 
@@ -166,7 +166,7 @@ export class BachomeSwitchAccessory {
 
       callback(null, isOn);
     } catch (error) {
-      this.platform.log.debug(error);
+      this.platform.log.debug(String(error));
     }
   }
 }
