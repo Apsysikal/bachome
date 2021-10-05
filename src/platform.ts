@@ -12,6 +12,7 @@ import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { BachomeSwitchAccessory } from './accessories/switch';
 import { BachomeThermostatAccessory } from './accessories/thermostat';
 import { BachomeHeaterCoolerAccessory } from './accessories/cooler';
+import { BachomeTemperatureSensorAccessory } from './accessories/temperatureSensor';
 
 /**
  * HomebridgePlatform
@@ -147,6 +148,32 @@ export class BachomeHomebridgePlatform implements DynamicPlatformPlugin {
           this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
         }
       }
-    } 
+    }
+
+    if (this.config.temperatureSensor) {
+      for (const device of this.config.temperatureSensor) {
+        const uuid = this.api.hap.uuid.generate(device.serial);
+
+        const existingAccessory = this.accessories.find(
+          (accessory) => accessory.UUID === uuid,
+        );
+
+        if (existingAccessory) {
+          this.log.info(`Restoring existing accessory from cache: ${existingAccessory.displayName}`);
+    
+          new BachomeTemperatureSensorAccessory(this, existingAccessory);
+        } else {
+          this.log.info(`Adding new accessory: ${device.name}`);
+    
+          const accessory = new this.api.platformAccessory(device.name, uuid);
+    
+          accessory.context.device = device;
+    
+          new BachomeTemperatureSensorAccessory(this, accessory);
+    
+          this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+        }
+      }
+    }
   }
 }

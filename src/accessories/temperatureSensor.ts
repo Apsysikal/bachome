@@ -10,7 +10,7 @@ import { readAnalogInput, readAnalogValue, readAnalogOutput } from '../bacnet/ba
  * An instance of this class is created for each accessory your platform registers
  * Each accessory may expose multiple services of different service types.
  */
-export class BachomeSwitchAccessory {
+export class BachomeTemperatureSensorAccessory {
   private service: Service;
 
   private internalState = {
@@ -43,7 +43,7 @@ export class BachomeSwitchAccessory {
     // Read the service name form the accessory context (config file passed via platform)
     this.service.setCharacteristic(this.platform.Characteristic.Name, accessory.context.device.name);
 
-    this.stateObjects['TemperatureSensor'] = objectStringParser(accessory.context.device.stateObject);
+    this.stateObjects['CurrentTemperature'] = objectStringParser(accessory.context.device.stateObject);
 
     this.ipAddress = accessory.context.device.ipAddress;
     

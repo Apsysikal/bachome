@@ -206,6 +206,53 @@
                   }
               }
           }
+        },
+        "temperatureSensor": {
+            "title": "Temperature Sensors",
+            "type": "array",
+            "items": {
+                "title": "Temperature Sensor",
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "title": "Name",
+                        "type": "string",
+                        "placeholder": "e.g. Kitchen",
+                        "required": true    
+                    },
+                    "manufacturer": {
+                        "title": "Manufacturer",
+                        "type": "string",
+                        "default": "Caserage",
+                        "required": true
+                    },
+                    "model": {
+                        "title": "Model",
+                        "type": "string",
+                        "default": "Caserage's temperature sensor",
+                        "required": true
+                    },
+                    "serial": {
+                        "title": "Serial number",
+                        "type": "string",
+                        "required": true,
+                        "placeholder": "ABC-DEF-GHI",
+                        "description": "Must be unique in this configuration"
+                    },
+                    "ipAddress": {
+                        "title": "IP Address",
+                        "type": "string",
+                        "required": true,
+                        "placeholder": "192.168.1.140"
+                    },
+                    "stateObject": {
+                        "title": "State Object",
+                        "type": "string",
+                        "required": true,
+                        "placeholder": "AI:16"
+                    }
+                }
+            }
         }
       }
     }
