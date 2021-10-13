@@ -130,6 +130,7 @@ export class BachomeSwitchAccessory {
     // you must call the callback function
     // the first argument should be null if there were no errors
     // the second argument should be the value to return
+    callback(null, isOn);
 
     try {
       switch (this.stateObjects.On['typeText']) {
@@ -139,6 +140,7 @@ export class BachomeSwitchAccessory {
           value = value['values'][0]['value'];
           this.platform.log.debug(`Read value from BI: ${String(value)}`);
           this.internalState.On = Boolean(value);
+          this.service.getCharacteristic(this.platform.Characteristic.On).updateValue(Boolean(value));
           break;
         }
 
@@ -148,6 +150,7 @@ export class BachomeSwitchAccessory {
           value = value['values'][0]['value'];
           this.platform.log.debug(`Read value from BO: ${String(value)}`);
           this.internalState.On = Boolean(value);
+          this.service.getCharacteristic(this.platform.Characteristic.On).updateValue(Boolean(value));
           break;
         }
 
@@ -157,14 +160,13 @@ export class BachomeSwitchAccessory {
           const value = readProperty['values'][0]['value'];
           this.platform.log.debug(`Read value from BV: ${String(value)}`);
           this.internalState.On = Boolean(value);
+          this.service.getCharacteristic(this.platform.Characteristic.On).updateValue(Boolean(value));
           break;
         }
 
         default:
           break;
       }
-
-      callback(null, isOn);
     } catch (error) {
       this.platform.log.debug(String(error));
     }

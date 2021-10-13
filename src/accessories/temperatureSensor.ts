@@ -78,6 +78,7 @@ export class BachomeTemperatureSensorAccessory {
     // you must call the callback function
     // the first argument should be null if there were no errors
     // the second argument should be the value to return
+    callback(null, currentTemperature);
 
     try {
       switch (this.stateObjects.CurrentTemperature['typeText']) {
@@ -87,6 +88,7 @@ export class BachomeTemperatureSensorAccessory {
           value = value['values'][0]['value'];
           this.platform.log.debug(`Read value from BI: ${String(value)}`);
           this.internalState.CurrentTemperature = Number(value);
+          this.service.getCharacteristic(this.platform.Characteristic.CurrentTemperature).updateValue(Number(value));
           break;
         }
 
@@ -96,6 +98,7 @@ export class BachomeTemperatureSensorAccessory {
           value = value['values'][0]['value'];
           this.platform.log.debug(`Read value from BO: ${String(value)}`);
           this.internalState.CurrentTemperature = Number(value);
+          this.service.getCharacteristic(this.platform.Characteristic.CurrentTemperature).updateValue(Number(value));
           break;
         }
 
@@ -105,14 +108,13 @@ export class BachomeTemperatureSensorAccessory {
           const value = readProperty['values'][0]['value'];
           this.platform.log.debug(`Read value from BV: ${String(value)}`);
           this.internalState.CurrentTemperature = Number(value);
+          this.service.getCharacteristic(this.platform.Characteristic.CurrentTemperature).updateValue(Number(value));
           break;
         }
 
         default:
           break;
       }
-
-      callback(null, currentTemperature);
     } catch (error) {
       this.platform.log.debug(String(error));
     }
