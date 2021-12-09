@@ -14,7 +14,7 @@ export function readBinaryInput(
   ipAddress: string,
   instance: number,
   propertyId: number
-) {
+): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_BINARY_INPUT,
@@ -48,7 +48,7 @@ export function readBinaryValue(
   ipAddress: string,
   instance: number,
   propertyId: number
-) {
+): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_BINARY_VALUE,
@@ -82,7 +82,7 @@ export function readBinaryOutput(
   ipAddress: string,
   instance: number,
   propertyId: number
-) {
+): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_BINARY_OUTPUT,
@@ -116,7 +116,7 @@ export function readAnalogInput(
   ipAddress: string,
   instance: number,
   propertyId: number
-) {
+): Promise<number> {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_INPUT,
@@ -150,7 +150,7 @@ export function readAnalogValue(
   ipAddress: string,
   instance: number,
   propertyId: number
-) {
+): Promise<number> {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_VALUE,
@@ -184,7 +184,7 @@ export function readAnalogOutput(
   ipAddress: string,
   instance: number,
   propertyId: number
-) {
+): Promise<number> {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_OUTPUT,
@@ -219,8 +219,8 @@ export function writeBinaryInput(
   ipAddress: string,
   instance: number,
   propertyId: number,
-  value
-) {
+  value: boolean
+): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_BINARY_INPUT,
@@ -259,8 +259,8 @@ export function writeBinaryValue(
   ipAddress: string,
   instance: number,
   propertyId: number,
-  value
-) {
+  value: boolean
+): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_BINARY_VALUE,
@@ -299,8 +299,8 @@ export function writeBinaryOutput(
   ipAddress: string,
   instance: number,
   propertyId: number,
-  value
-) {
+  value: boolean
+): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_BINARY_OUTPUT,
@@ -339,8 +339,8 @@ export function writeAnalogInput(
   ipAddress: string,
   instance: number,
   propertyId: number,
-  value
-) {
+  value: number
+): Promise<number> {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_INPUT,
@@ -379,8 +379,8 @@ export function writeAnalogValue(
   ipAddress: string,
   instance: number,
   propertyId: number,
-  value
-) {
+  value: number
+): Promise<number> {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_VALUE,
@@ -419,8 +419,8 @@ export function writeAnalogOutput(
   ipAddress: string,
   instance: number,
   propertyId: number,
-  value
-) {
+  value: number
+): Promise<number> {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_OUTPUT,
@@ -452,7 +452,9 @@ export function writeAnalogOutput(
  * and write to external BACnet objects
  * @param value Value which will be converted to a valueObject
  */
-export function generateValueObjectFromValue(value) {
+export function generateValueObjectFromValue(
+  value: number | boolean | string
+): unknown[] {
   const valueObject: unknown[] = [];
 
   switch (typeof value) {

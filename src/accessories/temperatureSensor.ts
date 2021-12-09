@@ -2,8 +2,6 @@
 import {
   Service,
   PlatformAccessory,
-  CharacteristicValue,
-  CharacteristicSetCallback,
   CharacteristicGetCallback,
 } from "homebridge";
 
@@ -38,6 +36,7 @@ export class BachomeTemperatureSensorAccessory {
     private readonly accessory: PlatformAccessory
   ) {
     // set accessory information
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.accessory
       .getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(
@@ -99,7 +98,9 @@ export class BachomeTemperatureSensorAccessory {
    * @example
    * this.service.updateCharacteristic(this.platform.Characteristic.On, true)
    */
-  async getCurrentTemperature(callback: CharacteristicGetCallback) {
+  async getCurrentTemperature(
+    callback: CharacteristicGetCallback
+  ): Promise<void> {
     // implement your own code to check if the device is on
     const currentTemperature = this.internalState.CurrentTemperature;
 

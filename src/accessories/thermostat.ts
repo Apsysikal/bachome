@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Service, PlatformAccessory } from "homebridge";
+import {
+  Service,
+  PlatformAccessory,
+  CharacteristicGetCallback,
+  CharacteristicValue,
+  CharacteristicSetCallback,
+} from "homebridge";
 
 import { BachomeHomebridgePlatform } from "../platform";
 import { objectStringParser } from "../bacnet/parser";
@@ -39,6 +45,7 @@ export class BachomeThermostatAccessory {
     private readonly accessory: PlatformAccessory
   ) {
     // set accessory information
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.accessory
       .getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(
@@ -115,7 +122,9 @@ export class BachomeThermostatAccessory {
    * configured BACnet object and updates the internal state.
    * @param callback Callback from homebridge
    */
-  async getCurrentHeatingCoolingState(callback) {
+  async getCurrentHeatingCoolingState(
+    callback: CharacteristicGetCallback
+  ): Promise<void> {
     this.platform.log.debug("GET CurrentHeatingCoolingState");
 
     const readProperty = await readAnalogInput(
@@ -136,7 +145,9 @@ export class BachomeThermostatAccessory {
    * configured BACnet object and updates the internal state.
    * @param callback Callback from homebridge
    */
-  async getTargetHeatingCoolingState(callback) {
+  async getTargetHeatingCoolingState(
+    callback: CharacteristicGetCallback
+  ): Promise<void> {
     this.platform.log.debug("GET TargetHeatingCoolingState");
 
     const readProperty = await readAnalogValue(
@@ -159,10 +170,13 @@ export class BachomeThermostatAccessory {
    * @param value Value passed from homebridge
    * @param callback Callback from homebridge
    */
-  async setTargetHeatingCoolingState(value, callback) {
+  async setTargetHeatingCoolingState(
+    value: CharacteristicValue,
+    callback: CharacteristicSetCallback
+  ): Promise<void> {
     this.platform.log.debug("SET TargetHeatingCoolingState");
 
-    this.internalStates.targetHeatingCoolingState = value;
+    this.internalStates.targetHeatingCoolingState = Number(value);
 
     callback(null);
 
@@ -174,7 +188,7 @@ export class BachomeThermostatAccessory {
     );
 
     this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
-    this.internalStates.targetHeatingCoolingState = value;
+    this.internalStates.targetHeatingCoolingState = Number(value);
   }
 
   /**
@@ -182,7 +196,9 @@ export class BachomeThermostatAccessory {
    * configured BACnet object and updates the internal state.
    * @param callback Callback from homebridge
    */
-  async getCurrentTemperature(callback) {
+  async getCurrentTemperature(
+    callback: CharacteristicGetCallback
+  ): Promise<void> {
     this.platform.log.debug("GET CurrentTemperature");
 
     const readProperty = await readAnalogInput(
@@ -203,7 +219,9 @@ export class BachomeThermostatAccessory {
    * configured BACnet object and updates the internal state.
    * @param callback Callback from homebridge
    */
-  async getTargetTemperature(callback) {
+  async getTargetTemperature(
+    callback: CharacteristicGetCallback
+  ): Promise<void> {
     this.platform.log.debug("GET TargetTemperature");
 
     const readProperty = await readAnalogValue(
@@ -226,10 +244,13 @@ export class BachomeThermostatAccessory {
    * @param value Value passed from homebridge
    * @param callback Callback from homebridge
    */
-  async setTargetTemperature(value, callback) {
+  async setTargetTemperature(
+    value: CharacteristicValue,
+    callback: CharacteristicSetCallback
+  ): Promise<void> {
     this.platform.log.debug("SET TargetTemperature");
 
-    this.internalStates.targetTemperature = value;
+    this.internalStates.targetTemperature = Number(value);
 
     callback(null);
 
@@ -241,7 +262,7 @@ export class BachomeThermostatAccessory {
     );
 
     this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
-    this.internalStates.targetTemperature = value;
+    this.internalStates.targetTemperature = Number(value);
   }
 
   /**
@@ -249,7 +270,7 @@ export class BachomeThermostatAccessory {
    * internal state.
    * @param callback Callback from homebridge
    */
-  getTemperatureDisplayUnits(callback) {
+  getTemperatureDisplayUnits(callback: CharacteristicGetCallback): void {
     this.platform.log.debug("GET TemperatureDisplayUnits");
 
     callback(null, this.internalStates.temperatureDisplayUnits);
@@ -261,10 +282,13 @@ export class BachomeThermostatAccessory {
    * @param value Value passed from homebridge
    * @param callback Callback from homebridge
    */
-  setTemperatureDisplayUnits(value, callback) {
+  setTemperatureDisplayUnits(
+    value: CharacteristicValue,
+    callback: CharacteristicSetCallback
+  ): void {
     this.platform.log.debug("SET TemperatureDisplayUnits");
 
-    this.internalStates.temperatureDisplayUnits = value;
+    this.internalStates.temperatureDisplayUnits = Number(value);
 
     callback(null);
   }

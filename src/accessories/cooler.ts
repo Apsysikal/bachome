@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Service, PlatformAccessory } from "homebridge";
+import {
+  Service,
+  PlatformAccessory,
+  CharacteristicGetCallback,
+  CharacteristicValue,
+  CharacteristicSetCallback,
+} from "homebridge";
 
 import { BachomeHomebridgePlatform } from "../platform";
 import { objectStringParser } from "../bacnet/parser";
@@ -44,6 +50,7 @@ export class BachomeHeaterCoolerAccessory {
     private readonly accessory: PlatformAccessory
   ) {
     // set accessory information
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.accessory
       .getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(
@@ -132,7 +139,7 @@ export class BachomeHeaterCoolerAccessory {
    * and updates the internal state.
    * @param callback Callback from homebridge
    */
-  async getActive(callback) {
+  async getActive(callback: CharacteristicGetCallback): Promise<void> {
     this.platform.log.debug("GET Active");
 
     const readProperty = await readBinaryValue(
@@ -155,7 +162,10 @@ export class BachomeHeaterCoolerAccessory {
    * @param value Value passed from homebridge
    * @param callback Callback from homebridge
    */
-  async setActive(value, callback) {
+  async setActive(
+    value: CharacteristicValue,
+    callback: CharacteristicSetCallback
+  ): Promise<void> {
     this.platform.log.debug("SET Active");
 
     this.platform.log.debug(
@@ -171,8 +181,6 @@ export class BachomeHeaterCoolerAccessory {
     this.platform.log.debug(`Written value to BV: ${String(returnedValue)}`);
     this.internalStates.active = Boolean(value);
 
-    this.internalStates.active = value;
-
     callback(null);
   }
 
@@ -181,7 +189,9 @@ export class BachomeHeaterCoolerAccessory {
    * configured BACnet object and updates the internal state.
    * @param callback Callback from homebridge
    */
-  async getCurrentHeaterCoolerState(callback) {
+  async getCurrentHeaterCoolerState(
+    callback: CharacteristicGetCallback
+  ): Promise<void> {
     this.platform.log.debug("GET CurrentHeaterCoolerState");
 
     const readProperty = await readAnalogInput(
@@ -202,7 +212,9 @@ export class BachomeHeaterCoolerAccessory {
    * configured BACnet object and updates the internal state.
    * @param callback Callback from homebridge
    */
-  async getTargetHeaterCoolerState(callback) {
+  async getTargetHeaterCoolerState(
+    callback: CharacteristicGetCallback
+  ): Promise<void> {
     this.platform.log.debug("GET TargetHeaterCoolerState");
 
     const readProperty = await readAnalogValue(
@@ -225,10 +237,13 @@ export class BachomeHeaterCoolerAccessory {
    * @param value Value passed from homebridge
    * @param callback Callback from homebridge
    */
-  async setTargetHeaterCoolerState(value, callback) {
+  async setTargetHeaterCoolerState(
+    value: CharacteristicValue,
+    callback: CharacteristicSetCallback
+  ): Promise<void> {
     this.platform.log.debug("SET TargetHeaterCoolerState");
 
-    this.internalStates.targetHeaterCoolerState = value;
+    this.internalStates.targetHeaterCoolerState = Number(value);
 
     callback(null);
 
@@ -240,7 +255,7 @@ export class BachomeHeaterCoolerAccessory {
     );
 
     this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
-    this.internalStates.targetHeaterCoolerState = value;
+    this.internalStates.targetHeaterCoolerState = Number(value);
   }
 
   /**
@@ -248,7 +263,9 @@ export class BachomeHeaterCoolerAccessory {
    * configured BACnet object and updates the internal state.
    * @param callback Callback from homebridge
    */
-  async getCurrentTemperature(callback) {
+  async getCurrentTemperature(
+    callback: CharacteristicGetCallback
+  ): Promise<void> {
     this.platform.log.debug("GET CurrentTemperature");
 
     const readProperty = await readAnalogInput(
@@ -269,7 +286,9 @@ export class BachomeHeaterCoolerAccessory {
    * configured BACnet object and updates the internal state.
    * @param callback Callback from homebridge
    */
-  async getCoolingThresholdTemperature(callback) {
+  async getCoolingThresholdTemperature(
+    callback: CharacteristicGetCallback
+  ): Promise<void> {
     this.platform.log.debug("GET CoolingThresholdTemperature");
 
     const readProperty = await readAnalogValue(
@@ -292,10 +311,13 @@ export class BachomeHeaterCoolerAccessory {
    * @param value Value passed from homebridge
    * @param callback Callback from homebridge
    */
-  async setCoolingThresholdTemperature(value, callback) {
+  async setCoolingThresholdTemperature(
+    value: CharacteristicValue,
+    callback: CharacteristicSetCallback
+  ): Promise<void> {
     this.platform.log.debug("SET CoolingThresholdTemperature");
 
-    this.internalStates.coolingThresholdTemperature = value;
+    this.internalStates.coolingThresholdTemperature = Number(value);
 
     callback(null);
 
@@ -307,7 +329,7 @@ export class BachomeHeaterCoolerAccessory {
     );
 
     this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
-    this.internalStates.coolingThresholdTemperature = value;
+    this.internalStates.coolingThresholdTemperature = Number(value);
   }
 
   /**
@@ -315,7 +337,9 @@ export class BachomeHeaterCoolerAccessory {
    * configured BACnet object and updates the internal state.
    * @param callback Callback from homebridge
    */
-  async getHeatingThresholdTemperature(callback) {
+  async getHeatingThresholdTemperature(
+    callback: CharacteristicGetCallback
+  ): Promise<void> {
     this.platform.log.debug("GET HeatingThresholdTemperature");
 
     const readProperty = await readAnalogValue(
@@ -338,10 +362,13 @@ export class BachomeHeaterCoolerAccessory {
    * @param value Value passed from homebridge
    * @param callback Callback from homebridge
    */
-  async setHeatingThresholdTemperature(value, callback) {
+  async setHeatingThresholdTemperature(
+    value: CharacteristicValue,
+    callback: CharacteristicSetCallback
+  ): Promise<void> {
     this.platform.log.debug("SET HeatingThresholdTemperature");
 
-    this.internalStates.heatingThresholdTemperature = value;
+    this.internalStates.heatingThresholdTemperature = Number(value);
 
     callback(null);
 
@@ -353,6 +380,6 @@ export class BachomeHeaterCoolerAccessory {
     );
 
     this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
-    this.internalStates.heatingThresholdTemperature = value;
+    this.internalStates.heatingThresholdTemperature = Number(value);
   }
 }

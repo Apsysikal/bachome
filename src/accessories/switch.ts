@@ -41,6 +41,7 @@ export class BachomeSwitchAccessory {
     private readonly accessory: PlatformAccessory
   ) {
     // set accessory information
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.accessory
       .getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(
@@ -90,7 +91,10 @@ export class BachomeSwitchAccessory {
    * Handle "SET" requests from HomeKit
    * These are sent when the user changes the state of an accessory, for example, turning on a Light bulb.
    */
-  async setOn(value: CharacteristicValue, callback: CharacteristicSetCallback) {
+  async setOn(
+    value: CharacteristicValue,
+    callback: CharacteristicSetCallback
+  ): Promise<void> {
     // implement your own code to turn your device on/off
     this.internalState.On = value as boolean;
 
@@ -172,7 +176,7 @@ export class BachomeSwitchAccessory {
    * @example
    * this.service.updateCharacteristic(this.platform.Characteristic.On, true)
    */
-  async getOn(callback: CharacteristicGetCallback) {
+  async getOn(callback: CharacteristicGetCallback): Promise<void> {
     // implement your own code to check if the device is on
     const isOn = this.internalState.On;
 
