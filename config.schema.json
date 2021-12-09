@@ -1,259 +1,259 @@
 {
-    "pluginAlias": "bachome",
-    "pluginType": "platform",
-    "singular": true,
-    "schema": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "title": "Name",
-          "type": "string",
-          "required": true,
-          "default": "BAChome Dynamic Platform"
-        },
-        "switch": {
-          "title": "Switches",
-          "type": "array",
-          "items": {
-              "title": "Switch",
-              "type": "object",
-              "properties": {
-                  "name": {
-                      "title": "Name",
-                      "type": "string",
-                      "placeholder": "e.g. Kitchen",
-                      "required": true    
-                  },
-                  "manufacturer": {
-                      "title": "Manufacturer",
-                      "type": "string",
-                      "default": "Caserage",
-                      "required": true
-                  },
-                  "model": {
-                      "title": "Model",
-                      "type": "string",
-                      "default": "Caserage's switch",
-                      "required": true
-                  },
-                  "serial": {
-                      "title": "Serial number",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "ABC-DEF-GHI",
-                      "description": "Must be unique in this configuration"
-                  },
-                  "ipAddress": {
-                      "title": "IP Address",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "192.168.1.140"
-                  },
-                  "stateObject": {
-                      "title": "State Object",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "BV:16",
-                      "description": "Must be a writeable BACnet object"
-                  }
-              }
-          }
-        },
-        "thermostat": {
-          "title": "Thermostats",
-          "type": "array",
-          "items": {
-              "title": "Thermostat",
-              "type": "object",
-              "properties": {
-                  "name": {
-                      "title": "Name",
-                      "type": "string",
-                      "placeholder": "e.g. Kitchen",
-                      "required": true    
-                  },
-                  "manufacturer": {
-                      "title": "Manufacturer",
-                      "type": "string",
-                      "default": "Caserage",
-                      "required": true
-                  },
-                  "model": {
-                      "title": "Model",
-                      "type": "string",
-                      "default": "Caserage's thermostat",
-                      "required": true
-                  },
-                  "serial": {
-                      "title": "Serial number",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "ABC-DEF-GHI",
-                      "description": "Must be unique in this configuration"
-                  },
-                  "ipAddress": {
-                      "title": "IP Address",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "192.168.1.140"
-                  },
-                  "currentHeatingCoolingState": {
-                      "title": "Current State Object",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "AI:16"
-                  },
-                  "targetHeatingCoolingState": {
-                      "title": "Target State Object",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "AV:16",
-                      "description": "Must be a writeable BACnet object"
-                  },
-                  "currentTemperature": {
-                      "title": "Current Temperature Object",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "AI:7"
-                  },
-                  "targetTemperature": {
-                      "title": "Target Temperature Object",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "AV:8",
-                      "description": "Must be a writeable BACnet object"
-                  }
-              }
-          }
-        },
-        "cooler": {
-          "title": "Coolers",
-          "type": "array",
-          "items": {
-              "title": "Cooler",
-              "type": "object",
-              "properties": {
-                  "name": {
-                      "title": "Name",
-                      "type": "string",
-                      "placeholder": "e.g. Kitchen",
-                      "required": true    
-                  },
-                  "manufacturer": {
-                      "title": "Manufacturer",
-                      "type": "string",
-                      "default": "Caserage",
-                      "required": true
-                  },
-                  "model": {
-                      "title": "Model",
-                      "type": "string",
-                      "default": "Caserage's cooler",
-                      "required": true
-                  },
-                  "serial": {
-                      "title": "Serial number",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "ABC-DEF-GHI",
-                      "description": "Must be unique in this configuration"
-                  },
-                  "ipAddress": {
-                      "title": "IP Address",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "192.168.1.140"
-                  },
-                  "active": {
-                      "title": "Active State Object",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "BV:16",
-                      "description": "Must be a writeable BACnet object"
-                  },
-                  "currentHeaterCoolerState": {
-                      "title": "Current State Object",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "AI:16"
-                  },
-                  "targetHeaterCoolerState": {
-                      "title": "Target State Object",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "AV:16",
-                      "description": "Must be a writeable BACnet object"
-                  },
-                  "currentTemperature": {
-                      "title": "Current Temperature Object",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "AI:7"
-                  },
-                  "coolingThresholdTemperature": {
-                      "title": "Cooling Threshold Temperature Object",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "AV:8",
-                      "description": "Must be a writeable BACnet object"
-                  },
-                  "heatingThresholdTemperature": {
-                      "title": "Heating Threshold Temperature Object",
-                      "type": "string",
-                      "required": true,
-                      "placeholder": "AV:8",
-                      "description": "Must be a writeable BACnet object"
-                  }
-              }
-          }
-        },
-        "temperatureSensor": {
-            "title": "Temperature Sensors",
-            "type": "array",
-            "items": {
-                "title": "Temperature Sensor",
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "title": "Name",
-                        "type": "string",
-                        "placeholder": "e.g. Kitchen",
-                        "required": true    
-                    },
-                    "manufacturer": {
-                        "title": "Manufacturer",
-                        "type": "string",
-                        "default": "Caserage",
-                        "required": true
-                    },
-                    "model": {
-                        "title": "Model",
-                        "type": "string",
-                        "default": "Caserage's temperature sensor",
-                        "required": true
-                    },
-                    "serial": {
-                        "title": "Serial number",
-                        "type": "string",
-                        "required": true,
-                        "placeholder": "ABC-DEF-GHI",
-                        "description": "Must be unique in this configuration"
-                    },
-                    "ipAddress": {
-                        "title": "IP Address",
-                        "type": "string",
-                        "required": true,
-                        "placeholder": "192.168.1.140"
-                    },
-                    "stateObject": {
-                        "title": "State Object",
-                        "type": "string",
-                        "required": true,
-                        "placeholder": "AI:16"
-                    }
-                }
+  "pluginAlias": "bachome",
+  "pluginType": "platform",
+  "singular": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "required": true,
+        "default": "BAChome Dynamic Platform"
+      },
+      "switch": {
+        "title": "Switches",
+        "type": "array",
+        "items": {
+          "title": "Switch",
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "type": "string",
+              "placeholder": "e.g. Kitchen",
+              "required": true
+            },
+            "manufacturer": {
+              "title": "Manufacturer",
+              "type": "string",
+              "default": "Caserage",
+              "required": true
+            },
+            "model": {
+              "title": "Model",
+              "type": "string",
+              "default": "Caserage's switch",
+              "required": true
+            },
+            "serial": {
+              "title": "Serial number",
+              "type": "string",
+              "required": true,
+              "placeholder": "ABC-DEF-GHI",
+              "description": "Must be unique in this configuration"
+            },
+            "ipAddress": {
+              "title": "IP Address",
+              "type": "string",
+              "required": true,
+              "placeholder": "192.168.1.140"
+            },
+            "stateObject": {
+              "title": "State Object",
+              "type": "string",
+              "required": true,
+              "placeholder": "BV:16",
+              "description": "Must be a writeable BACnet object"
             }
+          }
+        }
+      },
+      "thermostat": {
+        "title": "Thermostats",
+        "type": "array",
+        "items": {
+          "title": "Thermostat",
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "type": "string",
+              "placeholder": "e.g. Kitchen",
+              "required": true
+            },
+            "manufacturer": {
+              "title": "Manufacturer",
+              "type": "string",
+              "default": "Caserage",
+              "required": true
+            },
+            "model": {
+              "title": "Model",
+              "type": "string",
+              "default": "Caserage's thermostat",
+              "required": true
+            },
+            "serial": {
+              "title": "Serial number",
+              "type": "string",
+              "required": true,
+              "placeholder": "ABC-DEF-GHI",
+              "description": "Must be unique in this configuration"
+            },
+            "ipAddress": {
+              "title": "IP Address",
+              "type": "string",
+              "required": true,
+              "placeholder": "192.168.1.140"
+            },
+            "currentHeatingCoolingState": {
+              "title": "Current State Object",
+              "type": "string",
+              "required": true,
+              "placeholder": "AI:16"
+            },
+            "targetHeatingCoolingState": {
+              "title": "Target State Object",
+              "type": "string",
+              "required": true,
+              "placeholder": "AV:16",
+              "description": "Must be a writeable BACnet object"
+            },
+            "currentTemperature": {
+              "title": "Current Temperature Object",
+              "type": "string",
+              "required": true,
+              "placeholder": "AI:7"
+            },
+            "targetTemperature": {
+              "title": "Target Temperature Object",
+              "type": "string",
+              "required": true,
+              "placeholder": "AV:8",
+              "description": "Must be a writeable BACnet object"
+            }
+          }
+        }
+      },
+      "cooler": {
+        "title": "Coolers",
+        "type": "array",
+        "items": {
+          "title": "Cooler",
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "type": "string",
+              "placeholder": "e.g. Kitchen",
+              "required": true
+            },
+            "manufacturer": {
+              "title": "Manufacturer",
+              "type": "string",
+              "default": "Caserage",
+              "required": true
+            },
+            "model": {
+              "title": "Model",
+              "type": "string",
+              "default": "Caserage's cooler",
+              "required": true
+            },
+            "serial": {
+              "title": "Serial number",
+              "type": "string",
+              "required": true,
+              "placeholder": "ABC-DEF-GHI",
+              "description": "Must be unique in this configuration"
+            },
+            "ipAddress": {
+              "title": "IP Address",
+              "type": "string",
+              "required": true,
+              "placeholder": "192.168.1.140"
+            },
+            "active": {
+              "title": "Active State Object",
+              "type": "string",
+              "required": true,
+              "placeholder": "BV:16",
+              "description": "Must be a writeable BACnet object"
+            },
+            "currentHeaterCoolerState": {
+              "title": "Current State Object",
+              "type": "string",
+              "required": true,
+              "placeholder": "AI:16"
+            },
+            "targetHeaterCoolerState": {
+              "title": "Target State Object",
+              "type": "string",
+              "required": true,
+              "placeholder": "AV:16",
+              "description": "Must be a writeable BACnet object"
+            },
+            "currentTemperature": {
+              "title": "Current Temperature Object",
+              "type": "string",
+              "required": true,
+              "placeholder": "AI:7"
+            },
+            "coolingThresholdTemperature": {
+              "title": "Cooling Threshold Temperature Object",
+              "type": "string",
+              "required": true,
+              "placeholder": "AV:8",
+              "description": "Must be a writeable BACnet object"
+            },
+            "heatingThresholdTemperature": {
+              "title": "Heating Threshold Temperature Object",
+              "type": "string",
+              "required": true,
+              "placeholder": "AV:8",
+              "description": "Must be a writeable BACnet object"
+            }
+          }
+        }
+      },
+      "temperatureSensor": {
+        "title": "Temperature Sensors",
+        "type": "array",
+        "items": {
+          "title": "Temperature Sensor",
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "type": "string",
+              "placeholder": "e.g. Kitchen",
+              "required": true
+            },
+            "manufacturer": {
+              "title": "Manufacturer",
+              "type": "string",
+              "default": "Caserage",
+              "required": true
+            },
+            "model": {
+              "title": "Model",
+              "type": "string",
+              "default": "Caserage's temperature sensor",
+              "required": true
+            },
+            "serial": {
+              "title": "Serial number",
+              "type": "string",
+              "required": true,
+              "placeholder": "ABC-DEF-GHI",
+              "description": "Must be unique in this configuration"
+            },
+            "ipAddress": {
+              "title": "IP Address",
+              "type": "string",
+              "required": true,
+              "placeholder": "192.168.1.140"
+            },
+            "stateObject": {
+              "title": "State Object",
+              "type": "string",
+              "required": true,
+              "placeholder": "AI:16"
+            }
+          }
         }
       }
     }
   }
+}

@@ -1,4 +1,4 @@
-import bacnet from 'bacstack';
+import bacnet from "bacstack";
 
 const client = new bacnet();
 
@@ -10,13 +10,17 @@ const client = new bacnet();
  * @param instance Instance number of the binary input object
  * @param propertyId Property ID of the property, which will be read
  */
-export function readBinaryInput(ipAddress: string, instance: number, propertyId: number) {
+export function readBinaryInput(
+  ipAddress: string,
+  instance: number,
+  propertyId: number
+) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_BINARY_INPUT,
       instance: instance,
     };
- 
+
     client.readProperty(
       ipAddress,
       propertyObject,
@@ -25,9 +29,9 @@ export function readBinaryInput(ipAddress: string, instance: number, propertyId:
         if (error) {
           return reject(error);
         }
- 
+
         return resolve(value);
-      },
+      }
     );
   });
 }
@@ -40,13 +44,17 @@ export function readBinaryInput(ipAddress: string, instance: number, propertyId:
  * @param instance Instance number of the binary value object
  * @param propertyId Property ID of the property, which will be read
  */
-export function readBinaryValue(ipAddress: string, instance: number, propertyId: number) {
+export function readBinaryValue(
+  ipAddress: string,
+  instance: number,
+  propertyId: number
+) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_BINARY_VALUE,
       instance: instance,
     };
- 
+
     client.readProperty(
       ipAddress,
       propertyObject,
@@ -55,9 +63,9 @@ export function readBinaryValue(ipAddress: string, instance: number, propertyId:
         if (error) {
           return reject(error);
         }
- 
+
         return resolve(value);
-      },
+      }
     );
   });
 }
@@ -70,13 +78,17 @@ export function readBinaryValue(ipAddress: string, instance: number, propertyId:
  * @param instance Instance number of the binary output object
  * @param propertyId Property ID of the property, which will be read
  */
-export function readBinaryOutput(ipAddress: string, instance: number, propertyId: number) {
+export function readBinaryOutput(
+  ipAddress: string,
+  instance: number,
+  propertyId: number
+) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_BINARY_OUTPUT,
       instance: instance,
     };
- 
+
     client.readProperty(
       ipAddress,
       propertyObject,
@@ -85,9 +97,9 @@ export function readBinaryOutput(ipAddress: string, instance: number, propertyId
         if (error) {
           return reject(error);
         }
- 
+
         return resolve(value);
-      },
+      }
     );
   });
 }
@@ -100,13 +112,17 @@ export function readBinaryOutput(ipAddress: string, instance: number, propertyId
  * @param instance Instance number of the analog input object
  * @param propertyId Property ID of the property, which will be read
  */
-export function readAnalogInput(ipAddress: string, instance: number, propertyId: number) {
+export function readAnalogInput(
+  ipAddress: string,
+  instance: number,
+  propertyId: number
+) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_INPUT,
       instance: instance,
     };
- 
+
     client.readProperty(
       ipAddress,
       propertyObject,
@@ -115,9 +131,9 @@ export function readAnalogInput(ipAddress: string, instance: number, propertyId:
         if (error) {
           return reject(error);
         }
- 
+
         return resolve(value);
-      },
+      }
     );
   });
 }
@@ -130,13 +146,17 @@ export function readAnalogInput(ipAddress: string, instance: number, propertyId:
  * @param instance Instance number of the analog vlaue object
  * @param propertyId Property ID of the property, which will be read
  */
-export function readAnalogValue(ipAddress: string, instance: number, propertyId: number) {
+export function readAnalogValue(
+  ipAddress: string,
+  instance: number,
+  propertyId: number
+) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_VALUE,
       instance: instance,
     };
- 
+
     client.readProperty(
       ipAddress,
       propertyObject,
@@ -145,9 +165,9 @@ export function readAnalogValue(ipAddress: string, instance: number, propertyId:
         if (error) {
           return reject(error);
         }
- 
+
         return resolve(value);
-      },
+      }
     );
   });
 }
@@ -160,13 +180,17 @@ export function readAnalogValue(ipAddress: string, instance: number, propertyId:
  * @param instance Instance number of the analog output object
  * @param propertyId Property ID of the property, which will be read
  */
-export function readAnalogOutput(ipAddress: string, instance: number, propertyId: number) {
+export function readAnalogOutput(
+  ipAddress: string,
+  instance: number,
+  propertyId: number
+) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_OUTPUT,
       instance: instance,
     };
- 
+
     client.readProperty(
       ipAddress,
       propertyObject,
@@ -175,9 +199,9 @@ export function readAnalogOutput(ipAddress: string, instance: number, propertyId
         if (error) {
           return reject(error);
         }
- 
+
         return resolve(value);
-      },
+      }
     );
   });
 }
@@ -191,15 +215,20 @@ export function readAnalogOutput(ipAddress: string, instance: number, propertyId
  * @param propertyId Property ID of the property, which will be written
  * @param value Value to be written to the selected property
  */
-export function writeBinaryInput(ipAddress: string, instance: number, propertyId: number, value) {
+export function writeBinaryInput(
+  ipAddress: string,
+  instance: number,
+  propertyId: number,
+  value
+) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_BINARY_INPUT,
       instance: instance,
     };
- 
+
     const valueObject = generateValueObjectFromValue(value);
- 
+
     client.writeProperty(
       ipAddress,
       propertyObject,
@@ -210,9 +239,9 @@ export function writeBinaryInput(ipAddress: string, instance: number, propertyId
         if (error) {
           return reject(error);
         }
- 
+
         return resolve(value);
-      },
+      }
     );
   });
 }
@@ -226,15 +255,20 @@ export function writeBinaryInput(ipAddress: string, instance: number, propertyId
  * @param propertyId Property ID of the property, which will be written
  * @param value Value to be written to the selected property
  */
-export function writeBinaryValue(ipAddress: string, instance: number, propertyId: number, value) {
+export function writeBinaryValue(
+  ipAddress: string,
+  instance: number,
+  propertyId: number,
+  value
+) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_BINARY_VALUE,
       instance: instance,
     };
- 
+
     const valueObject = generateValueObjectFromValue(value);
- 
+
     client.writeProperty(
       ipAddress,
       propertyObject,
@@ -245,9 +279,9 @@ export function writeBinaryValue(ipAddress: string, instance: number, propertyId
         if (error) {
           return reject(error);
         }
- 
+
         return resolve(value);
-      },
+      }
     );
   });
 }
@@ -261,15 +295,20 @@ export function writeBinaryValue(ipAddress: string, instance: number, propertyId
  * @param propertyId Property ID of the property, which will be written
  * @param value Value to be written to the selected property
  */
-export function writeBinaryOutput(ipAddress: string, instance: number, propertyId: number, value) {
+export function writeBinaryOutput(
+  ipAddress: string,
+  instance: number,
+  propertyId: number,
+  value
+) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_BINARY_OUTPUT,
       instance: instance,
     };
- 
+
     const valueObject = generateValueObjectFromValue(value);
- 
+
     client.writeProperty(
       ipAddress,
       propertyObject,
@@ -280,9 +319,9 @@ export function writeBinaryOutput(ipAddress: string, instance: number, propertyI
         if (error) {
           return reject(error);
         }
- 
+
         return resolve(value);
-      },
+      }
     );
   });
 }
@@ -296,15 +335,20 @@ export function writeBinaryOutput(ipAddress: string, instance: number, propertyI
  * @param propertyId Property ID of the property, which will be written
  * @param value Value to be written to the selected property
  */
-export function writeAnalogInput(ipAddress: string, instance: number, propertyId: number, value) {
+export function writeAnalogInput(
+  ipAddress: string,
+  instance: number,
+  propertyId: number,
+  value
+) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_INPUT,
       instance: instance,
     };
- 
+
     const valueObject = generateValueObjectFromValue(value);
- 
+
     client.writeProperty(
       ipAddress,
       propertyObject,
@@ -315,9 +359,9 @@ export function writeAnalogInput(ipAddress: string, instance: number, propertyId
         if (error) {
           return reject(error);
         }
- 
+
         return resolve(value);
-      },
+      }
     );
   });
 }
@@ -331,15 +375,20 @@ export function writeAnalogInput(ipAddress: string, instance: number, propertyId
  * @param propertyId Property ID of the property, which will be written
  * @param value Value to be written to the selected property
  */
-export function writeAnalogValue(ipAddress: string, instance: number, propertyId: number, value) {
+export function writeAnalogValue(
+  ipAddress: string,
+  instance: number,
+  propertyId: number,
+  value
+) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_VALUE,
       instance: instance,
     };
- 
+
     const valueObject = generateValueObjectFromValue(value);
- 
+
     client.writeProperty(
       ipAddress,
       propertyObject,
@@ -350,9 +399,9 @@ export function writeAnalogValue(ipAddress: string, instance: number, propertyId
         if (error) {
           return reject(error);
         }
- 
+
         return resolve(value);
-      },
+      }
     );
   });
 }
@@ -366,15 +415,20 @@ export function writeAnalogValue(ipAddress: string, instance: number, propertyId
  * @param propertyId Property ID of the property, which will be written
  * @param value Value to be written to the selected property
  */
-export function writeAnalogOutput(ipAddress: string, instance: number, propertyId: number, value) {
+export function writeAnalogOutput(
+  ipAddress: string,
+  instance: number,
+  propertyId: number,
+  value
+) {
   return new Promise((resolve, reject) => {
     const propertyObject = {
       type: bacnet.enum.ObjectTypes.OBJECT_ANALOG_OUTPUT,
       instance: instance,
     };
- 
+
     const valueObject = generateValueObjectFromValue(value);
- 
+
     client.writeProperty(
       ipAddress,
       propertyObject,
@@ -385,9 +439,9 @@ export function writeAnalogOutput(ipAddress: string, instance: number, propertyI
         if (error) {
           return reject(error);
         }
- 
+
         return resolve(value);
-      },
+      }
     );
   });
 }
@@ -400,34 +454,34 @@ export function writeAnalogOutput(ipAddress: string, instance: number, propertyI
  */
 export function generateValueObjectFromValue(value) {
   const valueObject: unknown[] = [];
- 
+
   switch (typeof value) {
-    case 'number':
+    case "number":
       valueObject[0] = {
         type: bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_REAL,
         value: value,
       };
       break;
- 
-    case 'boolean':
+
+    case "boolean":
       valueObject[0] = {
         type: bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_ENUMERATED,
         // Bacnet uses 0 and 1 instead of false and true
         value: value,
       };
       break;
- 
-    case 'string':
+
+    case "string":
       valueObject[0] = {
-        type:
-            bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_CHARACTER_STRING,
+        type: bacnet.enum.ApplicationTags
+          .BACNET_APPLICATION_TAG_CHARACTER_STRING,
         value: value,
       };
       break;
- 
+
     default:
       break;
   }
- 
+
   return valueObject;
 }

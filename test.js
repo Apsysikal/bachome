@@ -1,11 +1,14 @@
-const bacnet = require('bacstack');
+const bacnet = require("bacstack");
 const client = new bacnet();
 
-client.readProperty('192.168.1.147', {type: 5, instance: 0}, 85, (err, value) => {
-  console.log('value: ', value);
-});
-
-
+client.readProperty(
+  "192.168.1.147",
+  { type: 5, instance: 0 },
+  85,
+  (err, value) => {
+    console.log("value: ", value);
+  }
+);
 
 // const values = [
 //   {objectId: {type: 5, instance: 0}, values: [
@@ -19,8 +22,13 @@ client.readProperty('192.168.1.147', {type: 5, instance: 0}, 85, (err, value) =>
 //   console.log('value: ', value);
 // });
 
-client.writeProperty('192.168.1.147', {type: 5, instance: 0}, 85, [
-  {type: bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_NULL, value: 0},
-], { priority: 8}, (err, value) => {
-  console.log('value: ', value);
-});
+client.writeProperty(
+  "192.168.1.147",
+  { type: 5, instance: 0 },
+  85,
+  [{ type: bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_NULL, value: 0 }],
+  { priority: 8 },
+  (err, value) => {
+    console.log("value: ", value);
+  }
+);
