@@ -127,6 +127,8 @@ export class BachomeThermostatAccessory {
   ): Promise<void> {
     this.platform.log.debug("GET CurrentHeatingCoolingState");
 
+    callback(null, this.internalStates.currentHeatingCoolingState);
+
     const readProperty = await readAnalogInput(
       this.ipAddress,
       this.stateObjects.currentHeatingCoolingState["instance"],
@@ -136,8 +138,6 @@ export class BachomeThermostatAccessory {
     const value = readProperty["values"][0]["value"];
     this.platform.log.debug(`Read value from AI: ${String(value)}`);
     this.internalStates.currentHeatingCoolingState = value;
-
-    callback(null, this.internalStates.currentHeatingCoolingState);
   }
 
   /**
@@ -150,6 +150,8 @@ export class BachomeThermostatAccessory {
   ): Promise<void> {
     this.platform.log.debug("GET TargetHeatingCoolingState");
 
+    callback(null, this.internalStates.targetHeatingCoolingState);
+
     const readProperty = await readAnalogValue(
       this.ipAddress,
       this.stateObjects.targetHeatingCoolingState["instance"],
@@ -159,8 +161,6 @@ export class BachomeThermostatAccessory {
     const value = readProperty["values"][0]["value"];
     this.platform.log.debug(`Read value from AV: ${String(value)}`);
     this.internalStates.targetHeatingCoolingState = value;
-
-    callback(null, this.internalStates.targetHeatingCoolingState);
   }
 
   /**
@@ -201,6 +201,8 @@ export class BachomeThermostatAccessory {
   ): Promise<void> {
     this.platform.log.debug("GET CurrentTemperature");
 
+    callback(null, this.internalStates.currentTemperature);
+
     const readProperty = await readAnalogInput(
       this.ipAddress,
       this.stateObjects.currentTemperature["instance"],
@@ -210,8 +212,6 @@ export class BachomeThermostatAccessory {
     const value = readProperty["values"][0]["value"];
     this.platform.log.debug(`Read value from AI: ${String(value)}`);
     this.internalStates.currentTemperature = value;
-
-    callback(null, this.internalStates.currentTemperature);
   }
 
   /**
@@ -224,6 +224,8 @@ export class BachomeThermostatAccessory {
   ): Promise<void> {
     this.platform.log.debug("GET TargetTemperature");
 
+    callback(null, this.internalStates.targetTemperature);
+
     const readProperty = await readAnalogValue(
       this.ipAddress,
       this.stateObjects.targetTemperature["instance"],
@@ -233,8 +235,6 @@ export class BachomeThermostatAccessory {
     const value = readProperty["values"][0]["value"];
     this.platform.log.debug(`Read value from AV: ${String(value)}`);
     this.internalStates.targetTemperature = value;
-
-    callback(null, this.internalStates.targetTemperature);
   }
 
   /**
