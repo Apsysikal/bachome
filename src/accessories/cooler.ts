@@ -251,7 +251,7 @@ export class BachomeHeaterCoolerAccessory {
       this.ipAddress,
       this.stateObjects.targetHeaterCoolerState["instance"],
       85,
-      value
+      Number(value)
     );
 
     this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
@@ -325,7 +325,7 @@ export class BachomeHeaterCoolerAccessory {
       this.ipAddress,
       this.stateObjects.coolingThresholdTemperature["instance"],
       85,
-      value
+      Number(value)
     );
 
     this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
@@ -376,7 +376,7 @@ export class BachomeHeaterCoolerAccessory {
       this.ipAddress,
       this.stateObjects.heatingThresholdTemperature["instance"],
       85,
-      value
+      Number(value)
     );
 
     this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);

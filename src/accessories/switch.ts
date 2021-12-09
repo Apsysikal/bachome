@@ -110,7 +110,7 @@ export class BachomeSwitchAccessory {
             this.ipAddress,
             this.stateObjects.On["instance"],
             85,
-            value
+            Boolean(value)
           );
           // @ts-ignore
           returnedValue = returnedValue["values"][0]["value"];
@@ -126,7 +126,7 @@ export class BachomeSwitchAccessory {
             this.ipAddress,
             this.stateObjects.On["instance"],
             85,
-            value
+            Boolean(value)
           );
           // @ts-ignore
           returnedValue = returnedValue["values"][0]["value"];

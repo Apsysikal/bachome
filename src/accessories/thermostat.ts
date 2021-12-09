@@ -184,7 +184,7 @@ export class BachomeThermostatAccessory {
       this.ipAddress,
       this.stateObjects.targetHeatingCoolingState["instance"],
       85,
-      value
+      Number(value)
     );
 
     this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
@@ -258,7 +258,7 @@ export class BachomeThermostatAccessory {
       this.ipAddress,
       this.stateObjects.targetTemperature["instance"],
       85,
-      value
+      Number(value)
     );
 
     this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
