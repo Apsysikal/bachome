@@ -1,0 +1,179 @@
+{
+  "bridge": {
+    "name": "Homebridge",
+    "username": "CC:22:3D:E3:CE:30",
+    "manufacturer": "homebridge.io",
+    "model": "homebridge",
+    "port": 51826,
+    "pin": "031-45-154"
+  },
+  "ports": {
+    "start": 52100,
+    "end": 52150,
+    "comment": "This section is used to control the range of ports that separate accessory (like camera or television) should be bind to."
+  },
+  "platforms": [
+    {
+      "platform": "config",
+      "name": "Config",
+      "port": 8080,
+      "sudo": false
+    },
+    {
+      "platform": "bachome",
+      "name": "BAChome Dynamic Platform",
+      "switch": [
+        {
+          "name": "Presence",
+          "manufacturer": "Koerby",
+          "model": "Koerby's switch",
+          "serial": "B-H-R-PSC",
+          "ipAddress": "192.168.1.105",
+          "stateObject": "BV:82"
+        },
+        {
+          "name": "Gong",
+          "manufacturer": "Koerby",
+          "model": "Koerby's switch",
+          "serial": "B-H-OA-GONG",
+          "ipAddress": "192.168.1.105",
+          "stateObject": "BV:63"
+        }
+      ],
+      "thermostat": [
+        {
+          "name": "UT Thermostat",
+          "manufacturer": "Koerby",
+          "model": "Koerby's thermostat",
+          "serial": "B-H-R-F1-R2",
+          "ipAddress": "192.168.1.201",
+          "currentHeatingCoolingState": "AI:75",
+          "targetHeatingCoolingState": "AV:384",
+          "currentTemperature": "AI:48",
+          "targetTemperature": "AV:251"
+        },
+        {
+          "name": "Kitchen Thermostat",
+          "manufacturer": "Koerby",
+          "model": "Koerby's thermostat",
+          "serial": "B-H-R-F1-R3",
+          "ipAddress": "192.168.1.201",
+          "currentHeatingCoolingState": "AI:76",
+          "targetHeatingCoolingState": "AV:386",
+          "currentTemperature": "AI:49",
+          "targetTemperature": "AV:262"
+        },
+        {
+          "name": "Living Room Thermostat",
+          "manufacturer": "Koerby",
+          "model": "Koerby's thermostat",
+          "serial": "B-H-R-F1-R4",
+          "ipAddress": "192.168.1.201",
+          "currentHeatingCoolingState": "AI:73",
+          "targetHeatingCoolingState": "AV:380",
+          "currentTemperature": "AI:53",
+          "targetTemperature": "AV:273"
+        },
+        {
+          "name": "Office Thermostat",
+          "manufacturer": "Koerby",
+          "model": "Koerby's thermostat",
+          "serial": "B-H-R-F1-R5",
+          "ipAddress": "192.168.1.201",
+          "currentHeatingCoolingState": "AI:77",
+          "targetHeatingCoolingState": "AV:388",
+          "currentTemperature": "AI:54",
+          "targetTemperature": "AV:284"
+        },
+        {
+          "name": "Floor 1 Thermostat",
+          "manufacturer": "Koerby",
+          "model": "Koerby's thermostat",
+          "serial": "B-H-R-F1-R6",
+          "ipAddress": "192.168.1.201",
+          "currentHeatingCoolingState": "AI:78",
+          "targetHeatingCoolingState": "AV:390",
+          "currentTemperature": "AI:55",
+          "targetTemperature": "AV:295"
+        },
+        {
+          "name": "Toilet Thermostat",
+          "manufacturer": "Koerby",
+          "model": "Koerby's thermostat",
+          "serial": "B-H-R-F1-R7",
+          "ipAddress": "192.168.1.201",
+          "currentHeatingCoolingState": "AI:79",
+          "targetHeatingCoolingState": "AV:392",
+          "currentTemperature": "AI:56",
+          "targetTemperature": "AV:306"
+        },
+        {
+          "name": "Bathroom Thermostat",
+          "manufacturer": "Koerby",
+          "model": "Koerby's thermostat",
+          "serial": "B-H-R-F2-R1",
+          "ipAddress": "192.168.1.201",
+          "currentHeatingCoolingState": "AI:74",
+          "targetHeatingCoolingState": "AV:382",
+          "currentTemperature": "AI:60",
+          "targetTemperature": "AV:317"
+        },
+        {
+          "name": "Bedroom Thermostat",
+          "manufacturer": "Koerby",
+          "model": "Koerby's thermostat",
+          "serial": "B-H-R-F2-R3",
+          "ipAddress": "192.168.1.201",
+          "currentHeatingCoolingState": "AI:80",
+          "targetHeatingCoolingState": "AV:394",
+          "currentTemperature": "AI:62",
+          "targetTemperature": "AV:328"
+        },
+        {
+          "name": "Dressing Thermostat",
+          "manufacturer": "Koerby",
+          "model": "Koerby's thermostat",
+          "serial": "B-H-R-F2-R4",
+          "ipAddress": "192.168.1.201",
+          "currentHeatingCoolingState": "AI:81",
+          "targetHeatingCoolingState": "AV:396",
+          "currentTemperature": "AI:63",
+          "targetTemperature": "AV:339"
+        },
+        {
+          "name": "Child 2 Thermostat",
+          "manufacturer": "Koerby",
+          "model": "Koerby's thermostat",
+          "serial": "B-H-R-F2-R5",
+          "ipAddress": "192.168.1.201",
+          "currentHeatingCoolingState": "AI:82",
+          "targetHeatingCoolingState": "AV:398",
+          "currentTemperature": "AI:64",
+          "targetTemperature": "AV:350"
+        },
+        {
+          "name": "Child 1 Thermostat",
+          "manufacturer": "Koerby",
+          "model": "Koerby's thermostat",
+          "serial": "B-H-R-F2-R6",
+          "ipAddress": "192.168.1.201",
+          "currentHeatingCoolingState": "AI:83",
+          "targetHeatingCoolingState": "AV:400",
+          "currentTemperature": "AI:65",
+          "targetTemperature": "AV:361"
+        },
+        {
+          "name": "Floor 2 Thermostat",
+          "manufacturer": "Koerby",
+          "model": "Koerby's thermostat",
+          "serial": "B-H-R-F2-R7",
+          "ipAddress": "192.168.1.201",
+          "currentHeatingCoolingState": "AI:84",
+          "targetHeatingCoolingState": "AV:402",
+          "currentTemperature": "AI:66",
+          "targetTemperature": "AV:372"
+        }
+      ]
+    }
+  ]
+}
