@@ -129,15 +129,19 @@ export class BachomeThermostatAccessory {
 
     callback(null, this.internalStates.currentHeatingCoolingState);
 
-    const readProperty = await readAnalogInput(
-      this.ipAddress,
-      this.stateObjects.currentHeatingCoolingState["instance"],
-      85
-    );
-    // @ts-ignore
-    const value = readProperty["values"][0]["value"];
-    this.platform.log.debug(`Read value from AI: ${String(value)}`);
-    this.internalStates.currentHeatingCoolingState = value;
+    try {
+      const readProperty = await readAnalogInput(
+        this.ipAddress,
+        this.stateObjects.currentHeatingCoolingState["instance"],
+        85
+      );
+      // @ts-ignore
+      const value = readProperty["values"][0]["value"];
+      this.platform.log.debug(`Read value from AI: ${String(value)}`);
+      this.internalStates.currentHeatingCoolingState = value;
+    } catch (error) {
+      this.platform.log.error(`An error occured: ${error}`);
+    }
   }
 
   /**
@@ -152,15 +156,19 @@ export class BachomeThermostatAccessory {
 
     callback(null, this.internalStates.targetHeatingCoolingState);
 
-    const readProperty = await readAnalogValue(
-      this.ipAddress,
-      this.stateObjects.targetHeatingCoolingState["instance"],
-      85
-    );
-    // @ts-ignore
-    const value = readProperty["values"][0]["value"];
-    this.platform.log.debug(`Read value from AV: ${String(value)}`);
-    this.internalStates.targetHeatingCoolingState = value;
+    try {
+      const readProperty = await readAnalogValue(
+        this.ipAddress,
+        this.stateObjects.targetHeatingCoolingState["instance"],
+        85
+      );
+      // @ts-ignore
+      const value = readProperty["values"][0]["value"];
+      this.platform.log.debug(`Read value from AV: ${String(value)}`);
+      this.internalStates.targetHeatingCoolingState = value;
+    } catch (error) {
+      this.platform.log.error(`An error occured: ${error}`);
+    }
   }
 
   /**
@@ -180,15 +188,19 @@ export class BachomeThermostatAccessory {
 
     callback(null);
 
-    const returnedValue = await writeAnalogValue(
-      this.ipAddress,
-      this.stateObjects.targetHeatingCoolingState["instance"],
-      85,
-      Number(value)
-    );
+    try {
+      const returnedValue = await writeAnalogValue(
+        this.ipAddress,
+        this.stateObjects.targetHeatingCoolingState["instance"],
+        85,
+        Number(value)
+      );
 
-    this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
-    this.internalStates.targetHeatingCoolingState = Number(value);
+      this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
+      this.internalStates.targetHeatingCoolingState = Number(value);
+    } catch (error) {
+      this.platform.log.error(`An error occured: ${error}`);
+    }
   }
 
   /**
@@ -203,15 +215,19 @@ export class BachomeThermostatAccessory {
 
     callback(null, this.internalStates.currentTemperature);
 
-    const readProperty = await readAnalogInput(
-      this.ipAddress,
-      this.stateObjects.currentTemperature["instance"],
-      85
-    );
-    // @ts-ignore
-    const value = readProperty["values"][0]["value"];
-    this.platform.log.debug(`Read value from AI: ${String(value)}`);
-    this.internalStates.currentTemperature = value;
+    try {
+      const readProperty = await readAnalogInput(
+        this.ipAddress,
+        this.stateObjects.currentTemperature["instance"],
+        85
+      );
+      // @ts-ignore
+      const value = readProperty["values"][0]["value"];
+      this.platform.log.debug(`Read value from AI: ${String(value)}`);
+      this.internalStates.currentTemperature = value;
+    } catch (error) {
+      this.platform.log.error(`An error occured: ${error}`);
+    }
   }
 
   /**
@@ -226,15 +242,19 @@ export class BachomeThermostatAccessory {
 
     callback(null, this.internalStates.targetTemperature);
 
-    const readProperty = await readAnalogValue(
-      this.ipAddress,
-      this.stateObjects.targetTemperature["instance"],
-      85
-    );
-    // @ts-ignore
-    const value = readProperty["values"][0]["value"];
-    this.platform.log.debug(`Read value from AV: ${String(value)}`);
-    this.internalStates.targetTemperature = value;
+    try {
+      const readProperty = await readAnalogValue(
+        this.ipAddress,
+        this.stateObjects.targetTemperature["instance"],
+        85
+      );
+      // @ts-ignore
+      const value = readProperty["values"][0]["value"];
+      this.platform.log.debug(`Read value from AV: ${String(value)}`);
+      this.internalStates.targetTemperature = value;
+    } catch (error) {
+      this.platform.log.error(`An error occured: ${error}`);
+    }
   }
 
   /**
@@ -254,15 +274,19 @@ export class BachomeThermostatAccessory {
 
     callback(null);
 
-    const returnedValue = await writeAnalogValue(
-      this.ipAddress,
-      this.stateObjects.targetTemperature["instance"],
-      85,
-      Number(value)
-    );
+    try {
+      const returnedValue = await writeAnalogValue(
+        this.ipAddress,
+        this.stateObjects.targetTemperature["instance"],
+        85,
+        Number(value)
+      );
 
-    this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
-    this.internalStates.targetTemperature = Number(value);
+      this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
+      this.internalStates.targetTemperature = Number(value);
+    } catch (error) {
+      this.platform.log.error(`An error occured: ${error}`);
+    }
   }
 
   /**
