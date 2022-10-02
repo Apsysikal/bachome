@@ -253,6 +253,42 @@
             }
           }
         }
+      },
+      "dzk-bacnet": {
+	"title": "DZK-Bacnet",
+	"type": "object",
+	"properties": {
+	  "ipAddress": {
+	    "title": "IP Address",
+	    "type": "string",
+	    "placeholder": "172.16.16.16",
+	    "required": true
+	  },
+	  "zones": {
+	    "title": "Zones",
+	    "type": "array",
+	    "required": true,
+	    "minItems": 1,
+            "maxItems": 6,
+	    "uniqueItems": true,
+	    "items": {
+	      "title": "DZK Zone",
+	      "type": "object",
+	      "properties": {
+		"name": {
+		  "type": "string",
+		  "placeholder": "e.g. Back Office",
+		  "required": true
+		}
+		"zone": {
+		  "type": "number"
+		  "placeholder": 1
+		  "required": true
+		}
+	      }
+	    }
+	  }
+	}
       }
     }
   }

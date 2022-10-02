@@ -3,6 +3,67 @@ import bacnet from "bacstack";
 const client = new bacnet();
 
 /**
+ * Reads the current value of an object from the remote device.
+ * Returns a promise which resolves with the read content on
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param propertyId Property ID of the property, which will be read
+ */
+export function asyncReadPresentValue(
+  ipAddress: string,
+  propertyObject: object
+): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    client.readProperty(
+      ipAddress,
+      propertyObject,
+      bacnet.enum.PropertyIdentifier.PRESENT_VALUE,
+      (error, value) => {
+        if (error) {
+          return reject(error);
+        }
+
+        return resolve(value);
+      }
+    );
+  });
+}
+
+/**
+ * Writes a present value to the remote device with the provided value.
+ * Returns a promise which resolves with the written content
+ * successful operation and rejects on failure.
+ * @param ipAddress IP address of the device
+ * @param propertyObject
+ * @param value Value to be written to the selected property
+ */
+export function asyncWritePresentValue(
+  ipAddress: string,
+  propertyObject: object,
+  value: number
+): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+
+    const valueObject = generateValueObjectFromValue(value);
+
+    client.writeProperty(
+      ipAddress,
+      propertyObject,
+      bacnet.enum.PropertyIdentifier.PRESENT_VALUE,
+      valueObject,
+      { priority: 8 },
+      (error, value) => {
+        if (error) {
+          return reject(error);
+        }
+
+        return resolve(value);
+      }
+    );
+  });
+}
+
+/**
  * Reads a binary input object from the remote device.
  * Returns a promise which resolves with the read content on
  * successful operation and rejects on failure.
