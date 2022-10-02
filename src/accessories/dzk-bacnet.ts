@@ -63,6 +63,30 @@ function c2f(cc) {
   *
   */
 
+/*
+ * 
+ * Zone ON/OFF
+ *   0 off
+ *   1 on
+ */
+
+/*
+ * DZK Operation Mode:
+ *     auto: 1
+ *     cool: 2
+ *     heat: 3
+ *      dry: 4
+ */
+/* User Mode:
+ *   stop: 1
+ *   comfort: 2
+ *   unoccupied: 3
+ *   night-time: 4
+ *   eco: 5
+ *   vacation: 6
+ * 
+ */
+
 const dzk_objects = {
 
     "global": {
@@ -96,6 +120,7 @@ const dzk_objects = {
 	"aux-heating-demand-(%)": {"n":"AV:17","d":"Z1 aux heating demand (%)","rw":"R"},
 	"opening-step-damper": {"n":"MV:0","d":"Z1 opening step damper","rw":"R"},
     },
+
     "zone2": {
 	"onoff": {"n":"BV:7","d":"Z2 ON/OFF","rw":"R/W"},
 	"local-ventilation": {"n":"BV:8","d":"Z2 Local ventilation","rw":"R/W"},
@@ -110,6 +135,7 @@ const dzk_objects = {
 	"humidity": {"n":"AV:34","d":"Z2 humidity","rw":"R"},
 	"opening-step-damper": {"n":"MV:1","d":"Z2 opening step damper","rw":"R"},
     },
+
     "zone3": {
 	"onoff": {"n":"BV:11","d":"Z3 ON/OFF","rw":"R/W"},
 	"local-ventilation": {"n":"BV:12","d":"Z3 Local ventilation","rw":"R/W"},
@@ -124,6 +150,7 @@ const dzk_objects = {
 	"humidity": {"n":"AV:35","d":"Z3 humidity","rw":"R"},
 	"opening-step-damper": {"n":"MV:2","d":"Z3 opening step damper","rw":"R"},
     },
+
     "zone4": {
 	"onoff": {"n":"BV:15","d":"Z4 ON/OFF","rw":"R/W"},
 	"local-ventilation": {"n":"BV:16","d":"Z4 Local ventilation","rw":"R/W"},
@@ -138,6 +165,7 @@ const dzk_objects = {
 	"humidity": {"n":"AV:36","d":"Z4 humidity","rw":"R"},
 	"opening-step-damper": {"n":"MV:3","d":"Z4 opening step damper","rw":"R"},
     },
+
     "zone5": {
 	"onoff": {"n":"BV:19","d":"Z5 ON/OFF","rw":"R/W"},
 	"local-ventilation": {"n":"BV:20","d":"Z5 Local ventilation","rw":"R/W"},
@@ -152,6 +180,7 @@ const dzk_objects = {
 	"humidity": {"n":"AV:37","d":"Z5 humidity","rw":"R"},
 	"opening-step-damper": {"n":"MV:4","d":"Z5 opening step damper","rw":"R"},
     },
+
     "zone6": {
 	"onoff": {"n":"BV:23","d":"Z6 ON/OFF","rw":"R/W"},
 	"local-ventilation": {"n":"BV:24","d":"Z6 Local ventilation","rw":"R/W"},
@@ -185,14 +214,9 @@ export class DzkBacnetZoneAccessory {
 	temperatureDisplayUnits: 0,
     };
 
-    private stateObjects = {
-	currentHeatingCoolingState: {},
-	targetHeatingCoolingState: {},
-	currentTemperature: {},
-	targetTemperature: {},
-    };
-
     private ipAddress = "";
+
+    private zone = 0;
 
     constructor(
 	private readonly platform: BachomeHomebridgePlatform,
@@ -204,16 +228,18 @@ export class DzkBacnetZoneAccessory {
 	    .getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(
         this.platform.Characteristic.Manufacturer,
-        accessory.context.device.manufacturer
+        "Daikin"
       )
       .setCharacteristic(
         this.platform.Characteristic.Model,
-        accessory.context.device.model
+        "DZK-BACNET-3"
       )
       .setCharacteristic(
         this.platform.Characteristic.SerialNumber,
-        accessory.context.device.serial
+        "DZK-BACNET-3-zone-" + accessory.context.device.zone
       );
+
+	this.zone = accessory.context.device.zone;
 
 	this.service =
 	    this.accessory.getService(this.platform.Service.Thermostat) ||
@@ -228,19 +254,7 @@ export class DzkBacnetZoneAccessory {
 	    this.platform.Characteristic.Name,
 	    accessory.context.device.name
 	);
-
-	this.stateObjects["currentHeatingCoolingState"] = objectStringParser(
-	    accessory.context.device.currentHeatingCoolingState
-	);
-	this.stateObjects["targetHeatingCoolingState"] = objectStringParser(
-	    accessory.context.device.targetHeatingCoolingState
-	);
-	this.stateObjects["currentTemperature"] = objectStringParser(
-	    accessory.context.device.currentTemperature
-	);
-	this.stateObjects["targetTemperature"] = objectStringParser(
-	    accessory.context.device.targetTemperature
-	);
+	let dzk_z = dzk_objects["zone"+this.zone];
 
 	this.ipAddress = accessory.context.device.ipAddress;
 
@@ -259,6 +273,10 @@ export class DzkBacnetZoneAccessory {
 	this.service
 	    .getCharacteristic(this.platform.Characteristic.CurrentTemperature)
 	    .on("get", this.getCurrentTemperature.bind(this));
+
+	this.service
+	    .getCharacteristic(this.platform.Characteristic.CurrentRelativeHumidity)
+	    .on("get", this.getCurrentRelativeHumidity.bind(this));
 
 	this.service
 	    .getCharacteristic(this.platform.Characteristic.TargetTemperature)
@@ -284,6 +302,7 @@ export class DzkBacnetZoneAccessory {
 	callback(null, this.internalStates.currentHeatingCoolingState);
 
 	try {
+	    /*
 	    const readProperty = await readAnalogInput(
 		this.ipAddress,
 		this.stateObjects.currentHeatingCoolingState["instance"],
@@ -293,6 +312,7 @@ export class DzkBacnetZoneAccessory {
 	    const value = readProperty["values"][0]["value"];
 	    this.platform.log.debug(`Read value from AI: ${String(value)}`);
 	    this.internalStates.currentHeatingCoolingState = value;
+	    */
 	} catch (error) {
 	    this.platform.log.error(`An error occured: ${error}`);
 	}
@@ -311,6 +331,7 @@ export class DzkBacnetZoneAccessory {
 	callback(null, this.internalStates.targetHeatingCoolingState);
 
 	try {
+	    /*
 	    const readProperty = await readAnalogValue(
 		this.ipAddress,
 		this.stateObjects.targetHeatingCoolingState["instance"],
@@ -320,6 +341,7 @@ export class DzkBacnetZoneAccessory {
 	    const value = readProperty["values"][0]["value"];
 	    this.platform.log.debug(`Read value from AV: ${String(value)}`);
 	    this.internalStates.targetHeatingCoolingState = value;
+	    */
 	} catch (error) {
 	    this.platform.log.error(`An error occured: ${error}`);
 	}
@@ -343,6 +365,7 @@ export class DzkBacnetZoneAccessory {
 	callback(null);
 
 	try {
+	    /*
 	    const returnedValue = await writeAnalogValue(
 		this.ipAddress,
 		this.stateObjects.targetHeatingCoolingState["instance"],
@@ -352,6 +375,7 @@ export class DzkBacnetZoneAccessory {
 
 	    this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
 	    this.internalStates.targetHeatingCoolingState = Number(value);
+	    */
 	} catch (error) {
 	    this.platform.log.error(`An error occured: ${error}`);
 	}
@@ -370,6 +394,7 @@ export class DzkBacnetZoneAccessory {
 	callback(null, this.internalStates.currentTemperature);
 	
 	try {
+	    /*
 	    const readProperty = await readAnalogInput(
 		this.ipAddress,
 		this.stateObjects.currentTemperature["instance"],
@@ -379,11 +404,70 @@ export class DzkBacnetZoneAccessory {
 	    const value = readProperty["values"][0]["value"];
 	    this.platform.log.debug(`Read value from AI: ${String(value)}`);
 	    this.internalStates.currentTemperature = value;
+	    */
 	} catch (error) {
 	    this.platform.log.error(`An error occured: ${error}`);
 	}
     }
-    
+
+  /**
+   * Reads the current temperature from the
+   * configured BACnet object and updates the internal state.
+   * @param callback Callback from homebridge
+   */
+    async getCurrentTemperature(
+    callback: CharacteristicGetCallback
+    ): Promise<void> {
+	this.platform.log.debug("GET CurrentTemperature");
+	
+	callback(null, this.internalStates.currentTemperature);
+	
+	try {
+	    /*
+	    const readProperty = await readAnalogInput(
+		this.ipAddress,
+		this.stateObjects.currentTemperature["instance"],
+		85
+	    );
+	    // @ts-ignore
+	    const value = readProperty["values"][0]["value"];
+	    this.platform.log.debug(`Read value from AI: ${String(value)}`);
+	    this.internalStates.currentTemperature = value;
+	    */
+	} catch (error) {
+	    this.platform.log.error(`An error occured: ${error}`);
+	}
+    }
+
+  /**
+   * Reads the current relative humidity from the
+   * configured BACnet object and updates the internal state.
+   * @param callback Callback from homebridge
+   */
+    async getCurrentRelativeHumidity(
+    callback: CharacteristicGetCallback
+    ): Promise<void> {
+	this.platform.log.debug("GET CurrentRelativeHumidity");
+	
+	callback(null, this.internalStates.currentRelativeHumidity);
+	
+	try {
+	    /*
+	    const readProperty = await readAnalogInput(
+		this.ipAddress,
+		this.stateObjects.currentTemperature["instance"],
+		85
+	    );
+	    // @ts-ignore
+	    const value = readProperty["values"][0]["value"];
+	    this.platform.log.debug(`Read value from AI: ${String(value)}`);
+	    this.internalStates.currentRelativeHumidity = value;
+	    */
+	} catch (error) {
+	    this.platform.log.error(`An error occured: ${error}`);
+	}
+    }
+
   /**
    * Reads the target temperature from the
    * configured BACnet object and updates the internal state.
@@ -397,6 +481,7 @@ export class DzkBacnetZoneAccessory {
 	callback(null, this.internalStates.targetTemperature);
 	
 	try {
+	    /*
 	    const readProperty = await readAnalogValue(
 		this.ipAddress,
 		this.stateObjects.targetTemperature["instance"],
@@ -406,6 +491,7 @@ export class DzkBacnetZoneAccessory {
 	    const value = readProperty["values"][0]["value"];
 	    this.platform.log.debug(`Read value from AV: ${String(value)}`);
 	    this.internalStates.targetTemperature = value;
+	    */
 	} catch (error) {
 	    this.platform.log.error(`An error occured: ${error}`);
 	}
@@ -429,6 +515,7 @@ export class DzkBacnetZoneAccessory {
 	callback(null);
 	
 	try {
+	    /*
 	    const returnedValue = await writeAnalogValue(
 		this.ipAddress,
 		this.stateObjects.targetTemperature["instance"],
@@ -438,6 +525,7 @@ export class DzkBacnetZoneAccessory {
 	    
 	    this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
 	    this.internalStates.targetTemperature = Number(value);
+	    */
 	} catch (error) {
 	    this.platform.log.error(`An error occured: ${error}`);
 	}
