@@ -92,116 +92,6 @@ function c2f(cc) {
  * 
  */
 
-const dzk_objects = {
-
-    "global": {
-	"iu-status-onoff": {"n":"BI:0","d":"IU Status ON/OFF","rw":"R"},
-	"dzk-system-input-alarm": {"n":"BI:1","d":"DZK system input alarm","rw":"R"},
-	"dzk-global-fan": {"n":"BV:0","d":"DZK Global Fan","rw":"R"},
-	"dzk-aux-heat1": {"n":"BV:1","d":"DZK Aux Heat1","rw":"R"},
-	"dzk-aux-heat2": {"n":"BV:2","d":"DZK Aux Heat2","rw":"R"},
-	"dzk-bacnet-communication-error": {"n":"BV:27","d":"DZK/BACnet Interface communication error","rw":"R"},
-	"iu-speed": {"n":"MI:0","d":"IU speed","rw":"R"},
-	"iu-errors": {"n":"MI:1","d":"IU errors","rw":"R"},
-	"dzk-error": {"n":"MI:2","d":"DZK error","rw":"R"},
-	"dzk-operation-mode": {"n":"MO:0","d":"DZK operation mode","rw":"R/W"},
-	"dzk-user-mode": {"n":"MO:1","d":"DZK user mode","rw":"R/W"},
-	"iu-set-point": {"n":"AV:0","d":"IU Set Point","rw":" R/W"},
-	"dzk-address": {"n":"AV:13","d":"DZK address (DK AirNet address)","rw":"R"},
-	"dzk-group-address": {"n":"AV:14","d":"DZK group address (DK group address)","rw":"R"},
-    },
-
-    "zone1": {
-	"onoff": {"n":"BV:3","d":"Z1 ON/OFF","rw":"R/W"},
-	"local-ventilation": {"n":"BV:4","d":"Z1 Local Ventilation","rw":"R/W"},
-	"vacation-override": {"n":"BV:5","d":"Z1 Vacation override","rw":"R"},
-	"unoccupied-override": {"n":"BV:6","d":"Z1 Unoccupied override","rw":"R"},
-	"room-temperature": {"n":"AI:0","d":"Z1 Room temperature","rw":"R"},
-	"heat-set-point": {"n":"AV:1","d":"Z1 Heat Set Point","rw":"R/W"},
-	"cold-set-point": {"n":"AV:2","d":"Z1 Cold Set Point","rw":"R/W"},
-	"humidity": {"n":"AV:33","d":"Z1 humidity","rw":"R"},
-	"cooling-demand": {"n":"AV:15","d":"Z1 cooling demand (%)","rw":"R"},
-	"heating-demand": {"n":"AV:16","d":"Z1 heating demand (%)","rw":"R"},
-	"aux-heating-demand-(%)": {"n":"AV:17","d":"Z1 aux heating demand (%)","rw":"R"},
-	"opening-step-damper": {"n":"MV:0","d":"Z1 opening step damper","rw":"R"},
-    },
-
-    "zone2": {
-	"onoff": {"n":"BV:7","d":"Z2 ON/OFF","rw":"R/W"},
-	"local-ventilation": {"n":"BV:8","d":"Z2 Local ventilation","rw":"R/W"},
-	"vacation-override": {"n":"BV:9","d":"Z2 Vacation override","rw":"R"},
-	"unoccupied-override": {"n":"BV:10","d":"Z2 Unoccupied override","rw":"R"},
-	"room-temperature": {"n":"AI:1","d":"Z2 Room temperature","rw":"R"},
-	"heat-set-point": {"n":"AV:3","d":"Z2 Heat Set Point","rw":"R/W"},
-	"cold-set-point": {"n":"AV:4","d":"Z2 Cold Set Point","rw":"R/W"},
-	"cooling-demand": {"n":"AV:18","d":"Z2 cooling demand (%)","rw":"R"},
-	"heating-demand": {"n":"AV:19","d":"Z2 heating demand (%)","rw":"R"},
-	"aux-heating-demand": {"n":"AV:20","d":"Z2 aux heating demand (%)","rw":"R"},
-	"humidity": {"n":"AV:34","d":"Z2 humidity","rw":"R"},
-	"opening-step-damper": {"n":"MV:1","d":"Z2 opening step damper","rw":"R"},
-    },
-
-    "zone3": {
-	"onoff": {"n":"BV:11","d":"Z3 ON/OFF","rw":"R/W"},
-	"local-ventilation": {"n":"BV:12","d":"Z3 Local ventilation","rw":"R/W"},
-	"vacation-override": {"n":"BV:13","d":"Z3 Vacation override","rw":"R"},
-	"unoccupied-override": {"n":"BV:14","d":"Z3 Unoccupied override","rw":"R"},
-	"room-temperature": {"n":"AI:2","d":"Z3 Room temperature","rw":"R"},
-	"heat-set-point": {"n":"AV:5","d":"Z3 Heat Set Point","rw":"R/W"},
-	"cold-set-point": {"n":"AV:6","d":"Z3 Cold Set Point","rw":"R/W"},
-	"cooling-demand": {"n":"AV:21","d":"Z3 cooling demand (%)","rw":"R"},
-	"heating-demand": {"n":"AV:22","d":"Z3 heating demand (%)","rw":"R"},
-	"aux-heating-demand": {"n":"AV:23","d":"Z3 aux heating demand (%)","rw":"R"},
-	"humidity": {"n":"AV:35","d":"Z3 humidity","rw":"R"},
-	"opening-step-damper": {"n":"MV:2","d":"Z3 opening step damper","rw":"R"},
-    },
-
-    "zone4": {
-	"onoff": {"n":"BV:15","d":"Z4 ON/OFF","rw":"R/W"},
-	"local-ventilation": {"n":"BV:16","d":"Z4 Local ventilation","rw":"R/W"},
-	"vacation-override": {"n":"BV:17","d":"Z4 Vacation override","rw":"R"},
-	"unoccupied-override": {"n":"BV:18","d":"Z4 Unoccupied override","rw":"R"},
-	"room-temperature": {"n":"AI:3","d":"Z4 Room temperature","rw":"R"},
-	"heat-set-point": {"n":"AV:7","d":"Z4 Heat Set Point","rw":"R/W"},
-	"cold-set-point": {"n":"AV:8","d":"Z4 Cold Set Point","rw":"R/W"},
-	"cooling-demand": {"n":"AV:24","d":"Z4 cooling demand (%)","rw":"R"},
-	"heating-demand": {"n":"AV:25","d":"Z4 heating demand (%)","rw":"R"},
-	"aux-heating-demand": {"n":"AV:26","d":"Z4 aux heating demand (%)","rw":"R"},
-	"humidity": {"n":"AV:36","d":"Z4 humidity","rw":"R"},
-	"opening-step-damper": {"n":"MV:3","d":"Z4 opening step damper","rw":"R"},
-    },
-
-    "zone5": {
-	"onoff": {"n":"BV:19","d":"Z5 ON/OFF","rw":"R/W"},
-	"local-ventilation": {"n":"BV:20","d":"Z5 Local ventilation","rw":"R/W"},
-	"vacation-override": {"n":"BV:21","d":"Z5 Vacation override","rw":"R"},
-	"unoccupied-override": {"n":"BV:22","d":"Z5 Unoccupied override","rw":"R"},
-	"room-temperature": {"n":"AI:4","d":"Z5 Room temperature","rw":" R"},
-	"heat-set-point": {"n":"AV:9","d":"Z5 Heat Set Point","rw":"R/W"},
-	"cold-set-point": {"n":"AV:10","d":"Z5 Cold Set Point","rw":"R/W"},
-	"cooling-demand": {"n":"AV:27","d":"Z5 cooling demand (%)","rw":"R"},
-	"heating-demand": {"n":"AV:28","d":"Z5 heating demand (%)","rw":"R"},
-	"aux-heating-demand": {"n":"AV:29","d":"Z5 aux heating demand (%)","rw":"R"},
-	"humidity": {"n":"AV:37","d":"Z5 humidity","rw":"R"},
-	"opening-step-damper": {"n":"MV:4","d":"Z5 opening step damper","rw":"R"},
-    },
-
-    "zone6": {
-	"onoff": {"n":"BV:23","d":"Z6 ON/OFF","rw":"R/W"},
-	"local-ventilation": {"n":"BV:24","d":"Z6 Local ventilation","rw":"R/W"},
-	"vacation-override": {"n":"BV:25","d":"Z6 Vacation override","rw":"R"},
-	"unoccupied-override": {"n":"BV:26","d":"Z6 Unoccupied override","rw":"R"},
-	"room-temperature": {"n":"AI:5","d":"Z6 Room temperature","rw":" R"},
-	"heat-set-point": {"n":"AV:11","d":"Z6 Heat Set Point","rw":"R/W"},
-	"cold-set-point": {"n":"AV:12","d":"Z6 Cold Set Point","rw":"R/W"},
-	"cooling-demand": {"n":"AV:30","d":"Z6 cooling demand (%)","rw":"R"},
-	"heating-demand": {"n":"AV:31","d":"Z6 heating demand (%)","rw":"R"},
-	"aux-heating-demand": {"n":"AV:32","d":"Z6 aux heating demand (%)","rw":"R"},
-	"humidity": {"n":"AV:38","d":"Z6 humidity","rw":"R"},
-	"opening-step-damper": {"n":"MV:5","d":"Z6 opening step damper","rw":"R"},
-    }
-};
-
 /**
  * Platform Accessory
  * An instance of this class is created for each accessory your platform registers
@@ -219,13 +109,14 @@ export class DzkZoneAccessory {
 	temperatureDisplayUnits: 0,
     };
 
-    private ipAddress = "";
+    private ipAddress : String = "";
 
-    private zone = 0;
+    private dzkz : DzkZone;
+    private zconfig : Object; // config object
 
     constructor(
 	private readonly platform: BachomeHomebridgePlatform,
-	private readonly config: Object,
+	public readonly config: Object,
 	private readonly accessory: PlatformAccessory
     ) {
 	// set accessory information
@@ -245,7 +136,8 @@ export class DzkZoneAccessory {
         "DZK-BACNET-3-zone-" + accessory.context.device.zone
       );
 
-	this.zone = accessory.context.device.zone;
+	this.zconfig = config;
+	this.dzkz = new DzkZone(config["zone"]);
 
 	this.service =
 	    this.accessory.getService(this.platform.Service.Thermostat) ||
@@ -260,7 +152,6 @@ export class DzkZoneAccessory {
 	    this.platform.Characteristic.Name,
 	    accessory.context.device.name
 	);
-	let dzk_z = dzk_objects["zone"+this.zone];
 
 	this.ipAddress = accessory.context.device.ipAddress;
 
@@ -534,5 +425,122 @@ export class DzkZoneAccessory {
 	this.internalStates.temperatureDisplayUnits = Number(value);
 	
 	callback(null);
+    }
+}
+
+class DzkZone {
+    private static readonly dzk_objects = {
+	"global": {
+	    "iu-status-onoff": {"n":"BI:0","d":"IU Status ON/OFF","rw":"R"},
+	    "dzk-system-input-alarm": {"n":"BI:1","d":"DZK system input alarm","rw":"R"},
+	    "dzk-global-fan": {"n":"BV:0","d":"DZK Global Fan","rw":"R"},
+	    "dzk-aux-heat1": {"n":"BV:1","d":"DZK Aux Heat1","rw":"R"},
+	    "dzk-aux-heat2": {"n":"BV:2","d":"DZK Aux Heat2","rw":"R"},
+	    "dzk-bacnet-communication-error": {"n":"BV:27","d":"DZK/BACnet Interface communication error","rw":"R"},
+	    "iu-speed": {"n":"MI:0","d":"IU speed","rw":"R"},
+	    "iu-errors": {"n":"MI:1","d":"IU errors","rw":"R"},
+	    "dzk-error": {"n":"MI:2","d":"DZK error","rw":"R"},
+	    "dzk-operation-mode": {"n":"MO:0","d":"DZK operation mode","rw":"R/W"},
+	    "dzk-user-mode": {"n":"MO:1","d":"DZK user mode","rw":"R/W"},
+	    "iu-set-point": {"n":"AV:0","d":"IU Set Point","rw":" R/W"},
+	    "dzk-address": {"n":"AV:13","d":"DZK address (DK AirNet address)","rw":"R"},
+	    "dzk-group-address": {"n":"AV:14","d":"DZK group address (DK group address)","rw":"R"},
+	},
+
+	"zone1": {
+	    "onoff": {"n":"BV:3","d":"Z1 ON/OFF","rw":"R/W"},
+	    "local-ventilation": {"n":"BV:4","d":"Z1 Local Ventilation","rw":"R/W"},
+	    "vacation-override": {"n":"BV:5","d":"Z1 Vacation override","rw":"R"},
+	    "unoccupied-override": {"n":"BV:6","d":"Z1 Unoccupied override","rw":"R"},
+	    "room-temperature": {"n":"AI:0","d":"Z1 Room temperature","rw":"R"},
+	    "heat-set-point": {"n":"AV:1","d":"Z1 Heat Set Point","rw":"R/W"},
+	    "cold-set-point": {"n":"AV:2","d":"Z1 Cold Set Point","rw":"R/W"},
+	    "humidity": {"n":"AV:33","d":"Z1 humidity","rw":"R"},
+	    "cooling-demand": {"n":"AV:15","d":"Z1 cooling demand (%)","rw":"R"},
+	    "heating-demand": {"n":"AV:16","d":"Z1 heating demand (%)","rw":"R"},
+	    "aux-heating-demand-(%)": {"n":"AV:17","d":"Z1 aux heating demand (%)","rw":"R"},
+	    "opening-step-damper": {"n":"MV:0","d":"Z1 opening step damper","rw":"R"},
+	},
+
+	"zone2": {
+	    "onoff": {"n":"BV:7","d":"Z2 ON/OFF","rw":"R/W"},
+	    "local-ventilation": {"n":"BV:8","d":"Z2 Local ventilation","rw":"R/W"},
+	    "vacation-override": {"n":"BV:9","d":"Z2 Vacation override","rw":"R"},
+	    "unoccupied-override": {"n":"BV:10","d":"Z2 Unoccupied override","rw":"R"},
+	    "room-temperature": {"n":"AI:1","d":"Z2 Room temperature","rw":"R"},
+	    "heat-set-point": {"n":"AV:3","d":"Z2 Heat Set Point","rw":"R/W"},
+	    "cold-set-point": {"n":"AV:4","d":"Z2 Cold Set Point","rw":"R/W"},
+	    "cooling-demand": {"n":"AV:18","d":"Z2 cooling demand (%)","rw":"R"},
+	    "heating-demand": {"n":"AV:19","d":"Z2 heating demand (%)","rw":"R"},
+	    "aux-heating-demand": {"n":"AV:20","d":"Z2 aux heating demand (%)","rw":"R"},
+	    "humidity": {"n":"AV:34","d":"Z2 humidity","rw":"R"},
+	    "opening-step-damper": {"n":"MV:1","d":"Z2 opening step damper","rw":"R"},
+	},
+
+	"zone3": {
+	    "onoff": {"n":"BV:11","d":"Z3 ON/OFF","rw":"R/W"},
+	    "local-ventilation": {"n":"BV:12","d":"Z3 Local ventilation","rw":"R/W"},
+	    "vacation-override": {"n":"BV:13","d":"Z3 Vacation override","rw":"R"},
+	    "unoccupied-override": {"n":"BV:14","d":"Z3 Unoccupied override","rw":"R"},
+	    "room-temperature": {"n":"AI:2","d":"Z3 Room temperature","rw":"R"},
+	    "heat-set-point": {"n":"AV:5","d":"Z3 Heat Set Point","rw":"R/W"},
+	    "cold-set-point": {"n":"AV:6","d":"Z3 Cold Set Point","rw":"R/W"},
+	    "cooling-demand": {"n":"AV:21","d":"Z3 cooling demand (%)","rw":"R"},
+	    "heating-demand": {"n":"AV:22","d":"Z3 heating demand (%)","rw":"R"},
+	    "aux-heating-demand": {"n":"AV:23","d":"Z3 aux heating demand (%)","rw":"R"},
+	    "humidity": {"n":"AV:35","d":"Z3 humidity","rw":"R"},
+	    "opening-step-damper": {"n":"MV:2","d":"Z3 opening step damper","rw":"R"},
+	},
+
+	"zone4": {
+	    "onoff": {"n":"BV:15","d":"Z4 ON/OFF","rw":"R/W"},
+	    "local-ventilation": {"n":"BV:16","d":"Z4 Local ventilation","rw":"R/W"},
+	    "vacation-override": {"n":"BV:17","d":"Z4 Vacation override","rw":"R"},
+	    "unoccupied-override": {"n":"BV:18","d":"Z4 Unoccupied override","rw":"R"},
+	    "room-temperature": {"n":"AI:3","d":"Z4 Room temperature","rw":"R"},
+	    "heat-set-point": {"n":"AV:7","d":"Z4 Heat Set Point","rw":"R/W"},
+	    "cold-set-point": {"n":"AV:8","d":"Z4 Cold Set Point","rw":"R/W"},
+	    "cooling-demand": {"n":"AV:24","d":"Z4 cooling demand (%)","rw":"R"},
+	    "heating-demand": {"n":"AV:25","d":"Z4 heating demand (%)","rw":"R"},
+	    "aux-heating-demand": {"n":"AV:26","d":"Z4 aux heating demand (%)","rw":"R"},
+	    "humidity": {"n":"AV:36","d":"Z4 humidity","rw":"R"},
+	    "opening-step-damper": {"n":"MV:3","d":"Z4 opening step damper","rw":"R"},
+	},
+
+	"zone5": {
+	    "onoff": {"n":"BV:19","d":"Z5 ON/OFF","rw":"R/W"},
+	    "local-ventilation": {"n":"BV:20","d":"Z5 Local ventilation","rw":"R/W"},
+	    "vacation-override": {"n":"BV:21","d":"Z5 Vacation override","rw":"R"},
+	    "unoccupied-override": {"n":"BV:22","d":"Z5 Unoccupied override","rw":"R"},
+	    "room-temperature": {"n":"AI:4","d":"Z5 Room temperature","rw":" R"},
+	    "heat-set-point": {"n":"AV:9","d":"Z5 Heat Set Point","rw":"R/W"},
+	    "cold-set-point": {"n":"AV:10","d":"Z5 Cold Set Point","rw":"R/W"},
+	    "cooling-demand": {"n":"AV:27","d":"Z5 cooling demand (%)","rw":"R"},
+	    "heating-demand": {"n":"AV:28","d":"Z5 heating demand (%)","rw":"R"},
+	    "aux-heating-demand": {"n":"AV:29","d":"Z5 aux heating demand (%)","rw":"R"},
+	    "humidity": {"n":"AV:37","d":"Z5 humidity","rw":"R"},
+	    "opening-step-damper": {"n":"MV:4","d":"Z5 opening step damper","rw":"R"},
+	},
+
+	"zone6": {
+	    "onoff": {"n":"BV:23","d":"Z6 ON/OFF","rw":"R/W"},
+	    "local-ventilation": {"n":"BV:24","d":"Z6 Local ventilation","rw":"R/W"},
+	    "vacation-override": {"n":"BV:25","d":"Z6 Vacation override","rw":"R"},
+	    "unoccupied-override": {"n":"BV:26","d":"Z6 Unoccupied override","rw":"R"},
+	    "room-temperature": {"n":"AI:5","d":"Z6 Room temperature","rw":" R"},
+	    "heat-set-point": {"n":"AV:11","d":"Z6 Heat Set Point","rw":"R/W"},
+	    "cold-set-point": {"n":"AV:12","d":"Z6 Cold Set Point","rw":"R/W"},
+	    "cooling-demand": {"n":"AV:30","d":"Z6 cooling demand (%)","rw":"R"},
+	    "heating-demand": {"n":"AV:31","d":"Z6 heating demand (%)","rw":"R"},
+	    "aux-heating-demand": {"n":"AV:32","d":"Z6 aux heating demand (%)","rw":"R"},
+	    "humidity": {"n":"AV:38","d":"Z6 humidity","rw":"R"},
+	    "opening-step-damper": {"n":"MV:5","d":"Z6 opening step damper","rw":"R"},
+	}
+    };
+
+    private ipAddress = "";
+    private dzkob : Object = {};
+    constructor(private readonly zno : Number) {
+	console.log("DzkZone Constructor: zone" + zno);
     }
 }

@@ -255,7 +255,7 @@
         }
       },
       "dzk-bacnet": {
-	"title": "DZK-Bacnet",
+	"title": "DzkBacnetConfig",
 	"type": "object",
 	"properties": {
 	  "ipAddress": {
@@ -265,14 +265,14 @@
 	    "required": true
 	  },
 	  "zones": {
-	    "title": "Zones",
+	    "title": "DzkZoneConfig",
 	    "type": "array",
 	    "required": true,
 	    "minItems": 1,
             "maxItems": 6,
 	    "uniqueItems": true,
 	    "items": {
-	      "title": "DZK Zone",
+	      "title": "DZK Zone Number",
 	      "type": "object",
 	      "properties": {
 		"name": {
