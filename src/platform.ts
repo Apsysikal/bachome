@@ -132,6 +132,7 @@ export class BachomeHomebridgePlatform implements DynamicPlatformPlugin {
     }
       
       if (this.config["dzk-bacnet"]) {
+	  this.log.info(`Found dzk-bacnet config`)
 	  for (const device of this.config["dzk-bacnet"].zones) {
               const uuid = this.api.hap.uuid.generate("dzk-bacnet-zone-" + device.zone);
 

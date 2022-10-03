@@ -5,6 +5,7 @@ import {
     CharacteristicGetCallback,
     CharacteristicValue,
     CharacteristicSetCallback,
+    Logger,
 } from "homebridge";
 
 import { BachomeHomebridgePlatform } from "../platform";
@@ -14,15 +15,18 @@ import {
     asyncWritePresentValue
 } from "../bacnet/bacnet";
 
-function dzk_to_hap_heatcool_state(dzk) {
+function dzk_to_hap_heatcool_state(dzk:number):number {
     /*
     TargetHeatingCoolingState.OFF = 0;
     TargetHeatingCoolingState.HEAT = 1;
     TargetHeatingCoolingState.COOL = 2;
     TargetHeatingCoolingState.AUTO = 3;
     */
+    return dzk;
 }
-function hap_to_dzk_heatcool_state(hap) {
+
+function hap_to_dzk_heatcool_state(hap:number):number {
+    return hap;
 }
 
 /*
@@ -105,18 +109,18 @@ export class DzkZoneAccessory {
 	targetHeatingCoolingState: 0,
 	currentTemperature: 20.5,
 	targetTemperature: 22.5,
-	currentRelativeHumidity: 42.2,
+	relativeHumidity: 42.2,
 	temperatureDisplayUnits: 0,
     };
 
     private ipAddress : String = "";
 
     private dzkz : DzkZone;
-    private zconfig : Object; // config object
+    private readonly zconfig : Object; // device config object
 
     constructor(
 	private readonly platform: BachomeHomebridgePlatform,
-	public readonly config: Object,
+	private readonly dzkconfig: Object,
 	private readonly accessory: PlatformAccessory
     ) {
 	// set accessory information
@@ -136,8 +140,9 @@ export class DzkZoneAccessory {
         "DZK-BACNET-3-zone-" + accessory.context.device.zone
       );
 
-	this.zconfig = config;
-	this.dzkz = new DzkZone(config["zone"]);
+	this.zconfig = accessory.context.device;
+	this.dzkconfig = dzkconfig;
+	this.dzkz = new DzkZone(this.platform.log, this.zconfig["zone"]);
 
 	this.service =
 	    this.accessory.getService(this.platform.Service.Thermostat) ||
@@ -199,6 +204,8 @@ export class DzkZoneAccessory {
 	callback(null, this.internalStates.currentHeatingCoolingState);
 
 	try {
+	    const val = this.dzkz.getCurrentHeatingCoolingState();
+	    this.internalStates.currentHeatingCoolingState = dzk_to_hap_heatcool_state(val);
 	    /*
 	    const readProperty = await readAnalogInput(
 		this.ipAddress,
@@ -208,7 +215,7 @@ export class DzkZoneAccessory {
 	    // @ts-ignore
 	    const value = readProperty["values"][0]["value"];
 	    this.platform.log.debug(`Read value from AI: ${String(value)}`);
-	    this.internalStates.currentHeatingCoolingState = value;
+	    
 	    */
 	} catch (error) {
 	    this.platform.log.error(`An error occured: ${error}`);
@@ -228,6 +235,8 @@ export class DzkZoneAccessory {
 	callback(null, this.internalStates.targetHeatingCoolingState);
 
 	try {
+	    const val = this.dzkz.getTargetHeatingCoolingState();
+	    this.internalStates.targetHeatingCoolingState = dzk_to_hap_heatcool_state(val);
 	    /*
 	    const readProperty = await readAnalogValue(
 		this.ipAddress,
@@ -262,6 +271,7 @@ export class DzkZoneAccessory {
 	callback(null);
 
 	try {
+	    this.dzkz.setTargetHeatingCoolingState(hap_to_dzk_heatcool_state(Number(value)));
 	    /*
 	    const returnedValue = await writeAnalogValue(
 		this.ipAddress,
@@ -291,6 +301,7 @@ export class DzkZoneAccessory {
 	callback(null, this.internalStates.currentTemperature);
 	
 	try {
+	    this.internalStates.currentTemperature = f2c(this.dzkz.getCurrentTemperature());
 	    /*
 	    const readProperty = await readAnalogInput(
 		this.ipAddress,
@@ -317,9 +328,10 @@ export class DzkZoneAccessory {
     ): Promise<void> {
 	this.platform.log.debug("GET CurrentRelativeHumidity");
 	
-	callback(null, this.internalStates.currentRelativeHumidity);
+	callback(null, this.internalStates.relativeHumidity);
 	
 	try {
+	    this.internalStates.relativeHumidity = this.dzkz.getCurrentRelativeHumidity();
 	    /*
 	    const readProperty = await readAnalogInput(
 		this.ipAddress,
@@ -329,7 +341,7 @@ export class DzkZoneAccessory {
 	    // @ts-ignore
 	    const value = readProperty["values"][0]["value"];
 	    this.platform.log.debug(`Read value from AI: ${String(value)}`);
-	    this.internalStates.currentRelativeHumidity = value;
+	    this.internalStates.relativeHumidity = value;
 	    */
 	} catch (error) {
 	    this.platform.log.error(`An error occured: ${error}`);
@@ -349,6 +361,8 @@ export class DzkZoneAccessory {
 	callback(null, this.internalStates.targetTemperature);
 	
 	try {
+	    this.internalStates.targetTemperature = f2c(this.dzkz.getTargetTemperature());
+
 	    /*
 	    const readProperty = await readAnalogValue(
 		this.ipAddress,
@@ -383,6 +397,7 @@ export class DzkZoneAccessory {
 	callback(null);
 	
 	try {
+	    this.dzkz.setTargetTemperature(c2f(Number(value)));
 	    /*
 	    const returnedValue = await writeAnalogValue(
 		this.ipAddress,
@@ -540,7 +555,36 @@ class DzkZone {
 
     private ipAddress = "";
     private dzkob : Object = {};
-    constructor(private readonly zno : Number) {
+    constructor(private readonly log: Logger,
+		private readonly zno : number) {
 	console.log("DzkZone Constructor: zone" + zno);
+    }
+    getCurrentHeatingCoolingState(): number {
+	this.log.debug("DzkZone.getCurrentHeatingCoolingState");
+	return 0;
+    }
+    getTargetHeatingCoolingState(): number {
+	this.log.debug("DzkZone.getTargetHeatingCoolingState");
+	return 0;
+    }
+    setTargetHeatingCoolingState(newState: number): number {
+	this.log.debug("DzkZone.setTargetHeatingCoolingState");
+	return newState;
+    }
+    getCurrentTemperature(): number {
+	this.log.debug("DzkZone.getCurrentTemperature");
+	return 69.9;
+    }
+    getCurrentRelativeHumidity(): number {
+	this.log.debug("DzkZone.getCurrentRelativeHumidity");
+	return 42.2;
+    }
+    getTargetTemperature(): number {
+	this.log.debug("DzkZone.getTargetTemperature");
+	return 69.2;
+    }
+    setTargetTemperature(newTemp: number): number {
+	this.log.debug("DzkZone.setTargetTemperature");
+	return newTemp;
     }
 }

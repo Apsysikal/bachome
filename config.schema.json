@@ -1,8 +1,9 @@
 {
-  "pluginAlias": "bachome",
+  "pluginAlias": "elh-bachome",
   "pluginType": "platform",
   "singular": true,
   "schema": {
+    "name": "elh-bachome-config",
     "type": "object",
     "properties": {
       "name": {
@@ -255,7 +256,7 @@
         }
       },
       "dzk-bacnet": {
-	"title": "DzkBacnetConfig",
+	"title": "DZK Bacnet",
 	"type": "object",
 	"properties": {
 	  "ipAddress": {
@@ -265,7 +266,7 @@
 	    "required": true
 	  },
 	  "zones": {
-	    "title": "DzkZoneConfig",
+	    "title": "DZK Zone",
 	    "type": "array",
 	    "required": true,
 	    "minItems": 1,
@@ -279,10 +280,10 @@
 		  "type": "string",
 		  "placeholder": "e.g. Back Office",
 		  "required": true
-		}
+		},
 		"zone": {
-		  "type": "number"
-		  "placeholder": 1
+		  "type": "number",
+		  "placeholder": 1,
 		  "required": true
 		}
 	      }
