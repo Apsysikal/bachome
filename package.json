@@ -1,7 +1,7 @@
 {
-  "displayName": "BAChome",
-  "name": "homebridge-bachome",
-  "version": "1.4.2",
+  "displayName": "ELHBAChome",
+  "name": "elh-homebridge-bachome",
+  "version": "1.4.2-elh",
   "description": "A short description about what your plugin does.",
   "license": "Apache-2.0",
   "repository": {
