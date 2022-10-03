@@ -56,10 +56,15 @@ function c2f(cc) {
 /*
   * Per-Zone Characteristics:
   *   CurrentRelativeHumidity
+  *     read direct from bacnet object
   *   CurrentTemperature
+  *     read direct from bacnet object
   *   TargetTemperature
+  *     read from one of two bacnet objects, depending on global heat/cool state
   *   CurrentHeatingCoolingState
+  *     read from global objecrt
   *   TargetHeatingCoolingState (only off or auto)
+  *     is global state
   *
   */
 
@@ -202,7 +207,7 @@ const dzk_objects = {
  * An instance of this class is created for each accessory your platform registers
  * Each accessory may expose multiple services of different service types.
  */
-export class DzkBacnetZoneAccessory {
+export class DzkZoneAccessory {
     private service: Service;
 
     private internalStates = {
@@ -220,6 +225,7 @@ export class DzkBacnetZoneAccessory {
 
     constructor(
 	private readonly platform: BachomeHomebridgePlatform,
+	private readonly config: Object,
 	private readonly accessory: PlatformAccessory
     ) {
 	// set accessory information
@@ -375,35 +381,6 @@ export class DzkBacnetZoneAccessory {
 
 	    this.platform.log.debug(`Written value to AV: ${String(returnedValue)}`);
 	    this.internalStates.targetHeatingCoolingState = Number(value);
-	    */
-	} catch (error) {
-	    this.platform.log.error(`An error occured: ${error}`);
-	}
-    }
-
-  /**
-   * Reads the current temperature from the
-   * configured BACnet object and updates the internal state.
-   * @param callback Callback from homebridge
-   */
-    async getCurrentTemperature(
-    callback: CharacteristicGetCallback
-    ): Promise<void> {
-	this.platform.log.debug("GET CurrentTemperature");
-	
-	callback(null, this.internalStates.currentTemperature);
-	
-	try {
-	    /*
-	    const readProperty = await readAnalogInput(
-		this.ipAddress,
-		this.stateObjects.currentTemperature["instance"],
-		85
-	    );
-	    // @ts-ignore
-	    const value = readProperty["values"][0]["value"];
-	    this.platform.log.debug(`Read value from AI: ${String(value)}`);
-	    this.internalStates.currentTemperature = value;
 	    */
 	} catch (error) {
 	    this.platform.log.error(`An error occured: ${error}`);
