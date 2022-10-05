@@ -12,12 +12,12 @@ const client = new bacnet();
 export function asyncReadPresentValue(
   ipAddress: string,
   propertyObject: object
-): Promise<boolean> {
+): Promise<number> {
   return new Promise((resolve, reject) => {
     client.readProperty(
       ipAddress,
       propertyObject,
-      bacnet.enum.PropertyIdentifier.PRESENT_VALUE,
+      bacnet.enum.PropertyIds.PROP_PRESENT_VALUE,
       (error, value) => {
         if (error) {
           return reject(error);
@@ -41,7 +41,7 @@ export function asyncWritePresentValue(
   ipAddress: string,
   propertyObject: object,
   value: number
-): Promise<boolean> {
+): Promise<number> {
   return new Promise((resolve, reject) => {
 
     const valueObject = generateValueObjectFromValue(value);
@@ -49,7 +49,7 @@ export function asyncWritePresentValue(
     client.writeProperty(
       ipAddress,
       propertyObject,
-      bacnet.enum.PropertyIdentifier.PRESENT_VALUE,
+      bacnet.enum.PropertyIds.PROP_PRESENT_VALUE,
       valueObject,
       { priority: 8 },
       (error, value) => {
