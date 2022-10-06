@@ -9,6 +9,35 @@ import {
     Logger,
 } from "homebridge";
 
+/* XXX-ELH:
+ * it would be really convenient if these were exported from hap-nodejs, homebridge, etc.
+ * But since they are not, we copy here so that we can make the code read a little more symbolic
+ */
+/**
+ * Characteristic "Temperature Display Units"
+ */
+class TemperatureDisplayUnits {
+    static readonly CELSIUS = 0;
+    static readonly FAHRENHEIT = 1;
+};
+/**
+ * Characteristic "Current Heating Cooling State"
+ */
+class CurrentHeatingCoolingState {
+    static readonly OFF = 0;
+    static readonly HEAT = 1;
+    static readonly COOL = 2;
+};
+/**
+ * Characteristic "Target Heating Cooling State"
+ */
+class TargetHeatingCoolingState {
+    static readonly OFF = 0;
+    static readonly HEAT = 1;
+    static readonly COOL = 2;
+    static readonly AUTO = 3;
+};
+
 import { BachomeHomebridgePlatform } from "../platform";
 import { objectStringParser } from "../bacnet/parser";
 import {
@@ -56,15 +85,13 @@ export class DzkZoneAccessory {
     private service: Service;
 
     private internalStates = {
-	currentHeatingCoolingState: 0,
-	targetHeatingCoolingState: 0,
+	currentHeatingCoolingState: CurrentHeatingCoolingState.OFF,
+	targetHeatingCoolingState: TargetHeatingCoolingState.OFF,
 	currentTemperature: 20.5,
 	targetTemperature: 22.5,
 	relativeHumidity: 42.2,
-	temperatureDisplayUnits: 0,
+	temperatureDisplayUnits: TemperatureDisplayUnits.FAHRENHEIT,
     };
-
-    private ipAddress : String = "";
 
     private dzkz : DzkZone;
     private readonly zconfig : Object; // device config object
@@ -93,7 +120,12 @@ export class DzkZoneAccessory {
 
 	this.zconfig = accessory.context.device;
 	this.dzkconfig = dzkconfig;
-	this.dzkz = new DzkZone(this.platform.log, dzkconfig["ipAddress"], this.zconfig["zone"]);
+	
+	if (DzkZone.ipAddress == "") {
+	    // only set this once.
+	    DzkZone.ipAddress = dzkconfig["ipAddress"];
+	}
+	this.dzkz = new DzkZone(this.platform.log, this.zconfig["zone"]);
 
 	this.service =
 	    this.accessory.getService(this.platform.Service.Thermostat) ||
@@ -108,8 +140,6 @@ export class DzkZoneAccessory {
 	    this.platform.Characteristic.Name,
 	    accessory.context.device.name
 	);
-
-	this.ipAddress = accessory.context.device.ipAddress;
 
 	// register handlers for mandatory characteristics
 	this.service
@@ -150,9 +180,15 @@ export class DzkZoneAccessory {
     async getCurrentHeatingCoolingState(
 	callback: CharacteristicGetCallback
     ): Promise<void> {
-	this.platform.log.debug("GET CurrentHeatingCoolingState");
-	this.internalStates.currentHeatingCoolingState = await this.dzkz.getCurrentHeatingCoolingState();
-	callback(null, this.internalStates.currentHeatingCoolingState);
+	const op:string = "getCurrentHeatingCoolingState";
+	this.platform.log.debug(op);
+
+	try {
+	    this.internalStates.currentHeatingCoolingState = await this.dzkz.getCurrentHeatingCoolingState();
+	    callback(null, this.internalStates.currentHeatingCoolingState);
+	} catch (error) {
+	    this.platform.log.error(`${op}: An error occured: ${error}`);
+	}
     }
 
     /**
@@ -163,16 +199,17 @@ export class DzkZoneAccessory {
     async getTargetHeatingCoolingState(
 	callback: CharacteristicGetCallback
     ): Promise<void> {
-	this.platform.log.debug("GET TargetHeatingCoolingState");
+	const op:string = "getTargetHeatingCoolingState";
+	this.platform.log.debug(op);
 	
 	callback(null, this.internalStates.targetHeatingCoolingState);
 
 	try {
 	    const state = await this.dzkz.getTargetHeatingCoolingState();
-	    this.internalStates.targetHeatingCoolingState = DzkZone.to_hap_heatcool_state(state);
+	    this.internalStates.targetHeatingCoolingState = DzkZone.to_hap_target_heatcool_state(state);
 
 	} catch (error) {
-	    this.platform.log.error(`GET TargetHeatingCoolingState: An error occured: ${error}`);
+	    this.platform.log.error(`${op}: An error occured: ${error}`);
 	}
     }
 
@@ -187,14 +224,15 @@ export class DzkZoneAccessory {
 	value: CharacteristicValue,
 	callback: CharacteristicSetCallback
     ): Promise<void> {
-	this.platform.log.debug("SET TargetHeatingCoolingState");
+	const op:string = "setTargetHeatingCoolingState";
+	this.platform.log.debug(op);
 
 	try {
-	    const state = await this.dzkz.setTargetHeatingCoolingState(DzkZone.from_hap_heatcool_state(Number(value)));
-	    this.internalStates.targetHeatingCoolingState = DzkZone.to_hap_heatcool_state(state);
+	    const state = await this.dzkz.setTargetHeatingCoolingState(DzkZone.from_hap_target_heatcool_state(Number(value)));
+	    this.internalStates.targetHeatingCoolingState = DzkZone.to_hap_target_heatcool_state(state);
 
 	} catch (error) {
-	    this.platform.log.error(`SET TargetHeatingCoolingState: An error occured: ${error}`);
+	    this.platform.log.error(`${op}: An error occured: ${error}`);
 	}
 	callback(null);
     }
@@ -207,7 +245,8 @@ export class DzkZoneAccessory {
     async getCurrentTemperature(
     callback: CharacteristicGetCallback
     ): Promise<void> {
-	this.platform.log.debug("GET CurrentTemperature");
+	const op:string = "getCurrentTemperature";
+	this.platform.log.debug(op);
 	
 	callback(null, this.internalStates.currentTemperature);
 	
@@ -215,7 +254,7 @@ export class DzkZoneAccessory {
 	    const ctProp = await this.dzkz.getCurrentTemperature();
 	    this.internalStates.currentTemperature = f2c(ctProp["values"][0]["value"]);
 	} catch (error) {
-	    this.platform.log.error(`GET CurrentTemperature: An error occured: ${error}`);
+	    this.platform.log.error(`${op}: An error occured: ${error}`);
 	}
     }
 
@@ -227,7 +266,8 @@ export class DzkZoneAccessory {
     async getCurrentRelativeHumidity(
     callback: CharacteristicGetCallback
     ): Promise<void> {
-	this.platform.log.debug("GET CurrentRelativeHumidity");
+	const op:string = "getCurrentRelativeHumidity";
+	this.platform.log.debug(op);
 	
 	callback(null, this.internalStates.relativeHumidity);
 	
@@ -235,7 +275,7 @@ export class DzkZoneAccessory {
 	    const ctProp = await this.dzkz.getCurrentRelativeHumidity();
 	    this.internalStates.relativeHumidity = ctProp["values"][0]["value"];
 	} catch (error) {
-	    this.platform.log.error(`GET CurrentRelativeHumidity: An error occured: ${error}`);
+	    this.platform.log.error(`${op}: An error occured: ${error}`);
 	}
     }
 
@@ -247,7 +287,7 @@ export class DzkZoneAccessory {
     async getTargetTemperature(
 	callback: CharacteristicGetCallback
     ): Promise<void> {
-	const op:string = "GET TargetTemperature";
+	const op:string = "getTargetTemperature";
 	this.platform.log.debug(op);
 	try {
 	    const ctProp = await this.dzkz.getTargetTemperature();
@@ -309,11 +349,27 @@ export class DzkZoneAccessory {
     }
 }
 
+class DzkOperationMode {
+    static readonly AUTO = 1;
+    static readonly COOL = 2;
+    static readonly HEAT = 3;
+    static readonly DRY = 4;
+};
+class DzkUserMode {
+    static readonly STOP = 1;
+    static readonly COMFORT = 2;
+    static readonly UNOCCUPIED = 3;
+    static readonly NIGHT_TIME = 4
+    static readonly ECO = 5;
+    static readonly VACATION = 6;
+};
+
 class DzkZone {
     /*
      * https://www.daikinac.com/content/assets/DOC/QuickGuides/QG-DZK-BACNET-3_A4_EN_200.pdf
      * organized by global and zone settings
      */
+    static ipAddress : string = "";
     private static readonly dzk_objects = {
 	"global": {
 	    "iu-status-onoff": {"n":"BI:0","d":"IU Status ON/OFF","rw":"R"},
@@ -326,24 +382,15 @@ class DzkZone {
 	    "iu-errors": {"n":"MI:1","d":"IU errors","rw":"R"},
 	    "dzk-error": {"n":"MI:2","d":"DZK error","rw":"R"},
 
-	    "dzk-operation-mode": {"n":"MO:0","d":"DZK operation mode","rw":"R/W"},
 	    /*
-	     * DZK Operation Mode:
-	     *     auto: 1
-	     *     cool: 2
-	     *     heat: 3
-	     *      dry: 4
+	     * See DzkOperationMode class
 	     */
+	    "dzk-operation-mode": {"n":"MO:0","d":"DZK operation mode","rw":"R/W"},
 
-	    "dzk-user-mode": {"n":"MO:1","d":"DZK user mode","rw":"R/W"},
-	    /* User Mode:
-	     *   stop: 1
-	     *   comfort: 2
-	     *   unoccupied: 3
-	     *   night-time: 4
-	     *   eco: 5
-	     *   vacation: 6
+	    /*
+	     * see DzkUserMode class
 	     */
+	    "dzk-user-mode": {"n":"MO:1","d":"DZK user mode","rw":"R/W"},
 
 	    "iu-set-point": {"n":"AV:0","d":"IU Set Point","rw":" R/W"},
 	    "dzk-address": {"n":"AV:13","d":"DZK address (DK AirNet address)","rw":"R"},
@@ -450,7 +497,6 @@ class DzkZone {
     private static dzk_opmode : number = -1;
     private dzkob : Object = {};
     constructor(private readonly log: Logger,
-		private readonly ipAddress: string,
 		private readonly zno : number) {
 	this.log.debug("DzkZone Constructor: zone" + zno);
 	this.dzkob = DzkZone.dzk_objects["zone" + zno];
@@ -460,21 +506,21 @@ class DzkZone {
 	    this.getTargetHeatingCoolingState();
 	}
     }
-    getGlobalPv(id: string): Promise<number> {
+    static getGlobalPv(id: string): Promise<number> {
 	let po = objectStringParser(DzkZone.dzk_objects["global"][id]["n"]);
-	return asyncReadPresentValue(this.ipAddress, po);
+	return asyncReadPresentValue(DzkZone.ipAddress, po);
     }
-    setGlobalPv(id: string, val: number): Promise<number> {
+    static setGlobalPv(id: string, val: number): Promise<number> {
 	let po = objectStringParser(DzkZone.dzk_objects["global"][id]["n"]);
-	return asyncWritePresentValue(this.ipAddress, po, val);
+	return asyncWritePresentValue(DzkZone.ipAddress, po, val);
     }
     getZonePv(id: string): Promise<number> {
 	let po = objectStringParser(this.dzkob[id]["n"]);
-	return asyncReadPresentValue(this.ipAddress, po);
+	return asyncReadPresentValue(DzkZone.ipAddress, po);
     }
     setZonePv(id: string, val: number): Promise<number> {
 	let po = objectStringParser(this.dzkob[id]["n"]);
-	return asyncWritePresentValue(this.ipAddress, po, val);
+	return asyncWritePresentValue(DzkZone.ipAddress, po, val);
     }
     async getCurrentHeatingCoolingState(): Promise<number> { // XXX: this needs work
 	const hdp = await this.getZonePv("heating-demand");
@@ -500,13 +546,13 @@ class DzkZone {
     }
     async getTargetHeatingCoolingState(): Promise<number> {
 	this.log.debug("DzkZone.getTargetHeatingCoolingState");
-	const prop = await this.getGlobalPv("dzk-operation-mode");
+	const prop = await DzkZone.getGlobalPv("dzk-operation-mode");
 	DzkZone.dzk_opmode = prop["values"][0]["value"];
 	return DzkZone.dzk_opmode;
     }
     async setTargetHeatingCoolingState(newState: number): Promise<number> {
-	this.log.debug("DzkZone.setTargetHeatingCoolingState");
-	const prop = await this.setGlobalPv("dzk-operation-mode", newState);
+	this.log.debug("DzkZone.setTargetHeatingCoolingState: " + newState);
+	const prop = await DzkZone.setGlobalPv("dzk-operation-mode", newState);
 	DzkZone.dzk_opmode = prop["values"][0]["value"];
 	return DzkZone.dzk_opmode;
     }
@@ -524,52 +570,40 @@ class DzkZone {
 	return this.setZonePv(DzkZone.dzk_opmode == 3 ? "heat-set-point" : "cold-set-point", newTemp);
     }
 
-    static to_hap_heatcool_state(dzk:number):number {
+    static to_hap_target_heatcool_state(dzk:number):number {
 	let hap:number = 0; // TargetHeatingCoolingState.OFF;
-	/*
-	 * DZK Operation Mode:
-	 *     auto: 1
-	 *     cool: 2
-	 *     heat: 3
-	 *      dry: 4
-	 */
-	/*
-	  TargetHeatingCoolingState.OFF = 0;
-	  TargetHeatingCoolingState.HEAT = 1;
-	  TargetHeatingCoolingState.COOL = 2;
-	  TargetHeatingCoolingState.AUTO = 3;
-	*/
+
 	switch (dzk) {
-	    case 1: // auto
-		hap = 3; // TargetHeatingCoolingState.AUTO;
+	    case DzkOperationMode.AUTO:
+		hap = TargetHeatingCoolingState.AUTO;
 		break;
-	    case 2: // cool
-		hap = 2; // TargetHeatingCoolingState.COOL;
+	    case DzkOperationMode.COOL:
+		hap = TargetHeatingCoolingState.COOL;
 		break;
-	    case 3: // heat
-		hap = 1; // TargetHeatingCoolingState.HEAT;
+	    case DzkOperationMode.HEAT:
+		hap = TargetHeatingCoolingState.HEAT;
 		break;
-	    case 4: // dry
-		hap = 2; // TargetHeatingCoolingState.COOL;
+	    case DzkOperationMode.DRY:
+		hap = TargetHeatingCoolingState.COOL; // XXX-ELH: doesn't map directly.
 		break;
 	}
 	return hap;
     }
 
-    static from_hap_heatcool_state(hap:number):number {
-	let dzk:number = 0; // TargetHeatingCoolingState.OFF;
+    static from_hap_target_heatcool_state(hap:number):number {
+	let dzk:number = DzkOperationMode.AUTO;
 	switch (hap) {
-	    case 1: // TargetHeatingCoolingState.HEAT;
-		dzk = 3;
+	    case TargetHeatingCoolingState.HEAT:
+		dzk = DzkOperationMode.HEAT;
 		break;
-	    case 2: // TargetHeatingCoolingState.COOL;
-		dzk = 2;
+	    case TargetHeatingCoolingState.COOL:
+		dzk = DzkOperationMode.COOL;
 		break;
-	    case 3: // TargetHeatingCoolingState.AUTO;
-		dzk = 1;
+	    case TargetHeatingCoolingState.AUTO:
+		dzk = DzkOperationMode.AUTO;
 		break;
-	    case 0: // TargetHeatingCoolingState.OFF;
-		dzk = 1;
+	    case TargetHeatingCoolingState.OFF:
+		dzk = DzkOperationMode.AUTO; // XXX-ELH: this should maybe trigger a higher level function that puts DzkUserMode to stop
 		break;
 	}
 	return dzk;

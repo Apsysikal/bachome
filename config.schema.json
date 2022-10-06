@@ -273,7 +273,7 @@
             "maxItems": 6,
 	    "uniqueItems": true,
 	    "items": {
-	      "title": "DZK Zone Number",
+	      "title": "DZK Zone",
 	      "type": "object",
 	      "properties": {
 		"name": {
