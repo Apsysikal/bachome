@@ -40,7 +40,7 @@ export function asyncReadPresentValue(
 export function asyncWritePresentValue(
   ipAddress: string,
   propertyObject: object,
-  value: number
+    value: any
 ): Promise<number> {
   return new Promise((resolve, reject) => {
 
@@ -514,11 +514,23 @@ export function writeAnalogOutput(
  * @param value Value which will be converted to a valueObject
  */
 export function generateValueObjectFromValue(
-  value: number | boolean | string
+  value: number | boolean | string | object
 ): unknown[] {
   const valueObject: unknown[] = [];
 
-  switch (typeof value) {
+    switch (typeof value) {
+	case "object":
+	    /* typeof only has 9 return values, BACnet has around 38 Application Tag Types
+	     * provide a way for the caller to define their own type, when it doesn't
+	     * fit into a JS primitive
+	     */
+	    if (value.hasOwnProperty("type") && value.hasOwnProperty("value")) {
+		valueObject[0] = value;
+	    } else {
+		throw "generateValueObjectFromValue: object needs type and value";
+	    }
+	    break;
+
     case "number":
       valueObject[0] = {
         type: bacnet.enum.ApplicationTags.BACNET_APPLICATION_TAG_REAL,
