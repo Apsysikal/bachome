@@ -11,6 +11,7 @@ import {
 import { PLATFORM_NAME, PLUGIN_NAME } from "./settings";
 import { BachomeSwitchAccessory } from "./accessories/switch";
 import { BachomeThermostatAccessory } from "./accessories/thermostat";
+import { DzkZoneAccessory } from "./accessories/dzk-bacnet";
 import { BachomeHeaterCoolerAccessory } from "./accessories/cooler";
 import { BachomeTemperatureSensorAccessory } from "./accessories/temperatureSensor";
 
@@ -129,6 +130,37 @@ export class BachomeHomebridgePlatform implements DynamicPlatformPlugin {
         }
       }
     }
+
+      if (this.config["dzk-bacnet"]) {
+	  this.log.info(`Found dzk-bacnet config`)
+	  for (const device of this.config["dzk-bacnet"].zones) {
+              const uuid = this.api.hap.uuid.generate("dzk-bacnet-zone-" + device.zone);
+
+              const existingAccessory = this.accessories.find(
+		  (accessory) => accessory.UUID === uuid
+              );
+
+              if (existingAccessory) {
+		  this.log.info(
+		      `Restoring existing accessory from cache: ${existingAccessory.displayName}`
+		  );
+
+		  new DzkZoneAccessory(this, this.config["dzk-bacnet"], existingAccessory);
+              } else {
+		  this.log.info(`Adding new accessory: ${device.name}`);
+
+		  const accessory = new this.api.platformAccessory(device.name, uuid);
+
+		  accessory.context.device = device;
+
+		  new DzkZoneAccessory(this, this.config["dzk-bacnet"], accessory);
+
+		  this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
+		      accessory,
+		  ]);
+              }
+	  }
+      }
 
     if (this.config.cooler) {
       for (const device of this.config.cooler) {
