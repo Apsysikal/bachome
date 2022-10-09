@@ -590,11 +590,11 @@ class DzkZone {
 	return this.getZonePv("humidity");
     }
     getTargetTemperature(): Promise<number> {
-	this.log.debug("DzkZone.getTargetTemperature: ", this.lastDemand);
+	this.log.info("DzkZone.getTargetTemperature zone"+this.zno+".lastDemand: ", this.lastDemand);
 	return this.getZonePv(this.lastDemand>0 ? "heat-set-point" : "cold-set-point");
     }
     setTargetTemperature(newTemp: number): Promise<number> {
-	this.log.debug("DzkZone.setTargetTemperature: ", this.lastDemand);
+	this.log.info("DzkZone.setTargetTemperature zone"+this.zno+".lastDemand: ", this.lastDemand);
 	return this.setZonePv(this.lastDemand>0 ? "heat-set-point" : "cold-set-point", newTemp);
     }
 
