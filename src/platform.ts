@@ -130,7 +130,7 @@ export class BachomeHomebridgePlatform implements DynamicPlatformPlugin {
         }
       }
     }
-      
+
       if (this.config["dzk-bacnet"]) {
 	  this.log.info(`Found dzk-bacnet config`)
 	  for (const device of this.config["dzk-bacnet"].zones) {
