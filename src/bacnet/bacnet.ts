@@ -1,6 +1,11 @@
 import bacnet from "bacstack";
+import {BacnetObject} from "./parser"
 
 const client = new bacnet();
+export interface ValueObject {
+    type:number;
+    value:number | boolean | string;
+};
 
 /**
  * Reads the current value of an object from the remote device.
@@ -11,7 +16,7 @@ const client = new bacnet();
  */
 export function asyncReadPresentValue(
   ipAddress: string,
-  propertyObject: object
+  propertyObject: BacnetObject
 ): Promise<number> {
   return new Promise((resolve, reject) => {
     client.readProperty(
@@ -39,8 +44,8 @@ export function asyncReadPresentValue(
  */
 export function asyncWritePresentValue(
   ipAddress: string,
-  propertyObject: object,
-    value: any
+  propertyObject: BacnetObject,
+    value: number | boolean | string | ValueObject
 ): Promise<number> {
   return new Promise((resolve, reject) => {
 
@@ -514,9 +519,9 @@ export function writeAnalogOutput(
  * @param value Value which will be converted to a valueObject
  */
 export function generateValueObjectFromValue(
-  value: number | boolean | string | object
+  value: number | boolean | string | ValueObject
 ): unknown[] {
-  const valueObject: unknown[] = [];
+  const valueObject: ValueObject[] = [];
 
     switch (typeof value) {
 	case "object":
@@ -524,11 +529,7 @@ export function generateValueObjectFromValue(
 	     * provide a way for the caller to define their own type, when it doesn't
 	     * fit into a JS primitive
 	     */
-	    if (value.hasOwnProperty("type") && value.hasOwnProperty("value")) {
-		valueObject[0] = value;
-	    } else {
-		throw "generateValueObjectFromValue: object needs type and value";
-	    }
+	    valueObject[0] = value;
 	    break;
 
     case "number":

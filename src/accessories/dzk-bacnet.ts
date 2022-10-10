@@ -13,7 +13,8 @@ import { BachomeHomebridgePlatform } from "../platform";
 import { objectStringParser } from "../bacnet/parser";
 import {
     asyncReadPresentValue,
-    asyncWritePresentValue
+    asyncWritePresentValue,
+    ValueObject
 } from "../bacnet/bacnet";
 
 /* XXX-ELH:
@@ -90,13 +91,13 @@ function c2f(cc) {
  * An instance of this class is created for each accessory your platform registers
  * Each accessory may expose multiple services of different service types.
  */
-export class DzkZoneConfig {
-    name = "";
-    zone = 1;
+interface DzkZoneConfig {
+    name:string;
+    zone:number;
 };
-export class DzkConfig {
-    ipAddress = "";
-    zones:DzkZoneConfig[] = [];
+interface DzkConfig {
+    ipAddress:string;
+    zones:DzkZoneConfig[];
 }
 export class DzkZoneAccessory {
     private service: Service;
@@ -111,7 +112,7 @@ export class DzkZoneAccessory {
     };
 
     private dzkz : DzkZone;
-    private readonly zconfig : Record<string,unknown>; // device config object
+    private readonly zconfig : DzkConfig; // device config object
 
     constructor(
 	private readonly platform: BachomeHomebridgePlatform,
@@ -520,7 +521,7 @@ class DzkZone {
     private static dzk_opmode = -1;
     private dzkob:Record<string,DzkBacObject>;
     constructor(private readonly log: Logger,
-		private readonly zno : any) {
+		private readonly zno : number) {
 	this.log.debug("DzkZone Constructor: zone" + zno);
 	this.dzkob = DzkZone.dzk_objects["zone" + zno];
 
@@ -533,7 +534,7 @@ class DzkZone {
 	const po = objectStringParser(DzkZone.dzk_objects["global"][id]["n"]);
 	return asyncReadPresentValue(DzkZone.ipAddress, po);
     }
-    static setGlobalPv(id: string, val: number|object): Promise<number> {
+    static setGlobalPv(id: string, val: number|ValueObject): Promise<number> {
 	const po = objectStringParser(DzkZone.dzk_objects["global"][id]["n"]);
 	return asyncWritePresentValue(DzkZone.ipAddress, po, val);
     }
@@ -541,7 +542,7 @@ class DzkZone {
 	const po = objectStringParser(this.dzkob[id]["n"]);
 	return asyncReadPresentValue(DzkZone.ipAddress, po);
     }
-    setZonePv(id: string, val: number|object): Promise<number> {
+    setZonePv(id: string, val: number|ValueObject): Promise<number> {
 	const po = objectStringParser(this.dzkob[id]["n"]);
 	return asyncWritePresentValue(DzkZone.ipAddress, po, val);
     }
@@ -614,7 +615,7 @@ class DzkZone {
     }
 
     static to_hap_target_heatcool_state(dzk:number):number {
-	let hap:number = 0; // TargetHeatingCoolingState.OFF;
+	let hap = 0; // TargetHeatingCoolingState.OFF;
 
 	switch (dzk) {
 	    case DzkOperationMode.AUTO:
@@ -634,7 +635,7 @@ class DzkZone {
     }
 
     static from_hap_target_heatcool_state(hap:number):number {
-	let dzk:number = DzkOperationMode.AUTO;
+	let dzk = DzkOperationMode.AUTO;
 	switch (hap) {
 	    case TargetHeatingCoolingState.HEAT:
 		dzk = DzkOperationMode.HEAT;
