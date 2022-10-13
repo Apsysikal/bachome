@@ -66,6 +66,22 @@ class TargetHeatingCoolingState {
     static readonly AUTO = 3;
 };
 
+/**
+ * Characteristic "Current Fan State"
+ */
+class CurrentFanState {
+    static readonly INACTIVE = 0;
+    static readonly IDLE = 1;
+    static readonly BLOWING_AIR = 2;
+};
+/**
+ * Characteristic "Target Fan State"
+ */
+class TargetFanState {
+    static readonly MANUAL = 0;
+    static readonly AUTO = 1;
+};
+
 /*
  * farenheit to celsius and back
  *   these are used when the device is configured to send farenheit
@@ -89,11 +105,18 @@ function c2f(cc) {
  *   CurrentTemperature
  *     read direct from bacnet object
  *   TargetTemperature
- *     read from one of two bacnet objects, depending on global heat/cool state
+ *     "it's complicated"
+ *   CoolingThresholdTemperature
+ *     read direct from bacnet object
+ *   HeatingThresholdTemperature
+ *     read direct from bacnet object
  *   CurrentHeatingCoolingState
  *     read from global objecrt
  *   TargetHeatingCoolingState (only off or auto)
  *     is global state
+ *
+ *   CurrentFanState
+ *   TargetFanState
  *
  */
 
@@ -117,7 +140,10 @@ export class DzkZoneAccessory {
 	currentHeatingCoolingState: CurrentHeatingCoolingState.OFF,
 	targetHeatingCoolingState: TargetHeatingCoolingState.OFF,
 	currentTemperature: 20.5,
-	targetTemperature: 22.5,
+	currentFanState: 0,
+	coolSetpoint: 23.5,
+	heatSetpoint: 21.5,
+	targetTemperature: 22.0,
 	relativeHumidity: 42.2,
 	temperatureDisplayUnits: TemperatureDisplayUnits.FAHRENHEIT,
     };
@@ -183,6 +209,11 @@ export class DzkZoneAccessory {
 	    .on("get", this.getTargetHeatingCoolingState.bind(this));
 
 	this.service
+	    .getCharacteristic(this.platform.Characteristic.TargetTemperature)
+	    .on("set", this.setTargetTemperature.bind(this))
+	    .on("get", this.getTargetTemperature.bind(this));
+
+	this.service
 	    .getCharacteristic(this.platform.Characteristic.CurrentTemperature)
 	    .on("get", this.getCurrentTemperature.bind(this));
 
@@ -191,14 +222,24 @@ export class DzkZoneAccessory {
 	    .on("get", this.getCurrentRelativeHumidity.bind(this));
 
 	this.service
-	    .getCharacteristic(this.platform.Characteristic.TargetTemperature)
-	    .on("set", this.setTargetTemperature.bind(this))
-	    .on("get", this.getTargetTemperature.bind(this));
+	    .getCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature)
+	    .on("set", this.setCoolingThresholdTemperature.bind(this))
+	    .on("get", this.getCoolingThresholdTemperature.bind(this));
+
+	this.service
+	    .getCharacteristic(this.platform.Characteristic.HeatingThresholdTemperature)
+	    .on("set", this.setHeatingThresholdTemperature.bind(this))
+	    .on("get", this.getHeatingThresholdTemperature.bind(this));
 
 	this.service
 	    .getCharacteristic(this.platform.Characteristic.TemperatureDisplayUnits)
 	    .on("set", this.setTemperatureDisplayUnits.bind(this))
 	    .on("get", this.getTemperatureDisplayUnits.bind(this));
+
+	this.service
+	    .getCharacteristic(this.platform.Characteristic.CurrentFanState)
+	    .on("get", this.getCurrentFanState.bind(this));
+	
     }
 
     /**
@@ -212,12 +253,12 @@ export class DzkZoneAccessory {
 	const op = "getCurrentHeatingCoolingState";
 	this.platform.log.debug(op);
 
+	callback(null, this.internalStates.currentHeatingCoolingState);
 	try {
 	    this.internalStates.currentHeatingCoolingState = await this.dzkz.getCurrentHeatingCoolingState();
 	} catch (error) {
-	    this.platform.log.error(`${op}: An error occured: ${error}`);
+	    this.platform.log.error(`${op}.zone${this.accessory.context.device.zone}: An error occured: ${error}`);
 	}
-	callback(null, this.internalStates.currentHeatingCoolingState);
     }
 
     /**
@@ -231,15 +272,14 @@ export class DzkZoneAccessory {
 	const op = "getTargetHeatingCoolingState";
 	this.platform.log.debug(op);
 	
+	callback(null, this.internalStates.targetHeatingCoolingState);
 	try {
 	    const state = await this.dzkz.getTargetHeatingCoolingState();
 	    this.internalStates.targetHeatingCoolingState = DzkZone.to_hap_target_heatcool_state(state);
 
 	} catch (error) {
-	    this.platform.log.error(`${op}: An error occured: ${error}`);
+	    this.platform.log.error(`${op}.zone${this.accessory.context.device.zone}: An error occured: ${error}`);
 	}
-
-	callback(null, this.internalStates.targetHeatingCoolingState);
     }
 
     /**
@@ -256,14 +296,14 @@ export class DzkZoneAccessory {
 	const op = "setTargetHeatingCoolingState";
 	this.platform.log.debug(op);
 
+	callback(null);
 	try {
 	    const state = await this.dzkz.setTargetHeatingCoolingState(DzkZone.from_hap_target_heatcool_state(Number(value)));
 	    this.internalStates.targetHeatingCoolingState = DzkZone.to_hap_target_heatcool_state(state);
 
 	} catch (error) {
-	    this.platform.log.error(`${op}: An error occured: ${error}`);
+	    this.platform.log.error(`${op}.zone${this.accessory.context.device.zone}: An error occured: ${error}`);
 	}
-	callback(null);
     }
 
   /**
@@ -277,14 +317,29 @@ export class DzkZoneAccessory {
 	const op = "getCurrentTemperature";
 	this.platform.log.debug(op);
 	
+	callback(null, this.internalStates.currentTemperature);
 	try {
 	    const ctProp = await this.dzkz.getCurrentTemperature();
 	    this.internalStates.currentTemperature = f2c(ctProp["values"][0]["value"]);
 	} catch (error) {
-	    this.platform.log.error(`${op}: An error occured: ${error}`);
+	    this.platform.log.error(`${op}.zone${this.accessory.context.device.zone}: An error occured: ${error}`);
 	}
+    }
 
-	callback(null, this.internalStates.currentTemperature);
+    async getCurrentFanState(
+    callback: CharacteristicGetCallback
+    ): Promise<void> {
+	const op = "getCurrentFanState";
+	this.platform.log.debug(op);
+	
+	callback(null, this.internalStates.currentFanState);
+	try {
+	    const ctProp = await this.dzkz.getCurrentFanState();
+	    this.platform.log.info("dzk-fanstate." + this.accessory.context.device.zone, ctProp);
+	    this.internalStates.currentFanState = DzkZone.to_hap_fanstate(ctProp["values"][0]["value"]);
+	} catch (error) {
+	    this.platform.log.error(`${op}.zone${this.accessory.context.device.zone}: An error occured: ${error}`);
+	}
     }
 
   /**
@@ -298,34 +353,33 @@ export class DzkZoneAccessory {
 	const op = "getCurrentRelativeHumidity";
 	this.platform.log.debug(op);
 	
+	callback(null, this.internalStates.relativeHumidity);
 	try {
 	    const ctProp = await this.dzkz.getCurrentRelativeHumidity();
 	    this.internalStates.relativeHumidity = ctProp["values"][0]["value"];
 	} catch (error) {
-	    this.platform.log.error(`${op}: An error occured: ${error}`);
+	    this.platform.log.error(`${op}.zone${this.accessory.context.device.zone}: An error occured: ${error}`);
 	}
-
-	callback(null, this.internalStates.relativeHumidity);
     }
 
-  /**
-   * Reads the target temperature from the
-   * configured BACnet object and updates the internal state.
-   * @param callback Callback from homebridge
-   */
+    /**
+     * Reads the heating setpoint temperature from the
+     * configured BACnet object and updates the internal state.
+     * @param callback Callback from homebridge
+     */
     async getTargetTemperature(
 	callback: CharacteristicGetCallback
     ): Promise<void> {
 	const op = "getTargetTemperature";
 	this.platform.log.debug(op);
+	callback(null, this.internalStates.targetTemperature);
 	try {
 	    const ctProp = await this.dzkz.getTargetTemperature();
+	    this.platform.log.info(op + ".zone" + this.accessory.context.device.zone + ": ", ctProp)
 	    this.internalStates.targetTemperature = f2c(ctProp["values"][0]["value"]);
 	} catch (error) {
-	    this.platform.log.error(`${op}: An error occured: ${error}`);
+	    this.platform.log.error(`${op}.zone${this.accessory.context.device.zone}: An error occured: ${error}`);
 	}
-
-	callback(null, this.internalStates.targetTemperature);
     }
     
     /**
@@ -341,13 +395,99 @@ export class DzkZoneAccessory {
     ): Promise<void> {
 	const op = "setTargetTemperature";
 	this.platform.log.debug(op);
+	callback(null);
 	try {
 	    await this.dzkz.setTargetTemperature(c2f(Number(value)));
 
 	} catch (error) {
-	    this.platform.log.error(`${op}: An error occured: ${error}`);
+	    this.platform.log.error(`${op}.zone${this.accessory.context.device.zone}: An error occured: ${error}`);
 	}
+    }
+    
+  /**
+   * Reads the heating setpoint temperature from the
+   * configured BACnet object and updates the internal state.
+   * @param callback Callback from homebridge
+   */
+    async getHeatingThresholdTemperature(
+	callback: CharacteristicGetCallback
+    ): Promise<void> {
+	const op = "getHeatingThresholdTemperature";
+	this.platform.log.debug(op);
+	callback(null, this.internalStates.heatSetpoint);
+	try {
+	    const ctProp = await this.dzkz.getHeatSetpoint();
+	    this.platform.log.info(op + ".zone" + this.accessory.context.device.zone + ": ", ctProp)
+	    this.internalStates.heatSetpoint = f2c(ctProp["values"][0]["value"]);
+	} catch (error) {
+	    this.platform.log.error(`${op}.zone${this.accessory.context.device.zone}: An error occured: ${error}`);
+	}
+
+    }
+    
+    /**
+     * Writes the value passed from homebridge to the
+     * configured BACnet object and updates the
+     * internal state.
+     * @param value Value passed from homebridge
+     * @param callback Callback from homebridge
+     */
+    async setHeatingThresholdTemperature(
+	value: CharacteristicValue,
+	callback: CharacteristicSetCallback
+    ): Promise<void> {
+	const op = "setHeatingThresholdTemperature";
+	this.platform.log.debug(op);
 	callback(null);
+	try {
+	    await this.dzkz.setHeatSetpoint(c2f(Number(value)));
+
+	} catch (error) {
+	    this.platform.log.error(`${op}.zone${this.accessory.context.device.zone}: An error occured: ${error}`);
+	}
+    }
+    
+  /**
+   * Reads the cooling setpoint temperature from the
+   * configured BACnet object and updates the internal state.
+   * @param callback Callback from homebridge
+   */
+    async getCoolingThresholdTemperature(
+	callback: CharacteristicGetCallback
+    ): Promise<void> {
+	const op = "getCoolingThresholdTemperature";
+	this.platform.log.debug(op);
+	callback(null, this.internalStates.coolSetpoint);
+	try {
+	    const ctProp = await this.dzkz.getCoolSetpoint();
+	    this.platform.log.info(op + ".zone" + this.accessory.context.device.zone + ": ", ctProp)
+	    this.internalStates.coolSetpoint = f2c(ctProp["values"][0]["value"]);
+	} catch (error) {
+	    this.platform.log.error(`${op}.zone${this.accessory.context.device.zone}: An error occured: ${error}`);
+	}
+
+    }
+    
+    /**
+     * Writes the value passed from homebridge to the
+     * configured BACnet object and updates the
+     * internal state.
+     * @param value Value passed from homebridge
+     * @param callback Callback from homebridge
+     */
+    async setCoolingThresholdTemperature(
+	value: CharacteristicValue,
+	callback: CharacteristicSetCallback
+    ): Promise<void> {
+	const op = "setCoolingThresholdTemperature";
+	this.platform.log.debug(op);
+	callback(null);
+	try {
+	    await this.dzkz.setCoolSetpoint(c2f(Number(value)));
+
+	} catch (error) {
+	    this.platform.log.error(`${op}.zone${this.accessory.context.device.zone}: An error occured: ${error}`);
+	}
     }
     
     /**
@@ -597,11 +737,36 @@ class DzkZone {
     getCurrentTemperature(): Promise<number> {
 	return this.getZonePv("room-temperature");
     }
+    getCurrentFanState(): Promise<number> {
+	/* controls for fan...
+	 *
+	 * global.dzk-global-fan
+	 * global.iu-speed
+	 * zone.local-ventilation
+	 */ 
+	return DzkZone.getGlobalPv("dzk-global-fan");
+    }
     getCurrentRelativeHumidity(): Promise<number> {
 	return this.getZonePv("humidity");
     }
+    getHeatSetpoint(): Promise<number> {
+	return this.getZonePv("heat-set-point");
+    }
+    setHeatSetpoint(newTemp: number): Promise<number> {
+	return this.setZonePv("heat-set-point", newTemp);
+    }
+    getCoolSetpoint(): Promise<number> {
+	return this.getZonePv("cold-set-point");
+    }
+    setCoolSetpoint(newTemp: number): Promise<number> {
+	return this.setZonePv("cold-set-point", newTemp);
+    }
 
     /*
+     * XXX-ELH: Obsolete. This was usable before I realized
+     *          that HAP provides the two above charaacteristics
+     *          for separate heat/cool setpoints (thesholds).
+     *
      * setTargetTemperature is tricky because
      * DZK has separate setpoints for heating and cooling
      * but HAP only has the one "target temperature". 
@@ -617,11 +782,37 @@ class DzkZone {
     private lastDemand = 0;
 
     getTargetTemperature(): Promise<number> {
+	let bac_ob = "";
 	this.log.info("DzkZone.getTargetTemperature zone"+this.zno+".lastDemand: ", this.lastDemand);
-	return this.getZonePv(this.lastDemand>0 ? "heat-set-point" : "cold-set-point");
+	switch (DzkZone.dzk_opmode) {
+	    case DzkOperationMode.AUTO:
+	    case DzkOperationMode.DRY:
+		bac_ob = (this.lastDemand>0 ? "heat-set-point" : "cold-set-point");
+		break;
+	    case DzkOperationMode.COOL:
+		bac_ob = "cold-set-point";
+		break;
+	    case DzkOperationMode.HEAT:
+		bac_ob = "heat-set-point";
+		break;
+	}
+	return this.getZonePv(bac_ob);
     }
     setTargetTemperature(newTemp: number): Promise<number> {
+	let bac_ob = "";
 	this.log.info("DzkZone.setTargetTemperature zone"+this.zno+".lastDemand: ", this.lastDemand);
+	switch (DzkZone.dzk_opmode) {
+	    case DzkOperationMode.AUTO:
+	    case DzkOperationMode.DRY:
+		bac_ob = (this.lastDemand>0 ? "heat-set-point" : "cold-set-point");
+		break;
+	    case DzkOperationMode.COOL:
+		bac_ob = "cold-set-point";
+		break;
+	    case DzkOperationMode.HEAT:
+		bac_ob = "heat-set-point";
+		break;
+	}
 	return this.setZonePv(this.lastDemand>0 ? "heat-set-point" : "cold-set-point", newTemp);
     }
 
@@ -643,6 +834,10 @@ class DzkZone {
 		break;
 	}
 	return hap;
+    }
+
+    static to_hap_fanstate(dzk:number):number {
+	return dzk==0? CurrentFanState.INACTIVE : CurrentFanState.BLOWING_AIR;
     }
 
     static from_hap_target_heatcool_state(hap:number):number {
