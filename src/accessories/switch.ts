@@ -17,6 +17,7 @@ import {
   writeBinaryOutput,
   writeBinaryValue,
 } from "../bacnet/bacnet";
+import { SwitchContext } from "../types/switch";
 
 /**
  * Platform Accessory
@@ -38,24 +39,21 @@ export class BachomeSwitchAccessory {
 
   constructor(
     private readonly platform: BachomeHomebridgePlatform,
-    private readonly accessory: PlatformAccessory
+    private readonly accessory: PlatformAccessory<SwitchContext>
   ) {
+    const Service = platform.Service;
+    const Characteristic = platform.Characteristic;
+    const Log = platform.log;
+
+    const { device } = accessory.context;
+    const { manufacturer, model, serial } = device;
+
     // set accessory information
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.accessory
-      .getService(this.platform.Service.AccessoryInformation)!
-      .setCharacteristic(
-        this.platform.Characteristic.Manufacturer,
-        accessory.context.device.manufacturer
-      )
-      .setCharacteristic(
-        this.platform.Characteristic.Model,
-        accessory.context.device.model
-      )
-      .setCharacteristic(
-        this.platform.Characteristic.SerialNumber,
-        accessory.context.device.serial
-      );
+    accessory
+      .getService(Service.AccessoryInformation)
+      ?.setCharacteristic(Characteristic.Manufacturer, manufacturer)
+      ?.setCharacteristic(Characteristic.Model, model)
+      ?.setCharacteristic(Characteristic.SerialNumber, serial);
 
     this.service =
       this.accessory.getService(this.platform.Service.Switch) ||
@@ -66,23 +64,17 @@ export class BachomeSwitchAccessory {
     // this.accessory.getService('NAME') ?? this.accessory.addService(this.platform.Service.Lightbulb, 'NAME', 'USER_DEFINED_SUBTYPE');
 
     // Read the service name form the accessory context (config file passed via platform)
-    this.service.setCharacteristic(
-      this.platform.Characteristic.Name,
-      accessory.context.device.name
-    );
+    this.service.setCharacteristic(Characteristic.Name, device.name);
 
-    this.stateObjects["On"] = objectStringParser(
-      accessory.context.device.stateObject
-    );
-
+    this.stateObjects["On"] = objectStringParser(device.stateObject);
     this.ipAddress = accessory.context.device.ipAddress;
 
-    this.platform.log.debug(String(this.stateObjects.On["type"]));
-    this.platform.log.debug(String(this.stateObjects.On["instance"]));
+    Log.debug(String(this.stateObjects.On["type"]));
+    Log.debug(String(this.stateObjects.On["instance"]));
 
     // register handlers for the On/Off Characteristic
     this.service
-      .getCharacteristic(this.platform.Characteristic.On)
+      .getCharacteristic(Characteristic.On)
       .on("set", this.setOn.bind(this))
       .on("get", this.getOn.bind(this));
   }
@@ -95,71 +87,82 @@ export class BachomeSwitchAccessory {
     value: CharacteristicValue,
     callback: CharacteristicSetCallback
   ): Promise<void> {
-    // implement your own code to turn your device on/off
-    this.internalState.On = value as boolean;
+    const displayName = this.accessory.displayName;
+    const functionName = arguments.callee.name;
+    const log = this.platform.log;
 
-    this.platform.log.debug("Set Characteristic On ->", value);
+    log.debug(`${displayName}:${functionName}:${value}`);
+
+    this.internalState.On = Boolean(value);
 
     // you must call the callback function
     callback(null);
 
+    let bacnetFunctionName = "";
+    let returnedValue = false;
+
+    const ipAddress = this.ipAddress;
+    const instance = this.stateObjects.On["instance"];
+    const propertyId = 85;
+
     try {
       switch (this.stateObjects.On["typeText"]) {
         case "BI": {
-          let returnedValue = await writeBinaryInput(
-            this.ipAddress,
-            this.stateObjects.On["instance"],
-            85,
+          bacnetFunctionName = writeBinaryInput.name;
+
+          returnedValue = await writeBinaryInput(
+            ipAddress,
+            instance,
+            propertyId,
             Boolean(value)
           );
-          // @ts-ignore
-          returnedValue = returnedValue["values"][0]["value"];
-          this.platform.log.debug(
-            `Written value to BI: ${String(returnedValue)}`
-          );
-          this.internalState.On = Boolean(value);
+
           break;
         }
 
         case "BO": {
-          let returnedValue = await writeBinaryOutput(
-            this.ipAddress,
-            this.stateObjects.On["instance"],
-            85,
+          bacnetFunctionName = writeBinaryOutput.name;
+
+          returnedValue = await writeBinaryOutput(
+            ipAddress,
+            instance,
+            propertyId,
             Boolean(value)
           );
-          // @ts-ignore
-          returnedValue = returnedValue["values"][0]["value"];
-          this.platform.log.debug(
-            `Written value to BO: ${String(returnedValue)}`
-          );
-          this.internalState.On = Boolean(value);
+
           break;
         }
 
         case "BV": {
-          this.platform.log.debug(
-            `Trying to write ${this.stateObjects.On["typeText"]}:${this.stateObjects.On["instance"]}`
-          );
-          const returnedValue = await writeBinaryValue(
-            this.ipAddress,
-            this.stateObjects.On["instance"],
-            85,
+          bacnetFunctionName = writeBinaryValue.name;
+
+          returnedValue = await writeBinaryValue(
+            ipAddress,
+            instance,
+            propertyId,
             Boolean(value)
           );
-          // @ts-ignore
-          this.platform.log.debug(
-            `Written value to BV: ${String(returnedValue)}`
-          );
-          this.internalState.On = Boolean(value);
+
           break;
         }
 
         default:
-          break;
+          return;
       }
+
+      // @ts-ignore
+      returnedValue = returnedValue["values"][0]["value"];
+
+      log.debug(`
+        ${displayName}:
+        ${functionName}:
+        ${bacnetFunctionName}:
+        ${String(returnedValue)}
+      `);
+
+      this.internalState.On = Boolean(returnedValue);
     } catch (error) {
-      this.platform.log.debug(String(error));
+      log.debug(String(error));
     }
   }
 
