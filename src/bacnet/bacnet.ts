@@ -1,11 +1,11 @@
 import bacnet from "bacstack";
-import {BacnetObject} from "./parser"
+import { BacnetObject } from "./parser";
 
 const client = new bacnet();
 export interface ValueObject {
-    type:number;
-    value:number | boolean | string;
-};
+  type: number;
+  value: number | boolean | string;
+}
 
 /**
  * Reads the current value of an object from the remote device.
@@ -45,10 +45,9 @@ export function asyncReadPresentValue(
 export function asyncWritePresentValue(
   ipAddress: string,
   propertyObject: BacnetObject,
-    value: number | boolean | string | ValueObject
+  value: number | boolean | string | ValueObject
 ): Promise<number> {
   return new Promise((resolve, reject) => {
-
     const valueObject = generateValueObjectFromValue(value);
 
     client.writeProperty(
@@ -523,14 +522,14 @@ export function generateValueObjectFromValue(
 ): unknown[] {
   const valueObject: ValueObject[] = [];
 
-    switch (typeof value) {
-	case "object":
-	    /* typeof only has 9 return values, BACnet has around 38 Application Tag Types
-	     * provide a way for the caller to define their own type, when it doesn't
-	     * fit into a JS primitive
-	     */
-	    valueObject[0] = value;
-	    break;
+  switch (typeof value) {
+    case "object":
+      /* typeof only has 9 return values, BACnet has around 38 Application Tag Types
+       * provide a way for the caller to define their own type, when it doesn't
+       * fit into a JS primitive
+       */
+      valueObject[0] = value;
+      break;
 
     case "number":
       valueObject[0] = {

@@ -60,8 +60,8 @@ export function objectStringParser(objectString: string): BacnetObject {
       parsedObject.type = bacnet.enum.ObjectTypes.OBJECT_MULTI_STATE_VALUE;
       break;
 
-      default:
-	  throw "unknown object " + objectString;
+    default:
+      throw "unknown object " + objectString;
       break;
   }
 

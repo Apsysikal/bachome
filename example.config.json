@@ -23,33 +23,33 @@
       "platform": "bachome",
       "name": "BAChome Dynamic Platform",
       "dzk-bacnet": {
-	"ipAddress": "172.31.31.210",
-	"zones": [
-	  {
-	    "name": "Back Office",
-	    "zone": 1
-	  },
-	  {
-	    "name": "Shop",
-	    "zone": 2
-	  },
-	  {
-	    "name": "Zone3",
-	    "zone": 3
-	  },
-	  {
-	    "name": "Zone4",
-	    "zone": 4
-	  },
-	  {
-	    "name": "Zone5",
-	    "zone": 5
-	  },
-	  {
-	    "name": "Zone6",
-	    "zone": 6
-	  }
-	]
+        "ipAddress": "172.31.31.210",
+        "zones": [
+          {
+            "name": "Back Office",
+            "zone": 1
+          },
+          {
+            "name": "Shop",
+            "zone": 2
+          },
+          {
+            "name": "Zone3",
+            "zone": 3
+          },
+          {
+            "name": "Zone4",
+            "zone": 4
+          },
+          {
+            "name": "Zone5",
+            "zone": 5
+          },
+          {
+            "name": "Zone6",
+            "zone": 6
+          }
+        ]
       },
       "switch": [
         {
