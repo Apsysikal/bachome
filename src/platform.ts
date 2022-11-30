@@ -13,6 +13,7 @@ import { BachomeSwitchAccessory } from "./accessories/switch";
 import { BachomeThermostatAccessory } from "./accessories/thermostat";
 import { BachomeHeaterCoolerAccessory } from "./accessories/cooler";
 import { BachomeTemperatureSensorAccessory } from "./accessories/temperatureSensor";
+import { SwitchContext } from "./types/switch";
 
 /**
  * HomebridgePlatform
@@ -76,7 +77,7 @@ export class BachomeHomebridgePlatform implements DynamicPlatformPlugin {
 
         const existingAccessory = this.accessories.find(
           (accessory) => accessory.UUID === uuid
-        );
+        ) as PlatformAccessory<SwitchContext>;
 
         if (existingAccessory) {
           this.log.info(
@@ -87,7 +88,10 @@ export class BachomeHomebridgePlatform implements DynamicPlatformPlugin {
         } else {
           this.log.info(`Adding new accessory: ${device.name}`);
 
-          const accessory = new this.api.platformAccessory(device.name, uuid);
+          const accessory = new this.api.platformAccessory(
+            device.name,
+            uuid
+          ) as PlatformAccessory<SwitchContext>;
 
           accessory.context.device = device;
 
