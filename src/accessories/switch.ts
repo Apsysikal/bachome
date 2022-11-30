@@ -88,18 +88,17 @@ export class BachomeSwitchAccessory {
     callback: CharacteristicSetCallback
   ): Promise<void> {
     const displayName = this.accessory.displayName;
-    const functionName = arguments.callee.name;
+    const functionName = "setOn";
     const log = this.platform.log;
 
-    log.debug(`${displayName}:${functionName}:${value}`);
-
     this.internalState.On = Boolean(value);
+
+    log.debug(`${displayName}:${functionName}:${value}`);
 
     // you must call the callback function
     callback(null);
 
     let bacnetFunctionName = "";
-    let returnedValue = false;
 
     const ipAddress = this.ipAddress;
     const instance = this.stateObjects.On["instance"];
@@ -110,7 +109,7 @@ export class BachomeSwitchAccessory {
         case "BI": {
           bacnetFunctionName = writeBinaryInput.name;
 
-          returnedValue = await writeBinaryInput(
+          await writeBinaryInput(
             ipAddress,
             instance,
             propertyId,
@@ -123,7 +122,7 @@ export class BachomeSwitchAccessory {
         case "BO": {
           bacnetFunctionName = writeBinaryOutput.name;
 
-          returnedValue = await writeBinaryOutput(
+          await writeBinaryOutput(
             ipAddress,
             instance,
             propertyId,
@@ -136,7 +135,7 @@ export class BachomeSwitchAccessory {
         case "BV": {
           bacnetFunctionName = writeBinaryValue.name;
 
-          returnedValue = await writeBinaryValue(
+          await writeBinaryValue(
             ipAddress,
             instance,
             propertyId,
@@ -150,17 +149,9 @@ export class BachomeSwitchAccessory {
           return;
       }
 
-      // @ts-ignore
-      returnedValue = returnedValue["values"][0]["value"];
-
-      log.debug(`
-        ${displayName}:
-        ${functionName}:
-        ${bacnetFunctionName}:
-        ${String(returnedValue)}
-      `);
-
-      this.internalState.On = Boolean(returnedValue);
+      log.debug(
+        `${displayName}:${functionName}:${bacnetFunctionName}:${value}`
+      );
     } catch (error) {
       log.debug(String(error));
     }
@@ -180,69 +171,81 @@ export class BachomeSwitchAccessory {
    * this.service.updateCharacteristic(this.platform.Characteristic.On, true)
    */
   async getOn(callback: CharacteristicGetCallback): Promise<void> {
-    // implement your own code to check if the device is on
+    const displayName = this.accessory.displayName;
+    const functionName = "getOn";
+    const log = this.platform.log;
+
     const isOn = this.internalState.On;
 
-    this.platform.log.debug("Get Characteristic On ->", isOn);
+    log.debug(`${displayName}:${functionName}:${isOn}`);
 
     // you must call the callback function
     // the first argument should be null if there were no errors
     // the second argument should be the value to return
     callback(null, isOn);
 
+    let bacnetFunctionName = "";
+    let returnedValue = false;
+
+    const ipAddress = this.ipAddress;
+    const instance = this.stateObjects.On["instance"];
+    const propertyId = 85;
+
     try {
       switch (this.stateObjects.On["typeText"]) {
         case "BI": {
-          let value = await readBinaryInput(
-            this.ipAddress,
-            this.stateObjects.On["instance"],
-            85
+          bacnetFunctionName = readBinaryInput.name;
+
+          returnedValue = await readBinaryInput(
+            ipAddress,
+            instance,
+            propertyId
           );
-          // @ts-ignore
-          value = value["values"][0]["value"];
-          this.platform.log.debug(`Read value from BI: ${String(value)}`);
-          this.internalState.On = Boolean(value);
-          this.service
-            .getCharacteristic(this.platform.Characteristic.On)
-            .updateValue(Boolean(value));
+
           break;
         }
 
         case "BO": {
-          let value = await readBinaryOutput(
-            this.ipAddress,
-            this.stateObjects.On["instance"],
-            85
+          bacnetFunctionName = readBinaryOutput.name;
+
+          returnedValue = await readBinaryOutput(
+            ipAddress,
+            instance,
+            propertyId
           );
-          // @ts-ignore
-          value = value["values"][0]["value"];
-          this.platform.log.debug(`Read value from BO: ${String(value)}`);
-          this.internalState.On = Boolean(value);
-          this.service
-            .getCharacteristic(this.platform.Characteristic.On)
-            .updateValue(Boolean(value));
+
           break;
         }
 
         case "BV": {
-          const readProperty = await readBinaryValue(
-            this.ipAddress,
-            this.stateObjects.On["instance"],
-            85
+          bacnetFunctionName = readBinaryValue.name;
+
+          returnedValue = await readBinaryValue(
+            ipAddress,
+            instance,
+            propertyId
           );
-          // @ts-ignore
-          const value = readProperty["values"][0]["value"];
-          this.platform.log.debug(`Read value from BV: ${String(value)}`);
-          this.internalState.On = Boolean(value);
-          this.service
-            .getCharacteristic(this.platform.Characteristic.On)
-            .updateValue(Boolean(value));
+
           break;
         }
 
         default:
-          break;
+          return;
       }
+
+      // @ts-ignore
+      returnedValue = returnedValue["values"][0]["value"];
+
+      log.debug(
+        `${displayName}:${functionName}:${bacnetFunctionName}:${String(
+          returnedValue
+        )}`
+      );
+
+      this.internalState.On = Boolean(returnedValue);
+      this.service
+        .getCharacteristic(this.platform.Characteristic.On)
+        .updateValue(Boolean(returnedValue));
     } catch (error) {
       this.platform.log.debug(String(error));
     }
