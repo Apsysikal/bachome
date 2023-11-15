@@ -48,7 +48,20 @@ export function objectStringParser(objectString: string): BacnetObject {
       parsedObject.type = bacnet.enum.ObjectTypes.OBJECT_BINARY_VALUE;
       break;
 
+    case "MI":
+      parsedObject.type = bacnet.enum.ObjectTypes.OBJECT_MULTI_STATE_INPUT;
+      break;
+
+    case "MO":
+      parsedObject.type = bacnet.enum.ObjectTypes.OBJECT_MULTI_STATE_OUTPUT;
+      break;
+
+    case "MV":
+      parsedObject.type = bacnet.enum.ObjectTypes.OBJECT_MULTI_STATE_VALUE;
+      break;
+
     default:
+      throw "unknown object " + objectString;
       break;
   }
 
